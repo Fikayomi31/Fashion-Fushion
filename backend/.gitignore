@@ -1,0 +1,13 @@
+/venv/
+.env
+
+
+# Byte-compiled files
+*.pyc
+*.pyo
+/__pycache__/
+
+
+# Static files and uploads
+/static/
+/media/
