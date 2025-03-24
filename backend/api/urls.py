@@ -28,6 +28,6 @@ urlpatterns = [
     # Store Endpoint
     path('category', store_view.CategoryListAPIView.as_view()),
     path('products', store_view.ProductListAPIView.as_view()),
-     path('products/<slug>/', store_view.ProductDetailAPIView.as_view()),
+    path('products/<slug>/', store_view.ProductDetailAPIView.as_view()),
 
 ]

@@ -72,6 +72,7 @@ class Category(models.Model):
 
 class Product(models.Model):
     title = models.CharField(max_length=100)
+
     image = models.FileField(upload_to='products', default='product.jpg', null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
@@ -95,7 +96,15 @@ class Product(models.Model):
     def __str__(self):
         return self.title
     
-   
+    def save(self, *args, **kwargs):
+        # Handle slug creation
+        if self.slug == "" or self.slug == None:
+            self.slug = slugify(self.title)
+        
+        # Update the rating
+        self.rating = self.product_rating()
+        
+        super(Product, self).save(*args, **kwargs)
     
     def product_rating(self):
         product_rating = Review.objects.filter(product=self).aggregate(avg_rating=models.Avg("rating"))
@@ -116,16 +125,6 @@ class Product(models.Model):
 
     def color(self):
         return Color.objects.filter(product=self)
-
-    def save(self, *args, **kwargs):
-        # Handle slug creation
-        if self.slug == "" or self.slug == None:
-            self.slug = slugify(self.title)
-        
-        # Update the rating
-        self.rating = self.product_rating()
-        
-        super(Product, self).save(*args, **kwargs)
 
     
 class Gallery(models.Model):
@@ -276,7 +275,7 @@ class Review(models.Model):
         verbose_name_plural = 'Review & Rating'
 
     def profile(self):
-        """Return the VendorProfile or CustomerProfile based on user type."""
+       
         if self.user.is_vendor:
             return getattr(self.user, 'vendor_profile', None)
         elif self.user.is_customer:
@@ -324,4 +323,3 @@ class Coupon(models.Model):
 
     def __str__(self):
         return self.code
-    
