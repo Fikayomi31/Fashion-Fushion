@@ -2,7 +2,7 @@ import { create } from "zustand"
 import { mountStoreDevtool } from "simple-zustand-devtools"
 
 
-const useAuthStore = crerate((set, get) => ({
+const useAuthStore = create((set, get) => ({
     allUserDate: null,
     loading: false,
 
@@ -13,7 +13,7 @@ const useAuthStore = crerate((set, get) => ({
     
     setUser: (user) => set({ allUserDate: user }),
     setLoading: (loading) => set({ loading }),
-    setLoggedIn: () => get().allUserDate !== null,
+    isLoggedIn: () => get().allUserDate !== null,
     
 }))
 
