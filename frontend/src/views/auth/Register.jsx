@@ -10,6 +10,7 @@ function Register() {
     const [password, setPassword] = useState('');
     const [password2, setPassword2] = useState('');
     const [userType, setUserType] = useState('')
+    
     const [isLoading, setIsLoading] = useState(false);
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
     const navigate = useNavigate();

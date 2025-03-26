@@ -1,5 +1,9 @@
 import React from 'react'
 import { FaSearch, FaHeart, FaShoppingCart, FaUser } from "react-icons/fa";
+import "../../views/auth/dashboard.css";
+import FFH_logo from '../../assets/FFH_logo.webp'
+import { Link } from "react-router-dom";
+
 
 export default function Header() {
   return (
@@ -19,12 +23,19 @@ export default function Header() {
       <header className="header">
         <div className="container">
           <div className="nav-container">
-            <a href="#" className="logo">
-              <img
-                src="https://via.placeholder.com/100x40"
-                alt="SHOP.CO"
-              />
-            </a>
+            <Link className="logo"  to="/">
+              <img style={{ width: 60, height: 40, borderRadius: 50 }} src={FFH_logo} alt="" />
+            </Link>
+            <div className="container">
+              <nav className="nav-menu">
+                  <a href="#">Explore</a>
+                  <a href="#">Boutiques</a>
+                  <a href="#">Brand</a>
+                  <a href="#">Sell Here</a>
+                  <a href="#">About</a>
+                  <a href="#">Contact</a>
+              </nav>
+            </div>
             <div className="search-bar">
               <input type="text" placeholder="Search" />
               <button>

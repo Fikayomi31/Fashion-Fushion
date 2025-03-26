@@ -8,6 +8,7 @@ import Register from './views/auth/Register'
 import DashBoard from './views/auth/DashBoard'
 import Footer from './views/base/Footer'
 import Header from './views/base/Header'
+import Logout from './views/auth/Logout'
 
 
 
@@ -23,9 +24,11 @@ function App() {
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
           <Route path='/' element={<DashBoard />} />
-
+          <Route path='/logout' element={<Logout />} />
         </Routes>
       </MainWrapper>
+
+
       <Footer />
 
     </BrowserRouter>

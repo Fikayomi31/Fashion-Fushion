@@ -5,6 +5,11 @@ import { FaCheckCircle, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import "../../views/auth/dashboard.css";
 
 export default function DashBoard() {
+
+    const [isLoggedIn, setIsLoggedIn] = useAuthStore((state) => {
+        state.isLoggedIn
+        state.user
+    })
   return (
     <>
       {/* Hero Section */}
