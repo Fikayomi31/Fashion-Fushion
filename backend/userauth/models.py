@@ -12,13 +12,14 @@ USER_TYPE = (
 )
 
 class User(AbstractUser):
-    """Custom User model with user_type for Vendors and Customers."""
-    username = models.CharField(unique=True, max_length=100)
+    username = models.CharField(max_length=500, null=True, blank=True)
     email = models.EmailField(unique=True)
-    full_name = models.CharField(max_length=200, blank=True)
-    otp = models.CharField(max_length=250, null=True, blank=True)
-    refresh_token = models.CharField(max_length=250, null=True, blank=True)
+    full_name = models.CharField(max_length=500, null=True, blank=True)
+    phone = models.CharField(max_length=500)
+    otp = models.CharField(max_length=1000, null=True, blank=True)
+    reset_token  = models.CharField(max_length=1000, null=True, blank=True)
     user_type = models.CharField(max_length=255, choices=USER_TYPE, default="Customer")
+
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
@@ -26,15 +27,16 @@ class User(AbstractUser):
     def __str__(self):
         return self.email
 
+    def __unicode__(self):
+        return self.username
+
     def save(self, *args, **kwargs):
-        # Automatically set full_name and username if they are empty
-        if not self.full_name:
-            self.full_name = self.username
-        if not self.username:
-            self.username = self.email.split('@')[0]
-        
-        # Call the parent save method
-        super().save(*args, **kwargs)
+        email_username, mobile = self.email.split('@')
+        if self.full_name == "" or self.full_name == None:
+             self.full_name = self.email
+        if self.username == "" or self.username == None:
+             self.username = email_username
+        super(User, self).save(*args, **kwargs)
         
         # We'll use signals for profile creation instead of handling it here
         # to avoid duplication with the post_save signal

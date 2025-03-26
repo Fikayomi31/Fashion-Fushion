@@ -25,61 +25,41 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         return token
     
 class RegisterSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(
-        required=True,
-        validators=[UniqueValidator(queryset=User.objects.all())]
-    )
-    username = serializers.CharField(
-        required=True,
-        validators=[UniqueValidator(queryset=User.objects.all())]
-    )
-    password = serializers.CharField(
-        write_only=True, 
-        required=True, 
-        validators=[validate_password],
-        style={'input_type': 'password'}
-    )
-    password2 = serializers.CharField(
-        write_only=True, 
-        required=True,
-        style={'input_type': 'password'}
-    )
-    
+    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
+    password2 = serializers.CharField(write_only=True, required=True)
+
     class Meta:
         model = User
-        fields = ['full_name', 'email', 'username', 'user_type', 'password', 'password2']
-        extra_kwargs = {
-            'full_name': {'required': True},
-            'user_type': {'default': 'Customer'}
-        }
+        fields = ['full_name', 'email', 'phone', 'password', 'password2', 'user_type']
+
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
-            raise serializers.ValidationError({"password": "Password fields didn't match."})
-        
-        # Additional validation could be added here
+            raise serializers.ValidationError({"password": "Password does not match"})
         return attrs
     
     def create(self, validated_data):
-        # Remove password2 since it's not part of the User model
-        validated_data.pop('password2', None)
-        password = validated_data.pop('password')
-        
-        # Create user with the remaining validated data
-        user = User.objects.create(**validated_data)
-        
-        # Set password separately to ensure proper hashing
-        user.set_password(password)
+        user = User.objects.create(
+            full_name=validated_data['full_name'],
+            email=validated_data['email'],
+            phone=validated_data['phone'],
+        )
+
+        email_user, mobile = user.email.split('@')
+        user.set_password(validated_data['password'])
         user.save()
 
         return user
 
+
+
 class UserSerializer(serializers.ModelSerializer):
-    """Serializer for the User model with limited fields for security."""
+
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'full_name', 'user_type']
-        read_only_fields = ['id']
+        fields = '__all__'
+
+
 
 class CustomerProfileSerializer(serializers.ModelSerializer):
     """Serializer for Customer profiles with nested user details."""

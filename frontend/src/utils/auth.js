@@ -37,14 +37,15 @@ export const login = async (email, password) => {
 
 }
 
-export const register = async (full_name, email, phone, password, password2) => {
+export const register = async (full_name, email, phone, password, password2, user_type) => {
     try {
         const { data } = await axios.post('user/register/', {
             full_name,
             email,
             phone,
             password,
-            password2
+            password2,
+            user_type
         })
 
         await login(email, password)
