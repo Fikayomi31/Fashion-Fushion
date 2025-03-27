@@ -9,6 +9,8 @@ import DashBoard from './views/auth/DashBoard'
 import Footer from './views/base/Footer'
 import Header from './views/base/Header'
 import Logout from './views/auth/Logout'
+import ForgotPassword from './views/auth/ForgotPassword'
+import CreatePassword from './views/auth/CreatePassword'
 
 
 
@@ -25,6 +27,8 @@ function App() {
           <Route path='/register' element={<Register />} />
           <Route path='/' element={<DashBoard />} />
           <Route path='/logout' element={<Logout />} />
+          <Route path='/forgot-password' element={<ForgotPassword />} />
+          <Route path='/password-change' element={<CreatePassword/>} />
         </Routes>
       </MainWrapper>
 

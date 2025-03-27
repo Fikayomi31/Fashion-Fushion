@@ -18,8 +18,8 @@ urlpatterns = [
     path('user/register/', RegisterView.as_view(), name='register'),
     
     # Password reset flow
-    path('password-reset-email/<str:email>/', PasswordEmailVerify.as_view(), name='password_reset_email'),
-    path('password-change/', PasswordChangeView.as_view(), name='password_change'),
+    path('user/password-reset/<str:email>/', PasswordEmailVerify.as_view(), name='password_reset_email'),
+    path('user/password-change/', PasswordChangeView.as_view(), name='password_change'),
     
     # User profile management
     path('profile/', UserProfileView.as_view(), name='user_profile'),
