@@ -3,6 +3,18 @@ import "../../views/store/ProductDetail.css";
 import apiInstance from '../../utils/axios';
 import { useParams } from 'react-router-dom';
 import Swal from 'sweetalert2'
+import GetCurrentAddress from '../plugin/UserCountry';
+import UserData from '../plugin/UserData';
+import CardID from '../plugin/CardID';
+
+const Toast = Swal.mixin({
+    toast:true,
+    position:'top',
+    showConfirmButton:false,
+    timer:1500,
+    timerProgressBar:true
+  })
+
 
 
 export default function ProductDetail() {
@@ -18,7 +30,13 @@ export default function ProductDetail() {
     const [qtyValue, setQtyValue] = useState(1)
 
     const param = useParams()
-    console.log(param)
+
+    const currentAddress = GetCurrentAddress()
+    const userData = UserData()
+    const cart_id = CardID()
+
+    console.log(userData)
+    console.log(cart_id)
 
     const handleColorButtonClick = (e) => {
         const colorNameInput = e.target.closest('.color_button').parentNode.querySelector('.color_name')
