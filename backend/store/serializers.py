@@ -1,12 +1,18 @@
 from rest_framework import serializers
 
-from store.models import Category, Product, Gallery, Specification, Color, Size, Cart, CartOrder, CartOrderItem, ProductFaq, Notification, Coupon, Review, Wishlist
+from store.models import Category, SubCategory, Product, Gallery, Specification, Color, Size, Cart, CartOrder, CartOrderItem, ProductFaq, Notification, Coupon, Review, Wishlist
 
 
 class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
+        fields = '__all__'
+
+class SubCategorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = SubCategory
         fields = '__all__'
 
 class SpecificationSerializer(serializers.ModelSerializer):

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
-from store.models import Product, Category
-from store.serializers import ProductSerializer, CategorySerializer
+from store.models import Product, Category, SubCategory
+from store.serializers import ProductSerializer, CategorySerializer, SubCategorySerializer
 
 from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -10,6 +10,12 @@ class CategoryListAPIView(generics.ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     perimission_classes = [AllowAny]
+
+class SubCategoryListAPIView(generics.ListAPIView):
+    queryset = SubCategory.objects.all()
+    serializer_class = SubCategorySerializer
+    perimission_classes = [AllowAny]
+
 
 class ProductListAPIView(generics.ListAPIView):
     queryset = Product.objects.all()

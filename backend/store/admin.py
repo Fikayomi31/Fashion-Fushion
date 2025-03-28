@@ -1,6 +1,6 @@
 from ctypes.wintypes import SIZE
 from django.contrib import admin
-from store.models import Category, Product, Specification, Gallery, Size, Color, Cart, CartOrder, CartOrderItem, Review, Coupon, Notification, ProductFaq, Wishlist
+from store.models import Category, SubCategory, Product, Specification, Gallery, Size, Color, Cart, CartOrder, CartOrderItem, Review, Coupon, Notification, ProductFaq, SubCategory, Wishlist
 from import_export.admin import ImportExportModelAdmin
 
 
@@ -20,7 +20,7 @@ class SizeInline(admin.TabularInline):
     extra = 0
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['title', 'price', 'shipping_amount', 'stock_qty', 'in_stock', 'vendor', 'featured']
+    list_display = ['title', 'category', 'sub_category', 'price', 'shipping_amount', 'stock_qty', 'in_stock', 'vendor', 'featured']
     list_editable = ['featured']
     list_filter = ['date']
     search_fields = ['title']
@@ -62,6 +62,7 @@ class CouponAdmin(admin.ModelAdmin):
     search_fields = ['code', 'vendor__name']
 
 admin.site.register(Category)
+admin.site.register(SubCategory)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Cart, CartAdmin)
 admin.site.register(CartOrder, CartOrderAdmin)

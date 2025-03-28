@@ -25,8 +25,9 @@ urlpatterns = [
     path('profile/', UserProfileView.as_view(), name='user_profile'),
 
     # Store Endpoint
-    path('category', store_view.CategoryListAPIView.as_view()),
-    path('products', store_view.ProductListAPIView.as_view()),
+    path('category/', store_view.CategoryListAPIView.as_view()),
+    path('sub-category/', store_view.SubCategoryListAPIView.as_view()),
+    path('products/', store_view.ProductListAPIView.as_view()),
     path('products/<slug>/', store_view.ProductDetailAPIView.as_view()),
 
 ]

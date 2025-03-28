@@ -3,13 +3,11 @@ import React from "react";
 // Import FontAwesome for icons
 import { FaCheckCircle, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import "../../views/auth/dashboard.css";
+//import { useAuthStore } from "../../store/auth";
 
 export default function DashBoard() {
 
-    const [isLoggedIn, setIsLoggedIn] = useAuthStore((state) => {
-        state.isLoggedIn
-        state.user
-    })
+    
   return (
     <>
       {/* Hero Section */}

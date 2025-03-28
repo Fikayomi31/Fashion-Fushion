@@ -15,6 +15,23 @@ CATEGORY_TYPE = (
     ('UNISEX', 'UNISEX')
 )
 
+SUB_CATEGORY_TYPE = (
+    # MEN'S CATEGORIES
+    ('SHIRTS', 'Shirts'),
+    ('T_SHIRTS', 'T-Shirts'),
+    ('JEANS', 'Jeans'),
+    ('TROUSERS', 'Trousers'),
+    ('SUITS', 'Suits'),
+    ('TOPS', 'Tops'),
+    ('JEANS', 'Jeans'),
+    ('SKIRTS', 'Skirts'),
+    ('LEGGINGS', 'Leggings'),
+    ('JACKETS', 'Jackets'),
+    ('HOODIES', 'Hoodies'),
+    ('SHORTS', 'Shorts'),
+    ('JOGGERS', 'Joggers'),
+)
+
 RATING = (
     (1, '1 Star'),
     (2, '2 Star'),
@@ -68,6 +85,19 @@ class Category(models.Model):
         if self.slug == "" or self.slug == None:
             self.slug = slugify(self.title)
         super(Category, self).save()
+
+class SubCategory(models.Model):
+    title = models.CharField(max_length=100, choices=SUB_CATEGORY_TYPE, default="T-shirt")
+    slug = models.SlugField(unique=True, blank=True)
+    image = models.ImageField(upload_to="subcategories/", null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super(SubCategory, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
          
 
 class Product(models.Model):
@@ -76,6 +106,7 @@ class Product(models.Model):
     image = models.FileField(upload_to='products', default='product.jpg', null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name="category")
+    sub_category = models.ForeignKey(SubCategory, on_delete=models.SET_NULL, null=True, blank=True, related_name="sub_category")
     price = models.DecimalField(decimal_places=2, max_digits=12, default=0.00)
     old_price = models.DecimalField(decimal_places=2, max_digits=12, default=0.00)
     shipping_amount = models.DecimalField(decimal_places=2, max_digits=12, default=0.00)
