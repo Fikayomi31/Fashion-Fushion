@@ -55,7 +55,7 @@ class Category(models.Model):
     title = models.CharField(max_length=100, choices=CATEGORY_TYPE, default='MEN')
     image = models.FileField(upload_to='category', default='category.jpg', null=True, blank=True)
     active = models.BooleanField(default=True)
-    slug = models.SlugField(unique=True, blank=True)
+    slug = models.SlugField(null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -67,7 +67,7 @@ class Category(models.Model):
     def save(self, *args, **kwargs):
         if self.slug == "" or self.slug == None:
             self.slug = slugify(self.title)
-        super(Category, self).save(*args, **kwargs)
+        super(Category, self).save()
          
 
 class Product(models.Model):
@@ -75,7 +75,7 @@ class Product(models.Model):
 
     image = models.FileField(upload_to='products', default='product.jpg', null=True, blank=True)
     description = models.TextField(null=True, blank=True)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name="category")
     price = models.DecimalField(decimal_places=2, max_digits=12, default=0.00)
     old_price = models.DecimalField(decimal_places=2, max_digits=12, default=0.00)
     shipping_amount = models.DecimalField(decimal_places=2, max_digits=12, default=0.00)
@@ -88,9 +88,9 @@ class Product(models.Model):
     views = models.PositiveIntegerField(default=0)
     rating = models.PositiveIntegerField(default=0, null=True, blank=True)
 
-    vendor = models.ForeignKey(VendorProfile, on_delete=models.CASCADE)
+    vendor = models.ForeignKey(VendorProfile, on_delete=models.SET_NULL, null=True, blank=True, related_name="vendor")
     pid = ShortUUIDField(unique=True, length=10, alphabet='abcdefg12345')
-    slug = models.SlugField(unique=True, blank=True)
+    slug = models.SlugField(blank=True, null=True)
     date = models.DateTimeField(auto_now_add=True)
          
     def __str__(self):
@@ -101,12 +101,17 @@ class Product(models.Model):
         if self.slug == "" or self.slug == None:
             self.slug = slugify(self.title)
         
-        # Update the rating
-        self.rating = self.product_rating()
+        # Only calculate rating if the product is already saved
+        if self.pk:
+            self.rating = self.product_rating()
         
         super(Product, self).save(*args, **kwargs)
     
     def product_rating(self):
+        # Only calculate rating if the product exists in the database
+        if not self.pk:
+            return 0
+        
         product_rating = Review.objects.filter(product=self).aggregate(avg_rating=models.Avg("rating"))
         return product_rating["avg_rating"] or 0 
 

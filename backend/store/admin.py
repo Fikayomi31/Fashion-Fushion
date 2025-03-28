@@ -26,6 +26,8 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ['title']
     inlines = [GalleryInline, SpecificationInline, ColorInline, SizeInline]
 
+    
+
 class CartAdmin(admin.ModelAdmin):
     list_display = ['cart_id', 'product', 'user', 'qty', 'price', 'total', 'date']
     search_fields = ['cart_id', 'product__name', 'user__username']
