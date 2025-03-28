@@ -13,6 +13,7 @@ import ForgotPassword from './views/auth/ForgotPassword'
 import CreatePassword from './views/auth/CreatePassword'
 //import Product from './views/store/Product'
 import Category from './views/store/Category'
+import ProductDetail from './views/store/ProductDetail'
 
 
 function App() {
@@ -32,9 +33,9 @@ function App() {
           <Route path='/password-change' element={<CreatePassword/>} />
 
           {/** Store Components */}
-          {/**<Route path='/products' element={<Product />} />*/}
+          {/*<Route path='/products' element={<Product />} />*/}
           <Route path='/category' element={<Category />} />
-
+          <Route path='/detail/:slug' element={<ProductDetail />} />
 
         </Routes>
       </MainWrapper>

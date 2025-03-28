@@ -28,6 +28,6 @@ urlpatterns = [
     path('category/', store_view.CategoryListAPIView.as_view()),
     path('sub-category/', store_view.SubCategoryListAPIView.as_view()),
     path('products/', store_view.ProductListAPIView.as_view()),
-    path('products/<slug>/', store_view.ProductDetailAPIView.as_view()),
+    path('product/<slug>/', store_view.ProductDetailAPIView.as_view()),
 
 ]
