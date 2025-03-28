@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import "../../views/store/ProductDetail.css";
 import apiInstance from '../../utils/axios';
 import { useParams } from 'react-router-dom';
+import Swal from 'sweetalert2'
 
 
 export default function ProductDetail() {
@@ -12,8 +13,26 @@ export default function ProductDetail() {
     const [color, setColor] = useState([])
     const [size, setSize] = useState([])
 
+    const [colorValue, setColorValue] = useState('No Color')
+    const [sizeValue, setSizeValue] = useState('No Size')
+    const [qtyValue, setQtyValue] = useState(1)
+
     const param = useParams()
     console.log(param)
+
+    const handleColorButtonClick = (e) => {
+        const colorNameInput = e.target.closest('.color_button').parentNode.querySelector('.color_name')
+        setColorValue(colorNameInput.value)
+    }
+    const handleSizeButtonClick = (e) => {
+        const sizeNameInput = e.target.closest('.size_button').parentNode.querySelector('.size_name')
+        setSizeValue(sizeNameInput.value)
+    }
+
+    const handleQuantityChange = (e) => {
+        setQtyValue(e.target.value)
+    }
+
 
     useEffect(() => {
         apiInstance.get(`product/${param.slug}/`).then((res) => {
@@ -25,6 +44,33 @@ export default function ProductDetail() {
         })
     }, [])
      
+    const handleAddToCart = async () => {
+        try {
+         const formdata = new FormData()
+         formdata.append('product_id', product.id)
+         formdata.append('user_id', userData?.user_id)
+         formdata.append('qty', qtyValue)
+         formdata.append('price', product.price)
+         formdata.append('shipping_amount', product.shipping_amount)
+         formdata.append('country', currentAddress)
+         formdata.append('size', sizeValue)
+         formdata.append('color', colorValue)
+         formdata.append('cart_id', cart_id)
+ 
+         const response = await apiInstance.post('cart/', formdata)
+         console.log(response.data)
+ 
+         Toast.fire({
+             icon: 'success',
+             title: response.data.message
+            })
+ 
+        } catch (error) {
+         console.log(error)
+        }
+ 
+ 
+     }
 
 
   return (
@@ -120,8 +166,9 @@ export default function ProductDetail() {
                                         type='number'
                                         id='typeNumber'
                                         className='form-control'
-                                        
+                                        value={qtyValue}
                                         min={1}
+                                        onChange={handleQuantityChange}
                                         
                                 />
                             </div>
@@ -130,32 +177,49 @@ export default function ProductDetail() {
 
                         
                         <div className="color-selection">
-                            <span>Select Colors:</span>
-                            <div className="color-options">
-                                {color?.map((c, index)=> (
-                                    <buttton className='btn p-3 ms-2' style={{ backgroundColor: `${c.color_code}` }} ></buttton>
-                                ))}
+                            {color.length > 0 &&
+                                <>
+                                    <span>Select Colors: {colorValue}</span>
+                                    <div className="color-options">
+                                        {color?.map((c, index)=> (
+                                            <div className={index}>
+                                                <input type='hidden' className='color_name' value={c.name} name='' id='' />
+                                                <button className='btn p-3 m-1 color_button' type='button' onClick={handleColorButtonClick} style={{backgroundColor: `${c.color_code}`}}>
+                                                </button>
+                                            </div>
+                                        ))}
                                 
-                            </div>
+                                    </div>
+                                </>
+                            }
+                            
                         </div>
 
                         
                         <div className="size-selection">
-                            <span>Choose Size:</span>
-                            <div className="d-flex">
-                            {size?.map((s, index)=> (
-                                    <div className={index}>
-                                        <input  type='hidden' className='size_name' value={s.name}/>
-                                        <button className='btn btn-secondary m-1 size_button' type='button'  >{s.name}</button>
-                                </div>
-                                ))}
+                            {size.length > 0 &&
+                                <>
+                                    <span>Choose Size: {sizeValue}</span>
+                                    <div className="d-flex">
+                                    {size?.map((s, index)=> (
+                                        <div className={index}>
+                                            <input  type='hidden' className='size_name'  value={s.name}/>
+                                            <button className='btn btn-secondary m-1 size_button' type='button' onClick={handleSizeButtonClick}  >{s.name}</button>
+                                        </div>
+                                    ))}
                                 
-                            </div>
+                                    </div>
+
+                                </>
+                            
+                            }
+                            
                         </div>
 
                     
                         <button type='button'
                                 className='btn btn-primary btn-rounded me-2'
+                                onClick={handleAddToCart}
                                 
                             >
                             <i className='fas fa-cart-plus me-2' />
