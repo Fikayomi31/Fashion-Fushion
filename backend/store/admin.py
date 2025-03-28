@@ -1,6 +1,6 @@
 from ctypes.wintypes import SIZE
 from django.contrib import admin
-from store.models import Category, SubCategory, Product, Specification, Gallery, Size, Color, Cart, CartOrder, CartOrderItem, Review, Coupon, Notification, ProductFaq, SubCategory, Wishlist
+from store.models import Category, SubCategory, Product, Specification, Gallery, Size, Color, Cart, CartOrder, CartOrderItem, Review, Coupon, Notification, ProductFaq, SubCategory, Wishlist, Tax
 from import_export.admin import ImportExportModelAdmin
 
 
@@ -72,3 +72,4 @@ admin.site.register(Coupon, CouponAdmin)
 admin.site.register(Notification, NotificationAdmin)
 admin.site.register(ProductFaq, ProductFaqAdmin)
 admin.site.register(Wishlist)
+admin.site.register(Tax)
