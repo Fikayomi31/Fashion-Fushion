@@ -75,7 +75,7 @@ export default function ProductDetail() {
          formdata.append('color', colorValue)
          formdata.append('cart_id', cart_id)
  
-         const response = await apiInstance.post('cart/', formdata)
+         const response = await apiInstance.post('cart-view/', formdata)
          console.log(response.data)
  
          Toast.fire({

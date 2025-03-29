@@ -71,18 +71,34 @@ class CartAPIView(generics.ListCreateAPIView):
             cart.user = user
             cart.qty = qty
             cart.price = price
-            cart.sub_total = Decimal(price) * Decimal(qty)
+            cart.sub_total = Decimal(price) * int(qty)
             cart.shipping_amount = Decimal(shipping_amount) * int(qty)
             cart.tax_fee = int(qty) * Decimal(tax_rate)
-            cart.size = size
             cart.color = color
-            cart.country = country
+            cart.size = size
             cart.cart_id = cart_id
 
-            service_fee_percentage = 10 / 100
-            cart.service_fee = service_fee_percentage * cart.sub_total
-            cart.total = cart.sub_total + cart.service_fee + cart.shipping_amount + cart.tax_fee
-            cart.save()
+            cart.total = cart.sub_total + cart.shipping_amount + cart.tax_fee
+            cart.save() 
+
+            return Response({'message': "Cart Updated Successfully"}, status=status.HTTP_200_OK)
+
+        else:
+            cart = Cart()
+            cart.product = product
+            cart.user = user
+            cart.qty = qty
+            cart.price = price
+            cart.sub_total = Decimal(price) * int(qty)
+            cart.shipping_amount = Decimal(shipping_amount) * int(qty)
+            cart.tax_fee = int(qty) * Decimal(tax_rate)
+            cart.color = color
+            cart.size = size
+            cart.cart_id = cart_id
+            cart.country = country
+
+            cart.total = cart.sub_total + cart.shipping_amount + cart.tax_fee
+            cart.save() 
 
             return Response({'message': "Cart Created Successfully"}, status=status.HTTP_201_CREATED)
         

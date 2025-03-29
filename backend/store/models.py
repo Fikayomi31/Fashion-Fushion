@@ -200,7 +200,7 @@ class Color(models.Model):
 
 class Cart(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    user = models.ForeignKey(CustomerProfile, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
     qty = models.PositiveIntegerField(default=0)
     price = models.DecimalField(default=0.00, max_digits=12, decimal_places=2)
     sub_total = models.DecimalField(default=0.00, max_digits=12, decimal_places=2)
