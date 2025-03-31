@@ -240,7 +240,11 @@ export default function Products() {
 
                     </div>
                    
-                    <button
+                    
+
+                  </div>
+                  <div>
+                  <button
                       type='button'
                       className='btn btn-primary px-3 ms-2'
                       onClick={() => handleAddToCart(product.id, product.price, product.shipping_amount)}
@@ -254,7 +258,6 @@ export default function Products() {
                          >
                           <i className="fas fa-heart" />
                     </button>
-
                   </div>
                 </div>
               </div>

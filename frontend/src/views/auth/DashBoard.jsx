@@ -1,20 +1,24 @@
 import React from "react";
-
-// Import FontAwesome for icons
+import { useState, useEffect } from "react";
+import { Link } from 'react-router-dom'
 import { FaCheckCircle, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import "../../views/auth/dashboard.css";
 //import { useAuthStore } from "../../store/auth";
 
+
 export default function DashBoard() {
 
     
+
   return (
+
     <>
       {/* Hero Section */}
       <section className="hero">
         <div className="container">
             <div className="hero-content">
                 <div className="hero-text">
+
                     <h1>Find clothes that matches your style</h1>
                     <p>Browse through our diverse range of meticulously crafted garments, designed to bring out your individuality and cater to your sense of style.</p>
                     <a href="#" class="shop-now-btn">Shop Now</a>
@@ -34,7 +38,7 @@ export default function DashBoard() {
                     </div>
                 </div>
                 <div className="hero-image">
-                    <img src="/api/placeholder/500/450" alt="Fashion Models" />
+                    <img src='' alt="Fashion Models" />
                     <div className="star-decoration star-1">✦</div>
                     <div className="star-decoration star-2">✦</div>
                 </div>
@@ -135,87 +139,7 @@ export default function DashBoard() {
     </div>
 </section>
 
-<section className="product-section">
-    <div className="container">
-        <div className="section-header">
-            <h2 className="section-title">Top Selling</h2>
-        </div>
-        <div className="product-grid">
-            {/* Product 1 */}
-            <div className="product-card">
-                <div className="product-image">
-                    <img src="https://via.placeholder.com/240x200" alt="Vertical Striped Shirt" />
-                </div>
-                <div className="product-info">
-                    <h3 className="product-name">Vertical Striped Shirt</h3>
-                    <div className="product-rating">
-                        <span>★★★★★</span>
-                        <span className="rating-count">(4.7)</span>
-                    </div>
-                    <div className="product-price">
-                        <span className="current-price">$212</span>
-                        <span className="original-price">$232</span>
-                        <span className="discount-badge">-9%</span>
-                    </div>
-                </div>
-            </div>
 
-            {/* Product 2 */}
-            <div className="product-card">
-                <div className="product-image">
-                    <img src="https://via.placeholder.com/240x200" alt="Courage Graphic T-shirt" />
-                </div>
-                <div className="product-info">
-                    <h3 className="product-name">Courage Graphic T-shirt</h3>
-                    <div className="product-rating">
-                        <span>★★★★★</span>
-                        <span className="rating-count">(4.8)</span>
-                    </div>
-                    <div className="product-price">
-                        <span className="current-price">$145</span>
-                    </div>
-                </div>
-            </div>
-
-            {/* Product 3 */}
-            <div className="product-card">
-                <div className="product-image">
-                    <img src="https://via.placeholder.com/240x200" alt="Loose Fit Bermuda Shorts" />
-                </div>
-                <div className="product-info">
-                    <h3 className="product-name">Loose Fit Bermuda Shorts</h3>
-                    <div className="product-rating">
-                        <span>★★★☆☆</span>
-                        <span className="rating-count">(3.4)</span>
-                    </div>
-                    <div className="product-price">
-                        <span className="current-price">$80</span>
-                    </div>
-                </div>
-            </div>
-
-            {/* Product 4 */}
-            <div className="product-card">
-                <div className="product-image">
-                    <img src="https://via.placeholder.com/240x200" alt="Faded Skinny Jeans" />
-                </div>
-                <div className="product-info">
-                    <h3 className="product-name">Faded Skinny Jeans</h3>
-                    <div className="product-rating">
-                        <span>★★★★★</span>
-                        <span className="rating-count">(4.9)</span>
-                    </div>
-                    <div className="product-price">
-                        <span className="current-price">$210</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div style={{ textAlign: "center", marginTop: "30px" }}>
-            <a href="#" className="view-all">View All</a>
-        </div>
-    </div>
-</section>
 
 {/* Browse by Dress Style Section */}
 <section className="categories">
