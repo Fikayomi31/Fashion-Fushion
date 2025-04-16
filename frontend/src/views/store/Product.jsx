@@ -31,10 +31,11 @@ export default function Products() {
   const currentAddress = GetCurrentAddress()
   const userData = UserData()
   const cart_id = CardID()
-
+  
   const handleColorButtonClick = (event, product_id, colorName) => {
     setColorValue(colorName)
     setSelectedProduct(product_id)
+
     setSelectedColors((preSelectedColors) => ({
       ...preSelectedColors,
       [product_id]: colorName
@@ -75,7 +76,7 @@ export default function Products() {
      formdata.append('qty', qtyValue)
      formdata.append('price', price)
      formdata.append('shipping_amount', shipping_amount)
-     formdata.append('country', currentAddress)
+     formdata.append('country', currentAddress.country)
      formdata.append('size', sizeValue)
      formdata.append('color', colorValue)
      formdata.append('cart_id', cart_id)
@@ -110,29 +111,8 @@ export default function Products() {
    <>
     <main className='mt-5'>
       <div className='container'>
-        <section className='text-center'>
-          <div className='row mt-4 mb-3'>
-            <div className='col-lg-6 col-md-8 mx-auto'>
-              <h1 className="fw-light">Hot Category🔥</h1>
-                <p className="lead text-muted">
-                    Our Latest Categories
-              </p>
-            </div> 
-          </div>
-        </section>
-        <div className='d-flex justify-content-center'>
-          {category.map((c, index) => (
-            <div className='align-items-center d-flex flex-column' style={{ background: '#e8e8e8', marginLeft: '10px', borderRadius: '10px', padding: '30px' }}>
-              <Link>
-                <img src={c.image} alt=""
-                  style={{ width: '180px', height: '180px', objectFit: 'cover' }}
-                />
-              </Link>
-              <p><a href='' className='text-dark'>{c.title}</a>  </p>
-            </div>
-
-          ))}
-        </div>
+        
+        
         <section className="text-center container">
           <div className="row mt-4 mb-3">
             <div className="col-lg-6 col-md-8 mx-auto">

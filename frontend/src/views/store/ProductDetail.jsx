@@ -35,6 +35,8 @@ export default function ProductDetail() {
     const userData = UserData()
     const cart_id = CardID()
 
+    console.log(currentAddress)
+
     console.log(userData)
     console.log(cart_id)
 
@@ -70,7 +72,7 @@ export default function ProductDetail() {
          formdata.append('qty', qtyValue)
          formdata.append('price', product.price)
          formdata.append('shipping_amount', product.shipping_amount)
-         formdata.append('country', currentAddress)
+         formdata.append('country', currentAddress.country)
          formdata.append('size', sizeValue)
          formdata.append('color', colorValue)
          formdata.append('cart_id', cart_id)

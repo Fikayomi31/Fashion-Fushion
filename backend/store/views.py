@@ -61,9 +61,10 @@ class CartAPIView(generics.ListCreateAPIView):
 
         tax = Tax.objects.filter(country=country).first()
         if tax:
-            tax_rate = tax_rate / 100
+            tax_rate = Decimal(tax.rate) / 100
         else:
-            tax_rate = 0.0
+            tax_rate = Decimal(0.0)
+        print(tax_rate)
 
         cart = Cart.objects.filter(cart_id=cart_id, product=product).first()
         if cart:

@@ -4,9 +4,26 @@ import { Link } from 'react-router-dom'
 import { FaCheckCircle, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import "../../views/auth/dashboard.css";
 //import { useAuthStore } from "../../store/auth";
+import apiInstance from "../../utils/axios";
+
 
 
 export default function DashBoard() {
+    const [category, setCategory] = useState([])
+    const [subCategory, setSubCategory] = useState([])
+
+    useEffect(() => {
+        apiInstance.get(`/category`).then((res) => {
+          setCategory(res.data)
+        })
+      }, [])
+
+    useEffect(() => {
+        apiInstance.get(`/sub-category`).then((res) => {
+            setSubCategory(res.data)
+        })
+    }, [])
+
 
     
 
@@ -58,120 +75,52 @@ export default function DashBoard() {
         </div>
     </section>
 
-    <section className="product-section">
-    <div className="container">
-        <div className="section-header">
-            <h2 className="section-title">New Arrivals</h2>
-        </div>
-        <div className="product-grid">
-            <div className="product-card">
-                <div className="product-image">
-                    <img src="https://via.placeholder.com/240x200" alt="T-shirt with Tape Details" />
-                </div>
-                <div className="product-info">
-                    <h3 className="product-name">T-shirt with Tape Details</h3>
-                    <div className="product-rating">
-                        <span>★★★★★</span>
-                        <span className="rating-count">(4.9)</span>
-                    </div>
-                    <div className="product-price">
-                        <span className="current-price">$120</span>
-                    </div>
-                </div>
+    <section className='text-center'>
+          <div className='row mt-4 mb-3'>
+            <div className='col-lg-6 col-md-8 mx-auto'>
+              <h1 className="fw-light">Hot Category🔥</h1>
+                <p className="lead text-muted">
+                    Our Latest Categories
+              </p>
+            </div> 
+          </div>
+        </section>
+        <div className='d-flex justify-content-center'>
+          {category.map((c, index) => (
+            <div className='align-items-center d-flex flex-column' style={{ background: '#e8e8e8', marginLeft: '10px', borderRadius: '10px', padding: '30px' }}>
+              <Link>
+                <img src={c.image} alt=""
+                  style={{ width: '180px', height: '180px', objectFit: 'cover' }}
+                />
+              </Link>
+              <p><a href='' className='text-dark'>{c.title}</a>  </p>
             </div>
 
-            <div className="product-card">
-                <div className="product-image">
-                    <img src="https://via.placeholder.com/240x200" alt="Skinny Fit Jeans" />
-                </div>
-                <div className="product-info">
-                    <h3 className="product-name">Skinny Fit Jeans</h3>
-                    <div className="product-rating">
-                        <span>★★★★★</span>
-                        <span className="rating-count">(4.8)</span>
-                    </div>
-                    <div className="product-price">
-                        <span className="current-price">$240</span>
-                        <span className="original-price">$260</span>
-                        <span className="discount-badge">-8%</span>
-                    </div>
-                </div>
-            </div>
-
-            <div className="product-card">
-                <div className="product-image">
-                    <img src="https://via.placeholder.com/240x200" alt="Checkered Shirt" />
-                </div>
-                <div className="product-info">
-                    <h3 className="product-name">Checkered Shirt</h3>
-                    <div className="product-rating">
-                        <span>★★★★★</span>
-                        <span className="rating-count">(4.9)</span>
-                    </div>
-                    <div className="product-price">
-                        <span className="current-price">$180</span>
-                    </div>
-                </div>
-            </div>
-
-            <div className="product-card">
-                <div className="product-image">
-                    <img src="https://via.placeholder.com/240x200" alt="Sleeve Striped T-shirt" />
-                </div>
-                <div className="product-info">
-                    <h3 className="product-name">Sleeve Striped T-shirt</h3>
-                    <div className="product-rating">
-                        <span>★★★★★</span>
-                        <span className="rating-count">(4.7)</span>
-                    </div>
-                    <div className="product-price">
-                        <span className="current-price">$130</span>
-                        <span className="original-price">$160</span>
-                        <span className="discount-badge">-20%</span>
-                    </div>
-                </div>
-            </div>
+          ))}
         </div>
 
-        <div style={{ textAlign: "center", marginTop: "30px" }}>
-            <a href="#" className="view-all">View All</a>
-        </div>
-    </div>
-</section>
 
-
-
-{/* Browse by Dress Style Section */}
-<section className="categories">
-    <div className="container">
-        <h2 className="section-title" style={{ marginBottom: "40px" }}>Browse by Dress Style</h2>
-        <div className="category-grid">
-            {/* Category 1 */}
-            <div className="category-card">
-                <img src="https://via.placeholder.com/400x200" alt="Casual Style" />
-                <div className="category-overlay">Casual</div>
-            </div>
-
-            {/* Category 2 */}
-            <div className="category-card">
-                <img src="https://via.placeholder.com/400x200" alt="Formal Style" />
-                <div className="category-overlay">Formal</div>
-            </div>
-
-            {/* Category 3 */}
-            <div className="category-card">
-                <img src="https://via.placeholder.com/400x200" alt="Party Style" />
-                <div className="category-overlay">Party</div>
-            </div>
-
-            {/* Category 4 */}
-            <div className="category-card">
-                <img src="https://via.placeholder.com/400x200" alt="Gym Style" />
-                <div className="category-overlay">Gym</div>
-            </div>
-        </div>
-    </div>
-</section>
+<div className="category-section">
+  <h2 className="category-heading">Trending Collections <span className="fire-icon">🔥</span></h2>
+  <p className="category-subheading">Discover this season's most coveted styles</p>
+  
+  <div className="category-grid">
+    {subCategory.map((s, index) => (
+      <div key={index} className="category-item">
+        <Link to={`/category/${s.slug}`} className="category-link">
+          <div className="category-image-container">
+            <img 
+              src={s.image} 
+              alt={s.title}
+              className="category-image"
+            />
+          </div>
+          <h3 className="category-title">{s.title}</h3>
+        </Link>
+      </div>
+    ))}
+  </div>
+</div>
 
 
 

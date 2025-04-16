@@ -13,6 +13,7 @@ import ForgotPassword from './views/auth/ForgotPassword'
 import CreatePassword from './views/auth/CreatePassword'
 import Product from './views/store/Product'
 import Category from './views/store/Category'
+//import Cart from './views/store/Cart'
 import ProductDetail from './views/store/ProductDetail'
 
 
@@ -36,6 +37,7 @@ function App() {
           {<Route path='/products' element={<Product />} />}
           <Route path='/category' element={<Category />} />
           <Route path='/detail/:slug/' element={<ProductDetail />} />
+          {/*<Route path='/cart' element={<Cart />} />*/}
 
         </Routes>
       </MainWrapper>

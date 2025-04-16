@@ -30,6 +30,7 @@ SUB_CATEGORY_TYPE = (
     ('HOODIES', 'Hoodies'),
     ('SHORTS', 'Shorts'),
     ('JOGGERS', 'Joggers'),
+    ('DRESS', 'Dress'),
 )
 
 RATING = (
