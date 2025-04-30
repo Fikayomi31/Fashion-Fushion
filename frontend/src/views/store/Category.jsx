@@ -1,6 +1,7 @@
 import {useState, useEffect } from 'react'
 import apiInstance from '../../utils/axios'
 import { Link } from 'react-router-dom'
+import './cart.css';
 
 
 export default function Category() {
@@ -73,6 +74,15 @@ export default function Category() {
                     </div>
 
                 ))}
+                </div>
+            </div>
+
+            {/* Newsletter Subscription */}
+            <div className="newsletter">
+                <h2>Stay Up To Date About Our Latest Offers</h2>
+                <div className="newsletter-form">
+                <input type="email" placeholder="Enter your email address" />
+                <button>Subscribe to Newsletter</button>
                 </div>
             </div>
         </main>

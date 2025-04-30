@@ -1,0 +1,225 @@
+/* Page Layout */
+.cart-page {
+    background-color: #f3f4f6;
+    font-family: Arial, sans-serif;
+  }
+  
+  .cart-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+  }
+  
+  .cart-title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 24px;
+  }
+  
+  .cart-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  
+  @media (min-width: 1024px) {
+    .cart-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  
+  /* Cart Items */
+  .cart-items {
+    background: white;
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .cart-item {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 16px;
+  }
+  
+  .item-info {
+    display: flex;
+    gap: 16px;
+  }
+  
+  .item-info img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 6px;
+  }
+  
+  .item-info h3 {
+    margin: 0;
+    font-size: 1.125rem;
+    color: #374151;
+  }
+  
+  .item-info p {
+    margin: 4px 0;
+    font-size: 0.9rem;
+    color: #6b7280;
+  }
+  
+  .item-info .price {
+    font-weight: bold;
+    color: #111827;
+  }
+  
+  .item-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .item-actions button {
+    background-color: #d1d5db;
+    border: none;
+    padding: 8px 12px;
+    font-weight: bold;
+    color: #1f2937;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+  }
+  
+  .item-actions button:hover {
+    background-color: #9ca3af;
+  }
+  
+  .remove-btn {
+    background: none;
+    color: #ef4444;
+    border: none;
+    margin-left: 8px;
+    cursor: pointer;
+  }
+  
+  .remove-btn:hover {
+    color: #dc2626;
+  }
+  
+  /* Order Summary */
+  .order-summary {
+    background: white;
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .order-summary h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 16px;
+  }
+  
+  .summary-details div {
+    display: flex;
+    justify-content: space-between;
+    margin: 8px 0;
+    color: #4b5563;
+  }
+  
+  .summary-details .discount {
+    color: #ef4444;
+  }
+  
+  .summary-total {
+    font-weight: bold;
+    font-size: 1.125rem;
+    color: #111827;
+  }
+  
+  .promo-section {
+    display: flex;
+    margin-top: 24px;
+    gap: 12px;
+  }
+  
+  .promo-section input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+  }
+  
+  .promo-section button {
+    background-color: #d1d5db;
+    padding: 10px 16px;
+    font-weight: bold;
+    color: #1f2937;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  
+  .promo-section button:hover {
+    background-color: #9ca3af;
+  }
+  
+  .checkout-btn {
+    margin-top: 20px;
+    width: 100%;
+    padding: 14px 20px;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(to right, #ec4899, #8b5cf6);
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .checkout-btn:hover {
+    background: linear-gradient(to right, #db2777, #7c3aed);
+  }
+  
+  /* Newsletter */
+  .newsletter {
+    background-color: #1f2937;
+    padding: 40px 20px;
+    text-align: center;
+    margin-top: 64px;
+    color: white;
+  }
+  
+  .newsletter h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+  
+  .newsletter-form {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  
+  .newsletter-form input {
+    padding: 12px 16px;
+    width: 260px;
+    border-radius: 6px;
+    border: none;
+    outline: none;
+  }
+  
+  .newsletter-form button {
+    background: linear-gradient(to right, #facc15, #f97316);
+    padding: 12px 20px;
+    border: none;
+    border-radius: 9999px;
+    font-weight: bold;
+    color: #111827;
+    cursor: pointer
+  }  

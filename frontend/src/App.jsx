@@ -15,6 +15,7 @@ import Product from './views/store/Product'
 import Category from './views/store/Category'
 //import Cart from './views/store/Cart'
 import ProductDetail from './views/store/ProductDetail'
+import Carts from './views/store/Carts'
 
 
 function App() {
@@ -37,7 +38,7 @@ function App() {
           {<Route path='/products' element={<Product />} />}
           <Route path='/category' element={<Category />} />
           <Route path='/detail/:slug/' element={<ProductDetail />} />
-          {/*<Route path='/cart' element={<Cart />} />*/}
+          <Route path='/cart' element={<Carts />} />
 
         </Routes>
       </MainWrapper>

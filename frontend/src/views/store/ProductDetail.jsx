@@ -6,6 +6,7 @@ import Swal from 'sweetalert2'
 import GetCurrentAddress from '../plugin/UserCountry';
 import UserData from '../plugin/UserData';
 import CardID from '../plugin/CardID';
+import './cart.css';
 
 const Toast = Swal.mixin({
     toast:true,
@@ -305,7 +306,14 @@ export default function ProductDetail() {
             </div>
         </section>
 
-        
+        {/* Newsletter Subscription */}
+      <div className="newsletter">
+        <h2>Stay Up To Date About Our Latest Offers</h2>
+        <div className="newsletter-form">
+          <input type="email" placeholder="Enter your email address" />
+          <button>Subscribe to Newsletter</button>
+        </div>
+      </div>
         
       
     </div>

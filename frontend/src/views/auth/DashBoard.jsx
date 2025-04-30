@@ -5,6 +5,7 @@ import { FaCheckCircle, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import "../../views/auth/dashboard.css";
 //import { useAuthStore } from "../../store/auth";
 import apiInstance from "../../utils/axios";
+import '../store/cart.css';
 
 
 
@@ -210,6 +211,15 @@ export default function DashBoard() {
           </div>
         </div>
       </section>
+
+      {/* Newsletter Subscription */}
+      <div className="newsletter">
+        <h2>Stay Up To Date About Our Latest Offers</h2>
+        <div className="newsletter-form">
+          <input type="email" placeholder="Enter your email address" />
+          <button>Subscribe to Newsletter</button>
+        </div>
+      </div>
     </>
   );
 }
