@@ -62,9 +62,9 @@ export default function Header() {
               <a href="#">
                 <FaHeart />
               </a>
-              <a href="#">
+              <Link to="/cart/">
                 <FaShoppingCart />
-              </a>
+              </Link>
              
           </div>
             {/* User icon - always visible regardless of login state */}
