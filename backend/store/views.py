@@ -151,17 +151,17 @@ class CartDetailView(generics.RetrieveAPIView):
 
         for cart_item in queryset:
             total_shipping += float(self.calculate_shipping(cart_item))
-            total_tax += float(self.calculate_tax)
-            total_service_fee += float(self.calculate_service_fee)
-            total_sub_total += float(self.calculate_sub_total)
-            total_total += float(self.calculate_total)
+            total_tax += float(self.calculate_tax(cart_item))
+            total_service_fee += float(self.calculate_service_fee(cart_item))
+            total_sub_total += float(self.calculate_sub_total(cart_item))
+            total_total += float(self.calculate_total(cart_item))
 
         data = {
             'shipping': total_shipping,
             'tax': total_tax,
             'service_fee': total_service_fee,
             'sub_total': total_sub_total,
-            'total_total': total_total
+            'total': total_total
 
         }
 

@@ -10,6 +10,7 @@ function Cart() {
   const userData = UserData()
   const [quantity, setQuantity] = useState(1);
   const [effectClass, setEffectClass] = useState('');
+  const [cartTotal, setCartTotal] = useState([])
 
   const handleDecrease = () => {
     if (quantity > 1) { // Prevent quantity from going below 1
@@ -38,23 +39,38 @@ function Cart() {
     apiInstance.get(url).then((res) => {
       setCart(res.data)
     })
-    console.log(cartId)
+    
   }
+
+  const fetchCartTotal = (cartId, userId) => {
+    const url = userId ? `cart-detail/${cartId}/${userId}` : `cart-detail/${cartId}`
+    apiInstance.get(url).then((res) => {
+      setCartTotal(res.data)
+    })
+    
+  }
+
   if (cart_id !== null || cart_id !== undefined) {
     if (UserData !== undefined) {
       // Send Cart Data with UserId and CartId
       useEffect(() => {
         fetchCartData(cart_id, userData?.user_id)
+        fetchCartTotal(cart_id, userData?.user_id)
       }, [])
       
     } else {
       // Send cart data without UserId but only cartId
       useEffect(() => {
         fetchCartData(cart_id, null)
+        fetchCartTotal(cart_id, null)
       }, [])
+
+      
     }
+    console.log(cartTotal)
 
   }
+  
 
 
   return (
@@ -98,14 +114,14 @@ function Cart() {
           <div className="order-summary">
             <h2>Order Summary</h2>
             <div className="summary-details">
-              <div><span>Subtotal</span><span>$565</span></div>
+              <div><span>Subtotal</span><span>{cartTotal.sub_total?.toFixed(2)}</span></div>
               <div><span>Discount (20%)</span><span className="discount">-$113</span></div>
-              <div><span>Delivery Fee</span><span>$15</span></div>
-              <div><span>Service Fee</span><span>$15</span></div>
-              <div><span>Tax Fee</span><span>$15</span></div>
+              <div><span>Delivery Fee</span><span>{cartTotal.shipping?.toFixed(2)}</span></div>
+              <div><span>Service Fee</span><span>{cartTotal.service?.toFixed(2)}</span></div>
+              <div><span>Tax Fee</span><span>{cartTotal.tax?.toFixed(2)}</span></div>
 
               <hr />
-              <div className="summary-total"><span>Total</span><span>$467</span></div>
+              <div className="summary-total"><span>Total</span><span>{cartTotal.total?.toFixed(2)}</span></div>
             </div>
             <div className="promo-section">
               <input type="text" placeholder="Add promo code" />
