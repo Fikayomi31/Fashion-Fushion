@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import './cart.css';
 import apiInstance from '../../utils/axios';
 import CardID from '../plugin/CardID';
@@ -8,22 +8,50 @@ function Cart() {
   const [cart, setCart] = useState([])
   const cart_id = CardID()
   const userData = UserData()
+  const [quantity, setQuantity] = useState(1);
+  const [effectClass, setEffectClass] = useState('');
+
+  const handleDecrease = () => {
+    if (quantity > 1) { // Prevent quantity from going below 1
+      setQuantity(prevQuantity => prevQuantity - 1);
+      triggerEffect(); // Trigger visual effect
+    }
+  };
+
+  const handleIncrease = () => {
+    setQuantity(prevQuantity => prevQuantity + 1);
+    triggerEffect(); // Trigger visual effect
+  };
+
+  // Function to add a temporary CSS class for visual effect
+  const triggerEffect = () => {
+    setEffectClass('quantity-effect'); // Add the class
+    const timer = setTimeout(() => {
+      setEffectClass(''); // Remove the class after a short delay
+    }, 300); // Adjust delay as needed for your animation
+    // Cleanup the timer if the component unmounts
+    return () => clearTimeout(timer);
+  };
 
   const fetchCartData = (cartId, userId) => {
-    const url = userId ? `cart-list/${cartId}/${userId}/` : `cart-list/${cart}/`
+    const url = userId ? `cart-list/${cartId}/${userId}` : `cart-list/${cartId}`
     apiInstance.get(url).then((res) => {
-      console.log(res.data)
+      setCart(res.data)
     })
+    console.log(cartId)
   }
   if (cart_id !== null || cart_id !== undefined) {
     if (UserData !== undefined) {
       // Send Cart Data with UserId and CartId
       useEffect(() => {
         fetchCartData(cart_id, userData?.user_id)
-      })
+      }, [])
+      
     } else {
       // Send cart data without UserId but only cartId
-
+      useEffect(() => {
+        fetchCartData(cart_id, null)
+      }, [])
     }
 
   }
@@ -36,24 +64,33 @@ function Cart() {
         <div className="cart-grid">
           {/* Cart Items Section */}
           <div className="cart-items">
-            <div className="cart-item">
-              <div className="item-info">
-                <img src="https://via.placeholder.com/100" alt="Product 1" />
-                <div>
-                  <h3>Gradient Graphic T-shirt</h3>
-                  <p>Size: Large</p>
-                  <p>Color: White</p>
-                  <p className="price">$145</p>
+            {cart?.map((c, index) => (            
+              <div className="cart-item" key={index}>
+                <div className="item-info">
+                  <img src={c.product?.image} alt="Product 1" />
+                  <div>
+                    <h3>{c.product?.title}</h3>
+                    {c.size !== "No size" &&
+                      <p>Size: {c.size}</p>
+                    }
+                    {c.color !== "No color" &&                    
+                      <p>Color: {c.color}</p>
+                    }
+                    <p className="price">{c.product?.price}</p>
+                  </div>
+                </div>
+                <div className="item-actions">
+                  <button onClick={handleDecrease}>-</button>
+                  {/* Display the state variable and apply the effect class */}
+                  <span className={effectClass}>{c.qty}</span>
+                  <button onClick={handleIncrease}>+</button> 
+                  <button className="remove-btn">Remove</button>
                 </div>
               </div>
-              <div className="item-actions">
-                <button>-</button>
-                <span>1</span>
-                <button>+</button>
-                <button className="remove-btn">Remove</button>
-              </div>
-            </div>
-
+            ))}
+          {cart.length < 1 &&
+            <h4>Your Cart is Empty</h4>
+          }
             
           </div>
 
