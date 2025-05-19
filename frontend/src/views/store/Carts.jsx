@@ -104,7 +104,16 @@ function Cart() {
                           onChange={(e) => handleQuantityChange(e, c.product.id)}
                                         
                         />
+                        <p className='mb-4 mt-2'>
+                          <a href="" className='text-danger pe-3'>
+                            <small>
+                              <i className='fas fa-trash me-2'/>
+                              Remove
+                            </small>
+                          </a>
+                        </p>
                   </div>
+                  
 
                 </div>
               </div>
