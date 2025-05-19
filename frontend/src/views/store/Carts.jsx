@@ -8,31 +8,29 @@ function Cart() {
   const [cart, setCart] = useState([])
   const cart_id = CardID()
   const userData = UserData()
-  const [quantity, setQuantity] = useState(1);
-  const [effectClass, setEffectClass] = useState('');
+  const [productQuantity, setProductQuantity] = useState('')
+  const [qtyValue, setQtyValue] = useState(1)
   const [cartTotal, setCartTotal] = useState([])
 
-  const handleDecrease = () => {
-    if (quantity > 1) { // Prevent quantity from going below 1
-      setQuantity(prevQuantity => prevQuantity - 1);
-      triggerEffect(); // Trigger visual effect
+   const handleQuantityChange = (e, product_id) => {
+        const quantity = e.target.value
+
+        setProductQuantity((prevQuantities) => ({
+          ...prevQuantities,
+          [product_id]:quantity
+        })
+)
+
     }
-  };
 
-  const handleIncrease = () => {
-    setQuantity(prevQuantity => prevQuantity + 1);
-    triggerEffect(); // Trigger visual effect
-  };
-
-  // Function to add a temporary CSS class for visual effect
-  const triggerEffect = () => {
-    setEffectClass('quantity-effect'); // Add the class
-    const timer = setTimeout(() => {
-      setEffectClass(''); // Remove the class after a short delay
-    }, 300); // Adjust delay as needed for your animation
-    // Cleanup the timer if the component unmounts
-    return () => clearTimeout(timer);
-  };
+  useEffect(() => {
+    const initialQuantity = {}
+    cart.forEach((c) => {
+      initialQuantity[c.product?.id] = c.qty
+    })
+    setProductQuantity(initialQuantity)
+              
+  }, [cart] )
 
   const fetchCartData = (cartId, userId) => {
     const url = userId ? `cart-list/${cartId}/${userId}` : `cart-list/${cartId}`
@@ -67,11 +65,8 @@ function Cart() {
 
       
     }
-    console.log(cartTotal)
-
+    
   }
-  
-
 
   return (
     <div className="cart-page">
@@ -86,21 +81,31 @@ function Cart() {
                   <img src={c.product?.image} alt="Product 1" />
                   <div>
                     <h3>{c.product?.title}</h3>
-                    {c.size !== "No size" &&
+                    {c.size !== "No Size" &&
                       <p>Size: {c.size}</p>
                     }
-                    {c.color !== "No color" &&                    
+                    {c.color !== "No Color" &&                    
                       <p>Color: {c.color}</p>
                     }
                     <p className="price">{c.product?.price}</p>
                   </div>
                 </div>
-                <div className="item-actions">
-                  <button onClick={handleDecrease}>-</button>
-                  {/* Display the state variable and apply the effect class */}
-                  <span className={effectClass}>{c.qty}</span>
-                  <button onClick={handleIncrease}>+</button> 
-                  <button className="remove-btn">Remove</button>
+                {/* Quantity */}
+                <div className='col-md-6 mb-2 d-flex justify-content-end'>
+                  <div className='form-outline'>
+                    <label className='form-label' htmlFor="typeNumber">Quantity</label> 
+                        <input
+                          style={{width: '100px'}}
+                          type='number'
+                          id='typeNumber'
+                          className='form-control'
+                          value={productQuantity[c.product?.id] || c.qty}
+                          min={1}
+                          onChange={(e) => handleQuantityChange(e, c.product.id)}
+                                        
+                        />
+                  </div>
+
                 </div>
               </div>
             ))}
