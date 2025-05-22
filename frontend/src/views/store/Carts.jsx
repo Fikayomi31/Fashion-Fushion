@@ -3,34 +3,26 @@ import './cart.css';
 import apiInstance from '../../utils/axios';
 import CardID from '../plugin/CardID';
 import UserData from '../plugin/UserData';
+import GetCurrentAddress from '../plugin/UserCountry';
+import Swal from 'sweetalert2'
+
+const Toast = Swal.mixin({
+    toast:true,
+    position:'top',
+    showConfirmButton:false,
+    timer:1500,
+    timerProgressBar:true
+  })
+
 
 function Cart() {
   const [cart, setCart] = useState([])
   const cart_id = CardID()
   const userData = UserData()
   const [productQuantity, setProductQuantity] = useState('')
-  const [qtyValue, setQtyValue] = useState(1)
   const [cartTotal, setCartTotal] = useState([])
 
-   const handleQuantityChange = (e, product_id) => {
-        const quantity = e.target.value
-
-        setProductQuantity((prevQuantities) => ({
-          ...prevQuantities,
-          [product_id]:quantity
-        })
-)
-
-    }
-
-  useEffect(() => {
-    const initialQuantity = {}
-    cart.forEach((c) => {
-      initialQuantity[c.product?.id] = c.qty
-    })
-    setProductQuantity(initialQuantity)
-              
-  }, [cart] )
+  const currentAddress = GetCurrentAddress()
 
   const fetchCartData = (cartId, userId) => {
     const url = userId ? `cart-list/${cartId}/${userId}` : `cart-list/${cartId}`
@@ -68,6 +60,52 @@ function Cart() {
     
   }
 
+  useEffect(() => {
+    const initialQuantity = {}
+    cart.forEach((c) => {
+      initialQuantity[c.product?.id] = c.qty
+
+    })
+    setProductQuantity(initialQuantity)  
+  }, [cart])
+
+  const handleQtyChange = (event, product_id) => {
+    const quantity = event.target.value
+
+    setProductQuantity((preQuantities) => ({
+      ...preQuantities,
+      [product_id]:quantity
+    }))
+  }
+
+  const updateCart = async (product_id, price, shipping_amount, size, color) => {
+    const qtyValue = productQuantity[product_id]
+
+    const formdata = new FormData()
+
+    formdata.append('product_id', product_id)
+    formdata.append('user_id', userData?.user_id)
+    formdata.append('qty', qtyValue)
+    formdata.append('price', price)
+    formdata.append('shipping_amount', shipping_amount)
+    formdata.append('country', currentAddress.country)
+    formdata.append('size', size)
+    formdata.append('color', color)
+    formdata.append('cart_id', cart_id)
+    
+    const response = await apiInstance.post('cart-view/', formdata)
+    console.log(response.data)
+    
+    fetchCartData(cart_id, userData?.user_id)
+    fetchCartTotal(cart_id, UserData?.user_id)
+ 
+      Toast.fire({
+        icon: 'success',
+        title: response.data.message
+      })
+ 
+  } 
+
   return (
     <div className="cart-page">
       <div className="cart-container">
@@ -91,31 +129,28 @@ function Cart() {
                   </div>
                 </div>
                 {/* Quantity */}
-                <div className='col-md-6 mb-2 d-flex justify-content-end'>
-                  <div className='form-outline'>
-                    <label className='form-label' htmlFor="typeNumber">Quantity</label> 
-                        <input
-                          style={{width: '100px'}}
-                          type='number'
-                          id='typeNumber'
-                          className='form-control'
-                          value={productQuantity[c.product?.id] || c.qty}
-                          min={1}
-                          onChange={(e) => handleQuantityChange(e, c.product.id)}
-                                        
-                        />
-                        <p className='mb-4 mt-2'>
-                          <a href="" className='text-danger pe-3'>
-                            <small>
-                              <i className='fas fa-trash me-2'/>
-                              Remove
-                            </small>
-                          </a>
-                        </p>
+                <div className='col-md-2 mb-4 mb-md-0' style={{ marginLeft: 'auto', marginRight: 'auto' }}>
+                  <div className='form-outline d-flex mb-4 '>                  
+                    <input
+                      style={{width: '70px'}}
+                      type='number'
+                      id='typeNumber'
+                      className='form-control'
+                      value={productQuantity[c.product?.id] || c.qty}
+                      min={1}
+                      onChange={(e) => handleQtyChange(e, c.product.id)}                                        
+                    />
+                    <button onClick={() => updateCart(cart_id, c.id, c.product.id, c.product.price, c.product.shipping_amount, c.color, c.size)} className='btn btn-primary ms-2'><i className='fas fa-rotate-right'></i>  </button>
                   </div>
                   
-
-                </div>
+                    <a href="" className='text-danger pe-3'>
+                      <small>
+                        <i className='fas fa-trash me-2'/>
+                          Remove
+                      </small>
+                    </a>
+                  
+              </div>
               </div>
             ))}
           {cart.length < 1 &&

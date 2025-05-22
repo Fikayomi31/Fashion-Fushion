@@ -50,12 +50,20 @@
     gap: 16px;
   }
   
+  
   .item-info img {
     width: 100px;
     height: 100px;
     object-fit: cover;
     border-radius: 10px;
   }
+  .quantity-btn {
+            background: none;
+            border: none;
+            padding: 0.25rem 0.75rem;
+            font-size: 1.25rem;
+            cursor: pointer;
+        }
   
   .item-info h3 {
     margin: 0;
