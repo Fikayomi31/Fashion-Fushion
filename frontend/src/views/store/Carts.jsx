@@ -140,10 +140,11 @@ function Cart() {
                       min={1}
                       onChange={(e) => handleQtyChange(e, c.product.id)}                                        
                     />
-                    <button onClick={() => updateCart(cart_id, c.id, c.product.id, c.product.price, c.product.shipping_amount, c.color, c.size)} className='btn btn-primary ms-2'><i className='fas fa-rotate-right'></i>  </button>
+                    <button onClick={() => updateCart(c.product.id, c.product.price, c.product.shipping_amount, c.color, c.size)} className='btn btn-primary ms-2'><i className='fas fa-rotate-right'></i>  </button>
                   </div>
+                  <p className=''>Subtotal: <span>{c.sub_total}</span></p>
                   
-                    <a href="" className='text-danger pe-3'>
+                    <a href="" className='text-danger'>
                       <small>
                         <i className='fas fa-trash me-2'/>
                           Remove
