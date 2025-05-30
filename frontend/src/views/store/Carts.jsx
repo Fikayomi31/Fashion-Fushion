@@ -162,6 +162,31 @@ function Cart() {
     }
   }
 
+  const createOrder = () => {
+    if(!fullName || !email || !mobile || !address || !city || !state || !country) {
+      Swal.fire({
+        icon:'warning',
+        title:'Missing Fields',
+        text:'All fields are required before checkout'
+
+      })
+    }
+    const formdata = new FormData()
+    formdata.append('full_name', fullName)
+    formdata.append('email', email)
+    formdata.append('mobile', mobile)
+    formdata.append('address', address)
+    formdata.append('city', city)
+    formdata.append('state', state)
+    formdata.append('country', country)
+    formdata.append('cart_id', cart_id)
+    formdata.append('fuser_id', userData ? userData.user_id: 0)
+
+    const response = apiInstance.post('create-order/', formdata)
+    console.log(response.data.message);
+
+  } 
+
   return (
     <div className="cart-page">
       <div className="cart-container">
@@ -233,7 +258,7 @@ function Cart() {
               <input type="text" placeholder="Add promo code" />
               <button>Apply</button>
             </div>
-            <button className="checkout-btn">Go to Checkout →</button>
+            <button className="checkout-btn" onClick={createOrder}>Go to Checkout →</button>
           </div>
         </div>
       </div>

@@ -217,19 +217,23 @@ class CreateOrderAPIView(generics.CreateAPIView):
         state = payload['state']
         country = payload['country']
         cart_id = payload['cart_id']
-        user_id = payload['user_id']
+        #user_id = payload['user_id']
+        #print(user_id)
+        user_id = payload.get('user_id', None)
+        print("User ID:", user_id)
 
-        if user_id != 0:
+        try:
             user = User.objects.get(id=user_id)
-        else:
+        except:
             user = None
+
         cart_items = Cart.objects.filter(cart_id=cart_id)
 
         total_shipping = Decimal(0.00)
         total_tax = Decimal(0.00)
         total_service_fee = Decimal(0.00)
         total_sub_total = Decimal(0.00)
-        total_initial_total = Decimal(0.00)
+       
         total_total = Decimal(0.00)
 
         order = CartOrder.objects.create(
@@ -256,14 +260,13 @@ class CreateOrderAPIView(generics.CreateAPIView):
                 service_fee=c.service_fee,
                 tax_fee=c.tax_fee,
                 total=c.total,
-                initial_total=c.total
+                
             )
 
             total_shipping += Decimal(c.shipping_amount)
             total_tax += Decimal(c.tax_fee)
             total_service_fee += Decimal(c.service_fee)
             total_sub_total += Decimal(c.sub_total)
-            total_initial_total += Decimal(c.total)
             total_total += Decimal(c.total)
 
             order.vendor.add(c.product.vendor)
@@ -272,7 +275,7 @@ class CreateOrderAPIView(generics.CreateAPIView):
         order.shipping_amount = total_shipping
         order.tax_fee = total_tax
         order.service_fee = total_service_fee
-        order.initial_total = total_initial_total
+        
         order.total = total_total
 
         order.save()
