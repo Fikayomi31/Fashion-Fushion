@@ -232,7 +232,7 @@ class CreateOrderAPIView(generics.CreateAPIView):
         total_initial_total = Decimal(0.00)
         total_total = Decimal(0.00)
 
-        cart = CartOrder.objects.create(
+        order = CartOrder.objects.create(
             full_name=full_name,
             email=email,
             mobile=mobile,

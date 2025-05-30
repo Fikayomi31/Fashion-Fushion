@@ -21,6 +21,13 @@ function Cart() {
   const userData = UserData()
   const [productQuantity, setProductQuantity] = useState('')
   const [cartTotal, setCartTotal] = useState([])
+  const [fullName, setFullName] = useState('')
+  const [email, setEmail] = useState('')
+  const [mobile, setMobile] = useState('')
+  const [address, setAddress] = useState('')
+  const [city, setCity] = useState('')
+  const [state, setState] = useState('')
+  const [country, setCountry] = useState('')
 
   const currentAddress = GetCurrentAddress()
 
@@ -115,6 +122,46 @@ function Cart() {
       apiInstance.delete(url)
   }
 
+  const handleChange = (e) => {
+    const {name, value} = e.target
+
+    console.log(name)
+    console.log(value)
+
+    switch (name) {
+      case 'fullName':
+        setFullName(value)
+        break
+
+      case 'email':
+        setEmail(value)
+        break
+
+      case 'mobile':
+        setMobile(value)
+        break
+
+      case 'address':
+        setAddress(value)
+        break
+
+      case 'city':
+        setCity(value)
+        break
+      
+      case 'state':
+        setState(value)
+        break
+
+      case 'country':
+        setCountry(value)
+        break
+
+      default:
+        break
+    }
+  }
+
   return (
     <div className="cart-page">
       <div className="cart-container">
@@ -189,6 +236,114 @@ function Cart() {
             <button className="checkout-btn">Go to Checkout →</button>
           </div>
         </div>
+      </div>
+
+      <div className='mb-4 mt-4' style={{width: '60%', margin: '0 auto'}}>
+        <h5 className="mb-4 mt-4">Contact Information</h5>
+        {/* 2 column grid layout with text inputs for the first and last names */}
+        <div className='row mb-4'>
+          <div className='col'>
+            <div className='form-outline'>
+              <label className="form-label" htmlFor="form6Example1"> <i className='fas fa-user'></i> Full Name</label>
+                <input 
+                  type="text"
+                  id="form6Example1"
+                  name='fullName'
+                  className="form-control"
+                  value={fullName}
+                  onChange={handleChange}                     
+                />
+            </div>
+          </div>
+        </div>
+        <div className="row mb-4">
+          <div className="col">
+            <div className="form-outline">
+              <label className="form-label" htmlFor="form6Example1"><i className='fas fa-envelope'></i> Email</label>
+                <input
+                  type="text"
+                  id="form6Example1"
+                  className="form-control"
+                  onChange={handleChange}
+                  name='email'
+                  value={email}                 
+                />
+            </div>
+          </div>
+          <div className="col">
+            <div className="form-outline">
+              <label className="form-label" htmlFor="form6Example1"><i className='fas fa-phone'></i> Mobile</label>
+                <input
+                  type="text"
+                  id="form6Example1"
+                  className="form-control"
+                  onChange={handleChange}
+                  name='mobile'
+                  value={mobile}
+                                                
+                />
+            </div>
+          </div>
+        </div>
+        <h5 className="mb-1 mt-4">Shipping address</h5>
+
+        <div className="row mb-4">
+          <div className="col-lg-6 mt-3">
+            <div className="form-outline">
+              <label className="form-label" htmlFor="form6Example1"> Address</label>
+                <input
+                  type="text"
+                  id="form6Example1"
+                  className="form-control"
+                  onChange={handleChange}
+                  name='address'
+                  value={address}              
+                />
+            </div>
+          </div>
+          <div className="col-lg-6 mt-3">
+            <div className="form-outline">
+              <label className="form-label" htmlFor="form6Example1"> City</label>
+                <input
+                  type="text"
+                  id="form6Example1"
+                  className="form-control"
+                  onChange={handleChange}
+                  name='city'
+                  value={city}                          
+                />
+            </div>
+          </div>
+
+          <div className="col-lg-6 mt-3">
+            <div className="form-outline">
+              <label className="form-label" htmlFor="form6Example1"> State</label>
+                <input
+                  type="text"
+                  id="form6Example1"
+                  className="form-control"
+                  onChange={handleChange}
+                  name='state'
+                  value={state}       
+                />
+            </div>
+          </div>
+          <div className="col-lg-6 mt-3">
+            <div className="form-outline">
+              <label className="form-label" htmlFor="form6Example1"> Country</label>
+                <input
+                  type="text"
+                  id="form6Example1"
+                  className="form-control"
+                  name='country'
+                  onChange={handleChange}
+                  value={country}       
+                />
+            </div>
+            
+          </div>
+        </div>
+
       </div>
 
       {/* Newsletter Subscription */}
