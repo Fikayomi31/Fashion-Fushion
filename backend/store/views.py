@@ -1,8 +1,9 @@
+from re import L
 from django.shortcuts import render
 
 from userauth.models import User
-from store.models import Product, Tax, Category, SubCategory, Cart, CartOrder, CartOrderItem
-from store.serializers import ProductSerializer, CategorySerializer, SubCategorySerializer, CartSerializer, CartOrderSerializer
+from store.models import Product, Tax, Category, SubCategory, Cart, CartOrder, CartOrderItem, Coupon
+from store.serializers import ProductSerializer, CategorySerializer, SubCategorySerializer, CartSerializer, CartOrderSerializer, CouponSerializer
 
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -290,3 +291,44 @@ class CheckoutView(generics.RetrieveAPIView):
         order = CartOrder.objects.get(oid=order_oid)
         return order
     
+class CouponAPIView(generics.CreateAPIView):
+    serializer_class = CouponSerializer
+    queryset = Coupon.objects.all()
+    permission_classes = [AllowAny]
+
+    def create(self, request):
+        payload = request.data
+
+        order_oid = payload['order_oid']
+        coupon_code = payload['coupon_code']
+
+        order = CartOrder.objects.get(oid=order_oid)
+        coupon = Coupon.objects.get(code=coupon_code)
+
+        if coupon:
+            order_items = CartOrderItem.objects.filter(order=order, vendor=coupon.vendor)
+            if order_items:
+                for i in order_items:
+                    if not coupon in i.coupon.all():
+                        discount = i.total * coupon.discount / 100
+
+                        i.total -= discount
+                        i.sub_total -= discount
+                        i.coupon.add(coupon)
+                        i.saved += discount
+
+                        order.total -= discount
+                        order.sub_total -= discount
+                        order.saved += discount
+
+                        i.save()
+                        order.save()
+
+                        return Response({"message":'Coupon Activaed'}, status=status.HTTP_200_OK)
+                    else:
+                        return Response({"message":'Coupon ALready Activaed'}, status=status.HTTP_200_OK)
+                    
+                else:
+                    return Response({"message":'Order Item Does Not Exists'}, status=status.HTTP_200_OK)
+            else:
+                return Response({"message":'Coupon Not Exists'}, status=status.HTTP_200_OK)
