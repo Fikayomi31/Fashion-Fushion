@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './cart.css';
 import apiInstance from '../../utils/axios';
 import CardID from '../plugin/CardID';
 import UserData from '../plugin/UserData';
 import GetCurrentAddress from '../plugin/UserCountry';
 import Swal from 'sweetalert2'
+
 
 const Toast = Swal.mixin({
     toast:true,
@@ -28,8 +30,9 @@ function Cart() {
   const [city, setCity] = useState('')
   const [state, setState] = useState('')
   const [country, setCountry] = useState('')
-
+  const navigate = useNavigate()
   const currentAddress = GetCurrentAddress()
+
 
   const fetchCartData = (cartId, userId) => {
     const url = userId ? `cart-list/${cartId}/${userId}` : `cart-list/${cartId}`
@@ -162,30 +165,41 @@ function Cart() {
     }
   }
 
-  const createOrder = () => {
-    if(!fullName || !email || !mobile || !address || !city || !state || !country) {
-      Swal.fire({
-        icon:'warning',
-        title:'Missing Fields',
-        text:'All fields are required before checkout'
+  const createCartOrder = async () => {
 
-      })
+        if (!fullName || !email || !mobile || !address || !city || !state || !country) {
+            // If any required field is missing, show an error message or take appropriate action
+            console.log("Please fill in all required fields");
+            Swal.fire({
+                icon: 'warning',
+                title: 'Missing Fields!',
+                text: "All fields are required before checkout",
+            })
+            
+        }
+
+        try {
+
+            const formData = new FormData();
+            formData.append('full_name', fullName);
+            formData.append('email', email);
+            formData.append('mobile', mobile);
+            formData.append('address', address);
+            formData.append('city', city);
+            formData.append('state', state);
+            formData.append('country', country);
+            formData.append('cart_id', cart_id);
+            formData.append('user_id', userData ? userData.user_id : 0);
+
+            const response = await apiInstance.post('create-order/', formData)
+            console.log(response.data.order_oid);
+
+            navigate(`/checkout/${response.data.order_oid}`);
+
+        } catch (error) {
+            console.log(error);
+        }
     }
-    const formdata = new FormData()
-    formdata.append('full_name', fullName)
-    formdata.append('email', email)
-    formdata.append('mobile', mobile)
-    formdata.append('address', address)
-    formdata.append('city', city)
-    formdata.append('state', state)
-    formdata.append('country', country)
-    formdata.append('cart_id', cart_id)
-    formdata.append('fuser_id', userData ? userData.user_id: 0)
-
-    const response = apiInstance.post('create-order/', formdata)
-    console.log(response.data.message);
-
-  } 
 
   return (
     <div className="cart-page">
@@ -258,7 +272,7 @@ function Cart() {
               <input type="text" placeholder="Add promo code" />
               <button>Apply</button>
             </div>
-            <button className="checkout-btn" onClick={createOrder}>Go to Checkout →</button>
+            <button className="checkout-btn" onClick={createCartOrder}>Go to Checkout →</button>
           </div>
         </div>
       </div>

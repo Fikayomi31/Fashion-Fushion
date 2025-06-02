@@ -16,6 +16,7 @@ import Category from './views/store/Category'
 //import Cart from './views/store/Cart'
 import ProductDetail from './views/store/ProductDetail'
 import Carts from './views/store/Carts'
+import Checkout from './views/store/checkout'
 
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
           <Route path='/category' element={<Category />} />
           <Route path='/detail/:slug/' element={<ProductDetail />} />
           <Route path='/cart' element={<Carts />} />
+          <Route path='/checkout/:order_oid/' element={<Checkout />} />
 
         </Routes>
       </MainWrapper>

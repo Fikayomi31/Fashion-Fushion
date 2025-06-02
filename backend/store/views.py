@@ -217,8 +217,6 @@ class CreateOrderAPIView(generics.CreateAPIView):
         state = payload['state']
         country = payload['country']
         cart_id = payload['cart_id']
-        #user_id = payload['user_id']
-        #print(user_id)
         user_id = payload.get('user_id', None)
         print("User ID:", user_id)
 
@@ -283,3 +281,12 @@ class CreateOrderAPIView(generics.CreateAPIView):
         return Response({'message': "Order Created Successful", "order_oid":order.oid}, status=status.HTTP_201_CREATED)
 
 
+class CheckoutView(generics.RetrieveAPIView):
+    serializer_class = CartOrderSerializer
+    lookup_field = 'order_oid'
+
+    def get_object(self):
+        order_oid = self.kwargs['order_oid']
+        order = CartOrder.objects.get(oid=order_oid)
+        return order
+    
