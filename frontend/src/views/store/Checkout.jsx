@@ -1,11 +1,21 @@
 import React, { useState, useEffect } from 'react'
 import apiInstance from '../../utils/axios'
 import { useParams, useNavigate } from 'react-router-dom'
+import Swal from 'sweetalert2'
+
+const Toast = Swal.mixin({
+    toast:true,
+    position:'top',
+    showConfirmButton:false,
+    timer:1500,
+    timerProgressBar:true
+  })
 
 
 function Checkout() {
     const [order, setOrder] = useState([])
     const param = useParams()
+    const [couponCode, setCouponCode] = useState('')
     console.log(param.order_oid)
 
     useEffect(() => {
@@ -15,6 +25,30 @@ function Checkout() {
             
         })
     }, [])
+
+    const applyCoupon = async () => {
+
+        console.log(couponCode)
+        console.log(order.oid)
+
+        const formdata = new FormData()
+        formdata.append('order_oid', order.oid)
+        formdata.append('coupon_code', couponCode)
+
+        try {
+            const response = await apiInstance.post('coupon/', formdata)
+            console.log(response.data.message)
+
+            Swal.fire({
+                icon:response.data.message,
+                title:response.data.message 
+            })
+
+        } catch (error) {
+            console.log(error)
+        }
+    
+    }
 
   return (
     <div>
@@ -137,7 +171,7 @@ function Checkout() {
                         </div>
                         <div className="col-lg-4 mb-4 mb-md-0">
                           {/* Section: Summary */}
-                          {<section className="shadow-4 p-4 rounded-5 mb-4">
+                          <section className="shadow-4 p-4 rounded-5 mb-4">
                             <h5 className="mb-3">Cart Summary</h5>
                             <div className="d-flex justify-content-between mb-3">
                               <span>Subtotal </span>
@@ -163,7 +197,28 @@ function Checkout() {
         
                             
                            
-                          </section>}
+                          </section>
+                          <section className='shadow rounded-3 card p-4 mb-4 rounded-5'>
+                            <h5 className='mb-4'>Apply promo code</h5>
+                            <div className='d-flex align-items-center'>
+                                <input
+                                    type='text'
+                                    className='form-control rounded me-1'
+                                    placeholder='Promo code'
+                                    onChange={(e) => setCouponCode(e.target.value)}
+                                />
+                                <button
+                                    type='button'
+                                    className='btn btn-success btn-rounded overflow-visible'
+                                    onClick={applyCoupon}
+                                >
+                                    Apply
+
+                                </button>
+
+                            </div>
+                          
+                          </section>
                         </div>
                       </div>
                     </section>
