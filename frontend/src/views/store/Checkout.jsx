@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import apiInstance from '../../utils/axios'
 import { useParams, useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
+import { SERVER_URL } from '../../utils/constants'
 
 const Toast = Swal.mixin({
     toast:true,
@@ -16,8 +17,7 @@ function Checkout() {
     const [order, setOrder] = useState([])
     const param = useParams()
     const [couponCode, setCouponCode] = useState('')
-    console.log(param.order_oid)
-
+    const [paymentLoading, setPaymentLoading] = useState(false)
     useEffect(() => {
         apiInstance.get(`/checkout/${param.order_oid}/`).then((res) => {
             setOrder(res.data)
@@ -49,6 +49,12 @@ function Checkout() {
         }
     
     }
+    
+    const payWithStripe = (event) => {
+      setPaymentLoading(true)
+      event.target.form.submit()
+    }
+
 
   return (
     <div>
@@ -217,8 +223,27 @@ function Checkout() {
                                 </button>
 
                             </div>
+                            
                           
                           </section>
+                          {paymentLoading === true &&
+                            <form action={`${SERVER_URL}/api/v1/stripe-checkout/${order?.oid}/`}>
+                              <button onClick={payWithStripe} disabled type='button' className='btn btn-primary btn-rounded w-100'>
+                                Processing... <i className='fas fa-spinner fa-spin'></i>
+                              </button>
+
+                            </form>                          
+                          }
+
+                          {paymentLoading === false &&
+                            <form action={`${SERVER_URL}/api/v1/stripe-checkout/${order?.oid}/`} method='POST'>
+                              <button onClick={payWithStripe} type='button' className='btn btn-primary btn-rounded w-100'>
+                                Pay With Stripe <i className='fas fa-credit-card'></i>
+                              </button>
+
+                            </form>                          
+                          }
+                          
                         </div>
                       </div>
                     </section>

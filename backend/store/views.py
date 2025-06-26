@@ -343,7 +343,7 @@ class StripeCheckoutView(generics.CreateAPIView):
     permission_classes = [AllowAny]
     queryset = CartOrder.objects.all()
 
-    def create(self):
+    def create(self, *args, **kwargs):
         order_oid = self.kwargs['order_oid']
         order = CartOrder.objects.get(oid=order_oid)
 
@@ -353,7 +353,7 @@ class StripeCheckoutView(generics.CreateAPIView):
         try:
             checkout_session = stripe.checkout.Session.create(
                 customer_email=order.email,
-                payment_method=['card'],
+                payment_method_types=['card'],
                 line_items=[
                     {
                         'price_data':{
@@ -368,7 +368,7 @@ class StripeCheckoutView(generics.CreateAPIView):
                 ],
                 mode='payment',
                 success_url='http://localhost:5173/payment-success/' + order.oid +'?session_id={CHECKOUT_SESSION_ID}',
-                concel_url='http://localhost:5173/payment-failed/?session_id={CHECKOUT_SESSION_ID}'
+                cancel_url='http://localhost:5173/payment-failed/?session_id={CHECKOUT_SESSION_ID}'
             )   
             order.stripe_session_id = checkout_session.id
             order.save()
