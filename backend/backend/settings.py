@@ -162,6 +162,8 @@ ANYMAIL = {
 FROM_EMAIL = env("FROM_EMAIL")
 EMAIL_BACKEND = 'anymail.backends.mailgun.EmailBackend'
 
+STRIPE_PUBLIC_KEY = env("STRIPE_PUBLIC_KEY")
+STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

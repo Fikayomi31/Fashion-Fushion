@@ -1,5 +1,5 @@
-from re import L
 from django.shortcuts import redirect, render
+from django.conf import settings
 
 from userauth.models import User
 from store.models import Product, Tax, Category, SubCategory, Cart, CartOrder, CartOrderItem, Coupon
@@ -13,7 +13,8 @@ from decimal import Decimal
 
 import stripe
 
-stripe.api_key = "<api-key>"
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
 class CategoryListAPIView(generics.ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
