@@ -36,7 +36,7 @@ export default function Header() {
       </div>
 
       
-      <header className="header">
+      <header className="header p-0" >
         <div className="container">
           <div className="nav-container">
             <Link className="logo"  to="/">

@@ -12,7 +12,9 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+
 from datetime import timedelta
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -50,7 +52,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist', 
     'corsheaders',
-    'anymail',
+    #'anymail',
     'drf_yasg',
     'shortuuid',
     'django_ckeditor_5',
@@ -145,19 +147,6 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 AUTH_USER_MODEL = 'userauth.User'
 
-MAILGUN_API_KEY = env("MAILGUN_API_KEY")
-MAILGUN_SENDER_DOMAIN = env("MAILGUN_SENDER_DOMAIN")
-
-ANYMAIL = {
-    "MAILGUN_API_KEY": env("MAILGUN_API_KEY"),
-    "MAILGUN_SENDER_DOMAIN": env("MAILGUN_SENDER_DOMAIN"),
-}
-
-FROM_EMAIL = env("FROM_EMAIL")
-EMAIL_BACKEND = 'anymail.backends.mailgun.EmailBackend'
-
-STRIPE_PUBLIC_KEY = env("STRIPE_PUBLIC_KEY")
-STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -170,6 +159,14 @@ JAZZMIN_SETTINGS = {
     "site_logo": "your-logo.png",  # Replace with your logo
     "welcome_sign": "Welcome to the FashionFashionHub Admin",
     # More options can be configured
+    
+    "site_brand": "FashionFashionHub",
+    "site_logo": "images/logo.jpg",  # Replace with your logo
+    
+    "site_logo_classes": "img-circle",  # Controls logo shape and size
+
+    # This removes or hides the "Django administration" text
+    "hide_title": True,
 }
 
 SIMPLE_JWT = {
@@ -370,3 +367,11 @@ CKEDITOR_5_CONFIGS = {
         },
     },
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'fikayoogundijo@gmail.com'
+EMAIL_HOST_PASSWORD = 'qmwd lkxq qbsi xfup'  # The 16-character app password
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

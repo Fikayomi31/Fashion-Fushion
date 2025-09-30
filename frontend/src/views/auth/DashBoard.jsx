@@ -6,12 +6,18 @@ import "../../views/auth/dashboard.css";
 //import { useAuthStore } from "../../store/auth";
 import apiInstance from "../../utils/axios";
 import '../store/cart.css';
+import hero1 from "../../assets/Family-Togetherness-in-Joyful-Poses.png";
+import hero2 from "../../assets/Arranging-Hoodies-in-Retail-Space.png";
+import hero3 from "../../assets/Contemplative-Moment-in-the-Rain.png";
+import hero4 from "../../assets/Confident-Professional-in-Modern-Office.png";
 
 
 
 export default function DashBoard() {
     const [category, setCategory] = useState([])
     const [subCategory, setSubCategory] = useState([])
+    const heroImages = [hero1, hero2, hero3, hero4];
+    const [currentImage, setCurrentImage] = useState(0);
 
     useEffect(() => {
         apiInstance.get(`/category`).then((res) => {
@@ -25,44 +31,49 @@ export default function DashBoard() {
         })
     }, [])
 
-
+    useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % heroImages.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [heroImages.length]);
     
 
   return (
 
     <>
       {/* Hero Section */}
-      <section className="hero">
-        <div className="container">
-            <div className="hero-content">
-                <div className="hero-text">
-
-                    <h1>Find clothes that matches your style</h1>
-                    <p>Browse through our diverse range of meticulously crafted garments, designed to bring out your individuality and cater to your sense of style.</p>
-                    <a href="#" class="shop-now-btn">Shop Now</a>
-                    <div className="stats">
-                        <div className="stat-item">
-                            <div className="stat-number">200+</div>
-                            <div className="stat-text">International Brands</div>
-                        </div>
-                        <div className="stat-item">
-                            <div className="stat-number">2,000+</div>
-                            <div className="stat-text">High-Quality Products</div>
-                        </div>
-                        <div className="stat-item">
-                            <div className="stat-number">30,000+</div>
-                            <div className="stat-text">Happy Customers</div>
-                        </div>
-                    </div>
-                </div>
-                <div className="hero-image">
-                    <img src='' alt="Fashion Models" />
-                    <div className="star-decoration star-1">✦</div>
-                    <div className="star-decoration star-2">✦</div>
-                </div>
-            </div>
+      <section className="hero"
+  style={{
+    backgroundImage: `url(${heroImages[currentImage]})`,
+  }}>
+  <div className="container">
+    <div className="hero-content">
+      <div className="hero-text">
+        <h1>Find clothes that match your style</h1>
+        <p>
+          Browse through our diverse range of meticulously crafted garments,
+          designed to bring out your individuality and cater to your sense of style.
+        </p>
+        <a href="#" className="shop-now-btn">Shop Now</a>
+        <div className="stats">
+          <div className="stat-item">
+            <div className="stat-number">200+</div>
+            <div className="stat-text">International Brands</div>
+          </div>
+          <div className="stat-item">
+            <div className="stat-number">2,000+</div>
+            <div className="stat-text">High-Quality Products</div>
+          </div>
+          <div className="stat-item">
+            <div className="stat-number">30,000+</div>
+            <div className="stat-text">Happy Customers</div>
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
+  </div>
+</section>
     
     <section className="brands">
         <div className="container">

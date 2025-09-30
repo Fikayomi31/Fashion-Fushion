@@ -11,7 +11,7 @@ class CustomerProfileAdmin(admin.ModelAdmin):
     list_filter = ['date']
 
 class VendorProfileAdmin(admin.ModelAdmin):
-    list_display = ['brand', 'date']
+    list_display = ['full_name', 'brand', 'date']
     search_fields = ['brand']
     list_filter = ['date']
  

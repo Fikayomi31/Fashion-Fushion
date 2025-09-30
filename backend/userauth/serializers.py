@@ -3,23 +3,22 @@ from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework.validators import UniqueValidator
 
-from userauth.models import User, CustomerProfile, VendorProfile
+from userauth.models import User, Profile
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
 
-        # Add user details to token payload
+        # User details to token payload
         token['full_name'] = user.full_name
         token['email'] = user.email
         token['username'] = user.username
-        token['user_type'] = user.user_type
-        
-        # Add vendor_id if the user is a vendor
-        if user.user_type == 'Vendor' and hasattr(user, 'vendor_profile'):
-            token['vendor_id'] = user.vendor_profile.id
-        else:
+       
+        try:
+            token['vendor_id'] = user.vendor_id
+        except:
             token['vendor_id'] = 0
 
         return token
@@ -61,48 +60,18 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 
-class CustomerProfileSerializer(serializers.ModelSerializer):
+class ProfileSerializer(serializers.ModelSerializer):
     """Serializer for Customer profiles with nested user details."""
     user = UserSerializer(read_only=True)
     
     class Meta:
-        model = CustomerProfile
-        fields = ['id', 'user', 'image', 'full_name', 'country', 'mobile', 'active', 'slug', 'date']
-        read_only_fields = ['id', 'date', 'slug']
+        model = Profile
+        fields = '__all__'
+        read_only_fields = ['pid', 'date']
 
-    def update(self, instance, validated_data):
-        """Ensure user data is updated correctly."""
-        # Update profile fields
-        instance = super().update(instance, validated_data)
-        
-        # If full_name is updated in profile, sync it with user model
-        if 'full_name' in validated_data and validated_data['full_name']:
-            user = instance.user
-            user.full_name = validated_data['full_name']
-            user.save()
-            
-        return instance
-
-class VendorProfileSerializer(serializers.ModelSerializer):
-    """Serializer for Vendor profiles with nested user details."""
-    user = UserSerializer(read_only=True)
     
-    class Meta:
-        model = VendorProfile
-        fields = ['id', 'user', 'image', 'full_name', 'brand', 'description', 
-                 'mobile', 'active', 'slug', 'date']
-        read_only_fields = ['id', 'date', 'slug']
-
-    def update(self, instance, validated_data):
-        """Ensure user data is updated correctly."""
-        # Update profile fields
-        instance = super().update(instance, validated_data)
-        
-        # If full_name is updated in profile, sync it with user model
-        if 'full_name' in validated_data and validated_data['full_name']:
-            user = instance.user
-            user.full_name = validated_data['full_name']
-            user.save()
-            
-        return instance
-    
+    """Method to include nested user details in the serialized output."""
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        response['user'] = UserSerializer(instance.user).data
+        return response

@@ -5,7 +5,7 @@ from django.utils.text import slugify
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 
-from userauth.models import User, CustomerProfile, VendorProfile
+from userauth.models import User, Profile
 
 
 CATEGORY_TYPE = (
@@ -120,7 +120,7 @@ class Product(models.Model):
     views = models.PositiveIntegerField(default=0)
     rating = models.PositiveIntegerField(default=0, null=True, blank=True)
 
-    vendor = models.ForeignKey(VendorProfile, on_delete=models.SET_NULL, null=True, blank=True, related_name="vendor")
+    vendor = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, blank=True, related_name="vendor")
     pid = ShortUUIDField(unique=True, length=10, alphabet='abcdefg12345')
     slug = models.SlugField(blank=True, null=True)
     date = models.DateTimeField(auto_now_add=True)

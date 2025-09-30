@@ -11,13 +11,13 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound, ValidationError
 
-from userauth.models import User, CustomerProfile, VendorProfile
+from userauth.models import User, Profile
 from userauth.serializers import (
     MyTokenObtainPairSerializer, 
     RegisterSerializer, 
     UserSerializer,
-    CustomerProfileSerializer,
-    VendorProfileSerializer
+    ProfileSerializer,
+    ProfileSerializer
 )
 
 
