@@ -137,36 +137,7 @@ function Register() {
                                                             className="form-control"
                                                         />
                                                     </div>
-                                                    <div className="form-outline mb-4">
-                                                        <label className="form-label">Select Role</label>
-                                                        <div className="d-flex justify-content-start">
-                                                            <div className="form-check me-4">
-                                                                <input
-                                                                    type="radio"
-                                                                    id="customer"
-                                                                    name="userType"
-                                                                    value="Customer"
-                                                                    onChange={(e) => setUserType(e.target.value)}
-                                                                    className="form-check-input"
-                                                                    required
-                                                                />
-                                                                <label className="form-check-label" htmlFor="customer">Customer</label>
-                                                            </div>
-
-                                                            <div className="form-check">
-                                                                <input
-                                                                    type="radio"
-                                                                    id="vendor"
-                                                                    name="userType"
-                                                                    value="Vendor"
-                                                                    onChange={(e) => setUserType(e.target.value)}
-                                                                    className="form-check-input"
-                                                                    required
-                                                                />
-                                                                <label className="form-check-label" htmlFor="vendor">Vendor</label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    
 
 
                                                     <p className='fw-bold text-danger'>

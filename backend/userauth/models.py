@@ -32,7 +32,7 @@ class User(AbstractUser):
 
 class Profile(models.Model):
     """Profile model."""
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='customer_profile')
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
     image = models.ImageField(upload_to='images', default='default.jpg', null=True, blank=True)
     full_name = models.CharField(max_length=100, blank=True)
     gender = models.CharField(max_length=100, null=True, blank=True)
@@ -56,7 +56,7 @@ class Profile(models.Model):
         if self.full_name == "" or self.full_name == None:
             self.full_name = self.user.full_name
         
-        super().save(*args, **kwargs)
+        super(Profile, self).save(*args, **kwargs)
 
 
 # Signals to ensure profile is created for every user

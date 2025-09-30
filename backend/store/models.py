@@ -6,6 +6,7 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 
 from userauth.models import User, Profile
+from vendor.models import Vendor
 
 
 CATEGORY_TYPE = (
@@ -103,7 +104,6 @@ class SubCategory(models.Model):
 
 class Product(models.Model):
     title = models.CharField(max_length=100)
-
     image = models.FileField(upload_to='products', default='product.jpg', null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name="category")
@@ -120,7 +120,7 @@ class Product(models.Model):
     views = models.PositiveIntegerField(default=0)
     rating = models.PositiveIntegerField(default=0, null=True, blank=True)
 
-    vendor = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, blank=True, related_name="vendor")
+    vendor = models.ForeignKey(Vendor, on_delete=models.SET_NULL, null=True, blank=True, related_name="vendor")
     pid = ShortUUIDField(unique=True, length=10, alphabet='abcdefg12345')
     slug = models.SlugField(blank=True, null=True)
     date = models.DateTimeField(auto_now_add=True)
@@ -219,8 +219,8 @@ class Cart(models.Model):
         return f'{self.cart_id} - {self.product.title}'
     
 class CartOrder(models.Model):
-    vendor = models.ManyToManyField(VendorProfile, blank=True)
-    buyer = models.ForeignKey(CustomerProfile, on_delete=models.SET_NULL, null=True, blank=True)
+    vendor = models.ManyToManyField(Vendor, blank=True)
+    buyer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     
     sub_total = models.DecimalField(decimal_places=2, max_digits=12, default=0.00)
     shipping_amount = models.DecimalField(decimal_places=2, max_digits=12, default=0.00)
@@ -260,7 +260,7 @@ class CartOrder(models.Model):
 class CartOrderItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     order = models.ForeignKey(CartOrder, on_delete=models.CASCADE)
-    vendor = models.ForeignKey(VendorProfile, on_delete=models.CASCADE)
+    vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
 
     qty = models.CharField(default=0, max_length=100)
     price = models.DecimalField(decimal_places=2, max_digits=12, default=0.00)
@@ -344,7 +344,7 @@ class Wishlist(models.Model):
 
 class Notification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    vendor = models.ForeignKey(VendorProfile, on_delete=models.CASCADE)
+    vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
     order = models.ForeignKey(CartOrder, on_delete=models.SET_NULL, null=True, blank=True)
     order_item = models.ForeignKey(CartOrderItem, on_delete=models.SET_NULL, null=True, blank=True)
     seen = models.BooleanField(default=False)
@@ -357,7 +357,7 @@ class Notification(models.Model):
             return f"Notification - {self.pk}"
         
 class Coupon(models.Model):
-    vendor = models.ForeignKey(VendorProfile, on_delete=models.CASCADE)
+    vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
     user_by = models.ManyToManyField(User, blank=True)
     code = models.CharField(max_length=1000)
     discount = models.IntegerField(default=1)

@@ -20,7 +20,7 @@ class SizeInline(admin.TabularInline):
     extra = 0
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['title', 'category', 'sub_category', 'price', 'shipping_amount', 'stock_qty', 'in_stock', 'vendor', 'featured']
+    list_display = ['title', 'category', 'sub_category', 'price', 'shipping_amount', 'stock_qty', 'in_stock', 'featured']
     list_editable = ['featured']
     list_filter = ['date']
     search_fields = ['title']
@@ -34,7 +34,7 @@ class CartAdmin(admin.ModelAdmin):
     list_filter = ['date', 'product']
 
 class CartOrderAdmin(admin.ModelAdmin):
-    list_display = ['oid', 'buyer', 'total', 'payment_status', 'order_status', 'date']
+    list_display = ['oid',  'total', 'payment_status', 'order_status', 'date']
     search_fields = ['oid', '']
     list_editable = ['payment_status', 'order_status']
 

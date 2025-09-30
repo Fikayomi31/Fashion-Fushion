@@ -17,7 +17,7 @@ from userauth.serializers import (
     RegisterSerializer, 
     UserSerializer,
     ProfileSerializer,
-    ProfileSerializer
+    
 )
 
 
@@ -170,15 +170,13 @@ class PasswordChangeView(generics.CreateAPIView):
 
 class UserProfileView(generics.RetrieveUpdateAPIView):
     """View for retrieving and updating user profile."""
-    permission_classes = (IsAuthenticated,)
-    
-    def get_serializer_class(self):
-        if self.request.user.user_type == 'Vendor':
-            return VendorProfileSerializer
-        return CustomerProfileSerializer
-    
+   
+    permission_classes = (AllowAny,)
+    serializer_class = ProfileSerializer
+
     def get_object(self):
-        user = self.request.user
-        if user.user_type == 'Vendor':
-            return get_object_or_404(VendorProfile, user=user)
-        return get_object_or_404(CustomerProfile, user=user)
+        user_id = self.kwargs['user_id']
+
+        user = User.objects.get(id=user_id)
+        profile = Profile.objects.get(user=user)
+        return profile
