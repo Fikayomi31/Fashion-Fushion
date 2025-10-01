@@ -9,8 +9,7 @@ function Register() {
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
     const [password2, setPassword2] = useState('');
-    const [userType, setUserType] = useState('')
-    
+   
     const [isLoading, setIsLoading] = useState(false);
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
     const navigate = useNavigate();
@@ -27,7 +26,7 @@ function Register() {
         setPhone('');
         setPassword('');
         setPassword2('');
-        setUserType('');
+
     };
 
     const handleSubmit = async (e) => {
@@ -36,7 +35,7 @@ function Register() {
         // Set isLoading to true when the form is submitted
         setIsLoading(true);
 
-        const { error } = await register(fullname, email, phone, password, password2, userType);
+        const { error } = await register(fullname, email, phone, password, password2);
         if (error) {
             alert(JSON.stringify(error));
         } else {

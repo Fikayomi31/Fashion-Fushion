@@ -19,7 +19,7 @@ CATEGORY_TYPE = (
 SUB_CATEGORY_TYPE = (
     # MEN'S CATEGORIES
     ('SHIRTS', 'Shirts'),
-    ('T_SHIRTS', 'T-Shirts'),
+    ('T-SHIRTS', 'T-Shirts'),
     ('JEANS', 'Jeans'),
     ('TROUSERS', 'Trousers'),
     ('SUITS', 'Suits'),
