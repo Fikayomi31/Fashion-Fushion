@@ -11,9 +11,10 @@ from rest_framework.response import Response
 
 from decimal import Decimal
 
-#import stripe
+import stripe
 
-#stripe.api_key = settings.STRIPE_SECRET_KEY
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
 
 class CategoryListAPIView(generics.ListAPIView):
     queryset = Category.objects.all()
