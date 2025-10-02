@@ -4,6 +4,8 @@ from shortuuid.django_fields import ShortUUIDField
 from django.utils.text import slugify
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from django.utils.html import strip_tags
+import re
 
 from userauth.models import User, Profile
 from vendor.models import Vendor
@@ -24,7 +26,6 @@ SUB_CATEGORY_TYPE = (
     ('TROUSERS', 'Trousers'),
     ('SUITS', 'Suits'),
     ('TOPS', 'Tops'),
-    ('JEANS', 'Jeans'),
     ('SKIRTS', 'Skirts'),
     ('LEGGINGS', 'Leggings'),
     ('JACKETS', 'Jackets'),
@@ -32,6 +33,7 @@ SUB_CATEGORY_TYPE = (
     ('SHORTS', 'Shorts'),
     ('JOGGERS', 'Joggers'),
     ('DRESS', 'Dress'),
+    ('SWEATSHIRTS', 'Sweatshirts'),
 )
 
 RATING = (
@@ -193,8 +195,23 @@ class Size(models.Model):
 class Color(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     name = models.CharField(max_length=1000)
-    color_code = models.CharField(max_length=1000)
+    color_code = models.CharField(max_length=1000, null=True, blank=True)
 
+    def save(self, *args, **kwargs):
+        if not self.color_code:
+            color = self.name.strip().lower()
+
+            # Try converting using a temporary HTML element and regex
+            try:
+                import matplotlib.colors as mcolors
+                if color in mcolors.CSS4_COLORS:
+                    self.color_code = mcolors.CSS4_COLORS[color]
+                else:
+                    self.color_code = 'Invalid'
+            except:
+                self.color_code = 'Invalid'
+
+        super().save(*args, **kwargs)
     def __str__(self):
         return self.name
 

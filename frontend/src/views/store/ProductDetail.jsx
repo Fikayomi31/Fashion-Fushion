@@ -36,10 +36,7 @@ export default function ProductDetail() {
     const userData = UserData()
     const cart_id = CardID()
 
-    console.log(currentAddress)
-
-    console.log(userData)
-    console.log(cart_id)
+   
 
     const handleColorButtonClick = (e) => {
         const colorNameInput = e.target.closest('.color_button').parentNode.querySelector('.color_name')

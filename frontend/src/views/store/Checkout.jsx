@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, use } from 'react'
 import apiInstance from '../../utils/axios'
 import { useParams, useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
@@ -18,12 +18,16 @@ function Checkout() {
     const param = useParams()
     const [couponCode, setCouponCode] = useState('')
     const [paymentLoading, setPaymentLoading] = useState(false)
-    useEffect(() => {
-        apiInstance.get(`/checkout/${param.order_oid}/`).then((res) => {
-            setOrder(res.data)
-            console.log(res.data)
-            
+   
+    const fetchOrderData = () => {
+        apiInstance.get(`checkout/${param.order_oid}/`).then((res) => {
+          setOrder(res.data)
+          console.log(res.data)
         })
+        
+    }
+    useEffect(() => {
+        fetchOrderData()
     }, [])
 
     const applyCoupon = async () => {
@@ -38,6 +42,7 @@ function Checkout() {
         try {
             const response = await apiInstance.post('coupon/', formdata)
             console.log(response.data.message)
+            fetchOrderData()
 
             Swal.fire({
                 icon:response.data.message,
@@ -192,9 +197,15 @@ function Checkout() {
                               <span>${order.tax_fee}</span>
                             </div>
                             <div className="d-flex justify-content-between">
-                              <span>Servive Fee </span>
+                              <span>Service Fee </span>
                               <span>${order.service_fee}</span>
                             </div>
+                            {order.saved !== 0.00 && 
+                              <div className="d-flex text-danger justify-content-between">
+                              <span>Discount Fee </span>
+                              <span>${order.saved}</span>
+                            </div>
+                            }
                             <hr className="my-4" />
                             <div className="d-flex justify-content-between fw-bold mb-5">
                               <span>Total </span>
