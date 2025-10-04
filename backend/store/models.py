@@ -237,7 +237,7 @@ class Cart(models.Model):
     
 class CartOrder(models.Model):
     vendor = models.ManyToManyField(Vendor, blank=True)
-    buyer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    buyer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="buyer", blank=True)
     
     sub_total = models.DecimalField(decimal_places=2, max_digits=12, default=0.00)
     shipping_amount = models.DecimalField(decimal_places=2, max_digits=12, default=0.00)
