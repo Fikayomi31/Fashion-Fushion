@@ -53,7 +53,7 @@ STATUS = (
 
 PAYMENT_STATUS_CHOICES = (
     ('pending', 'Pending'),
-    ('completed', 'Completed'),
+    ('paid', 'Paid'),
     ('failed', 'Failed'),
 )
 
@@ -66,7 +66,7 @@ ORDER_STATUS = (
 
 PAYMENT_STATUS = (
     ('Pending', 'Pending'),
-    ('Processing', 'Processing'),
+    ('Paid', 'Paid'),
     ('Failed', 'Failed'),
 )
 

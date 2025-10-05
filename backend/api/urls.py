@@ -41,5 +41,6 @@ urlpatterns = [
       
     #payment
     path('stripe-checkout/<order_oid>/', store_view.StripeCheckoutView.as_view()),
-
+    path('payment-success/<order_oid>/', store_view.PaymentSuccessView.as_view()),
+    
 ]

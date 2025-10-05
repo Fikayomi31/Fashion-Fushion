@@ -380,7 +380,7 @@ class StripeCheckoutView(generics.CreateAPIView):
             return Response({"error": f'Something went wrong while creating the checkout session: {str(e)}'})
    
 
-class PaymentSucessView(generics.CreateAPIView):
+class PaymentSuccessView(generics.CreateAPIView):
     serializer_class = CartOrderSerializer
     permission_classes = [AllowAny]
     queryset = CartOrder.objects.all()
@@ -397,7 +397,7 @@ class PaymentSucessView(generics.CreateAPIView):
             session = stripe.checkout.Session.retrieve(session_id)
             
             if session.payment_status == 'paid':
-                if order.payment_status == 'Processing':
+                if order.payment_status == 'pending':
                     order.payment_status = 'Paid'
                     
                     order.save()
