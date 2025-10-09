@@ -393,24 +393,23 @@ class PaymentSuccessView(generics.CreateAPIView):
         order = CartOrder.objects.get(oid=order_oid)    
         order_items = CartOrderItem.objects.filter(order=order)
 
+
         if session_id != 'null':
             session = stripe.checkout.Session.retrieve(session_id)
             
-            if session.payment_status == 'paid':
+            if session.payment_status.lower() == 'paid':
                 if order.payment_status == 'pending':
-                    order.payment_status = 'Paid'
-                    
+                    order.payment_status = 'paid'
                     order.save()
-                
                     return Response({"message": "Payment Successful"})
-            
                 else:
                     return Response({"message": "Already Paid"})
-            elif session.payment_status == 'unpaid':
+            elif session.payment_status == 'Unpaid':
                 return Response({"message": "Your Invoice is Unpaid"})
-            elif session.payment_status == 'cancelled':
+            elif session.payment_status == 'Cancelled':
                 return Response({"message": "Your Invoice is Cancelled"})
             else:
                 return Response({"message": "An Error Occurred, Try Again..."})
         else:
-            session = None
+            session = None  
+            

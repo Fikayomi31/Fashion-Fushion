@@ -14,40 +14,38 @@ function PaymentSuccess()  {
     useEffect(() => {
         apiInstance.get(`checkout/${param.order_oid}/`).then((res) => {
             setOrder(res.data); 
-            
-            
-
         })
     }, [])
     
-   useEffect(() => {
-  if (!order || !sessionId) return;
 
-  const formdata = new FormData();
-  formdata.append('order_oid', param.order_oid);
-  formdata.append('session_id', sessionId);
+    useEffect(() => {
+    if (!order || !sessionId) return;
+    if (status !== 'Verifying') return; // Prevent double fire
 
-  apiInstance.post(`payment-success/${order.oid}/`, formdata)
-    .then((res) => {
-      const message = res.data.message?.toLowerCase();
+    const formdata = new FormData();
+    formdata.append('order_oid', param?.order_oid);
+    formdata.append('session_id', sessionId);
 
-      if (message === 'payment successful') {
-        setStatus('Payment Successful');
-      } else if (message === 'already paid') {
-        setStatus('Already Paid');
-      } else if (message === 'your invoice is unpaid') {
-        setStatus('Your Invoice is Unpaid');
-      } else {
-        setStatus('Unknown Status');
-      }
-    })
-    .catch((err) => {
-      console.error('Payment verification failed:', err);
-      setStatus('Verification Failed');
-    });
+    apiInstance.post(`payment-success/${order.oid}/`, formdata)
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.message === 'Payment Successful') {
+          setStatus('Payment Successful');
+        } else if (res.data.message === 'Already Paid') {
+          setStatus('Already Paid');
+        } else if (res.data.message === 'Your Invoice is Unpaid') {
+          setStatus('Your Invoice is Unpaid');
+        } else if (res.data.message === 'cancelled') {
+          setStatus('Cancelled');
+        }
+      })
+      .catch((error) => {
+        console.error('Payment verification error:', error);
+        setStatus('Error verifying payment');
+      });
+  }, [order, sessionId, param.order_oid]);
 
-}, [order, sessionId]); 
-   
+
   return (
     <div>
         
@@ -89,6 +87,49 @@ function PaymentSuccess()  {
                     </div>
                     
                     }
+                    {status === 'Payment Successful' && 
+                    <div className="col-lg-12">
+                      <div className="border border-3 border-success" />
+                      <div className="card bg-white shadow p-5">
+                        <div className="mb-4 text-center">
+
+                          <i
+                            className="fas fa-check-circle text-success"
+                            style={{ fontSize: 100, color: "green" }}
+                          />
+                        </div>
+                        <div className="text-center">
+                          <h1>Thank You !</h1>
+                          <p>
+                            Thanks for your patronage, please note your order id <b>#{order.oid}</b><br/>
+                            We have sent an order summary to your email address <b>{order.email}</b>.  
+                          </p>
+                          <button className="btn btn-success mt-3"
+                            data-bs-toggle="modal"
+                            data-bs-target="#exampleModal"
+                          >
+                            View Order Summary<i className="fas fa-eye" />{''}
+
+                          </button>
+                          <a
+                            href="/"
+                            className="btn btn-primary mt-3 ms-2"
+                          >
+                            Download Invoice{" "}
+                            <i className="fas fa-file-invoice" />{" "}
+                          </a>
+                          <a
+                            className="btn btn-secondary mt-3 ms-2"
+                          >
+                            Go Home <i className="fas fa-fa-arrow-left" />{" "}
+                          </a>
+                          
+                        </div>
+                      </div>
+                    </div>
+                    
+                    }
+
                     {status === 'Your Invoice is Unpaid' && 
                     <div className="col-lg-12">
                       <div className="border border-3 border-success" />
@@ -151,48 +192,7 @@ function PaymentSuccess()  {
                     </div>
                     }
 
-                    {status === 'Payment Successful' && 
-                    <div className="col-lg-12">
-                      <div className="border border-3 border-success" />
-                      <div className="card bg-white shadow p-5">
-                        <div className="mb-4 text-center">
-
-                          <i
-                            className="fas fa-check-circle text-success"
-                            style={{ fontSize: 100, color: "green" }}
-                          />
-                        </div>
-                        <div className="text-center">
-                          <h1>Thank You !</h1>
-                          <p>
-                            Thanks for your patronage, please note your order id <b>#{order.oid}</b><br/>
-                            We have sent an order summary to your email address <b>{order.email}</b>.  
-                          </p>
-                          <button className="btn btn-success mt-3"
-                            data-bs-toggle="modal"
-                            data-bs-target="#exampleModal"
-                          >
-                            View Order Summary<i className="fas fa-eye" />{''}
-
-                          </button>
-                          <a
-                            href="/"
-                            className="btn btn-primary mt-3 ms-2"
-                          >
-                            Download Invoice{" "}
-                            <i className="fas fa-file-invoice" />{" "}
-                          </a>
-                          <a
-                            className="btn btn-secondary mt-3 ms-2"
-                          >
-                            Go Home <i className="fas fa-fa-arrow-left" />{" "}
-                          </a>
-                          
-                        </div>
-                      </div>
-                    </div>
                     
-                    }
                     
                   </div>
                 </div>

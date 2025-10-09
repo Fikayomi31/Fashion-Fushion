@@ -65,9 +65,9 @@ ORDER_STATUS = (
 )
 
 PAYMENT_STATUS = (
-    ('Pending', 'Pending'),
-    ('Paid', 'Paid'),
-    ('Failed', 'Failed'),
+    ('pending', 'Pending'),
+    ('paid', 'Paid'),
+    ('cancelled', 'Cancelled'),
 )
 
 
@@ -245,7 +245,7 @@ class CartOrder(models.Model):
     service_fee = models.DecimalField(decimal_places=2, max_digits=12, default=0.00)
     total = models.DecimalField(decimal_places=2, max_digits=12, default=0.00)
 
-    payment_status = models.CharField(choices=PAYMENT_STATUS, max_length=100, default='Pending')
+    payment_status = models.CharField(choices=PAYMENT_STATUS, max_length=100, default='pending')
     order_status = models.CharField(choices=ORDER_STATUS, max_length=100, default='Pending')
 
     #coupon
