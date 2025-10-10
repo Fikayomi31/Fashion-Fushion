@@ -46,8 +46,9 @@ class CartOrderItemAdmin(admin.ModelAdmin):
 class ProductFaqAdmin(ImportExportModelAdmin):
     list_editable = [ 'active', 'answer']
     list_display = ['user', 'question', 'answer' ,'active']
+    
 
-class NotificationAdmin(ImportExportModelAdmin):
+class NotificationAdmin(admin.ModelAdmin):
     list_editable = ['seen']
     list_display = ['order', 'seen', 'user', 'vendor', 'date']
 

@@ -14,6 +14,7 @@ function PaymentSuccess()  {
     useEffect(() => {
         apiInstance.get(`checkout/${param.order_oid}/`).then((res) => {
             setOrder(res.data); 
+            console.log(res.data);
         })
     }, [])
     

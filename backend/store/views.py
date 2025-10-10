@@ -2,9 +2,9 @@ from django.shortcuts import redirect, render
 from django.conf import settings
 
 from userauth.models import User
-from store.models import Product, Tax, Category, SubCategory, Cart, CartOrder, CartOrderItem, Coupon
-from store.serializers import ProductSerializer, CategorySerializer, SubCategorySerializer, CartSerializer, CartOrderSerializer, CouponSerializer
-
+from store.models import Product, Tax, Category, SubCategory, Cart, CartOrder, CartOrderItem, Coupon, Notification
+from store.serializers import ProductSerializer, CategorySerializer, SubCategorySerializer, CartSerializer, CartOrderSerializer, CouponSerializer, NotificationSerializer
+from vendor.models import Vendor
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -14,6 +14,17 @@ from decimal import Decimal
 import stripe
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
+
+
+def send_notification(user=None, vendor=None, order=None, order_item=None):
+    Notification.objects.create(
+        user=user,
+        vendor=vendor,
+        order=order,
+        order_item=order_item
+
+    )
+   
 
 
 class CategoryListAPIView(generics.ListAPIView):
@@ -226,10 +237,18 @@ class CreateOrderAPIView(generics.CreateAPIView):
         user_id = payload.get('user_id', None)
         print("User ID:", user_id)
 
-        try:
-            user = User.objects.get(id=user_id)
-        except:
-            user = None
+        # Get user if user_id exit
+        buyer = None
+        if user_id and user_id != "undefined":
+            try:
+                buyer = User.objects.get(id=user_id)
+
+                
+
+            except User.DoesNotExist:
+                buyer = None
+        else:
+            buyer = None
 
         cart_items = Cart.objects.filter(cart_id=cart_id)
 
@@ -241,6 +260,7 @@ class CreateOrderAPIView(generics.CreateAPIView):
         total_total = Decimal(0.00)
 
         order = CartOrder.objects.create(
+            buyer=buyer,
             full_name=full_name,
             email=email,
             mobile=mobile,
@@ -401,6 +421,19 @@ class PaymentSuccessView(generics.CreateAPIView):
                 if order.payment_status == 'pending':
                     order.payment_status = 'paid'
                     order.save()
+
+                    # Send Notification Customer
+                    if order.buyer != None:
+                        send_notification(user=order.buyer, order=order)
+                        print(order.buyer)
+                    
+                    # Send Notification to Vendors
+                    for item in order_items:
+                        send_notification(vendor=item.vendor, order=order, order_item=item)
+
+                    
+
+
                     return Response({"message": "Payment Successful"})
                 else:
                     return Response({"message": "Already Paid"})
@@ -412,4 +445,3 @@ class PaymentSuccessView(generics.CreateAPIView):
                 return Response({"message": "An Error Occurred, Try Again..."})
         else:
             session = None  
-            
