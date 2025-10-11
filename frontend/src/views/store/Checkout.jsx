@@ -1,8 +1,9 @@
 import React, { useState, useEffect, use } from 'react'
 import apiInstance from '../../utils/axios'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, data } from 'react-router-dom'
 import Swal from 'sweetalert2'
-import { SERVER_URL } from '../../utils/constants'
+import { SERVER_URL, PAYPAL_CLIENT_ID } from '../../utils/constants'
+import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 
 const Toast = Swal.mixin({
     toast:true,
@@ -18,7 +19,8 @@ function Checkout() {
     const param = useParams()
     const [couponCode, setCouponCode] = useState('')
     const [paymentLoading, setPaymentLoading] = useState(false)
-   
+    const navigate = useNavigate()
+
     const fetchOrderData = () => {
         apiInstance.get(`checkout/${param.order_oid}/`).then((res) => {
           setOrder(res.data)
@@ -31,9 +33,6 @@ function Checkout() {
     }, [])
 
     const applyCoupon = async () => {
-
-        console.log(couponCode)
-        console.log(order.oid)
 
         const formdata = new FormData()
         formdata.append('order_oid', order.oid)
@@ -60,6 +59,11 @@ function Checkout() {
       event.target.form.submit()
     }
 
+    const initialOptions = {
+      clientId: PAYPAL_CLIENT_ID,
+      currency: 'USD',
+      intent: 'capture',
+    }
 
   return (
     <div>
@@ -254,6 +258,39 @@ function Checkout() {
 
                             </form>                          
                           }
+
+                          <PayPalScriptProvider options={initialOptions}>
+                            <PayPalButtons className='mt-3'
+                              createOrder={(data, actions) => {
+                                
+                                return actions.order.create({
+                                  purchase_units: [
+                                    {
+                                      amount: {
+                                        currency_code: 'USD',
+                                        value: order.total.toString()
+                                      }
+                                    }
+                                  ]
+                                })
+                              }}
+                              onApprove={(data, actions) => {
+                                return actions.order.capture().then((details) => {
+                                  const name = details.payer.name.given_name
+                                  const status = details.status
+                                  const paypal_order_id = data.orderID
+
+                                  if (status === 'COMPLETED') {
+                                    navigate(`/payment-success/${order.oid}/?paypal_order_id=${paypal_order_id}`)
+                                  }
+                                })
+                              }}
+                            >
+
+                            </PayPalButtons>
+
+
+                          </PayPalScriptProvider>
                           
                         </div>
                       </div>
