@@ -1,5 +1,7 @@
 from django.shortcuts import redirect, render
 from django.conf import settings
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
 
 from userauth.models import User
 from store.models import Product, Tax, Category, SubCategory, Cart, CartOrder, CartOrderItem, Coupon, Notification
@@ -422,17 +424,44 @@ class PaymentSuccessView(generics.CreateAPIView):
                     order.payment_status = 'paid'
                     order.save()
 
-                    # Send Notification Customer
+                    # Notification to buyer
+
                     if order.buyer != None:
                         send_notification(user=order.buyer, order=order)
-                        print(order.buyer)
-                    
-                    # Send Notification to Vendors
-                    for item in order_items:
-                        send_notification(vendor=item.vendor, order=order, order_item=item)
 
-                    
+                        merge_data = {
+                            'order': order, 
+                            'order_items': order_items, 
+                        }
+                        subject = f"Order Placed Successfully"
+                        text_body = render_to_string("email/customer_order_confirmation.txt", merge_data)
+                        html_body = render_to_string("email/customer_order_confirmation.html", merge_data)
+                        
+                        msg = EmailMultiAlternatives(
+                            subject=subject, from_email=settings.DEFAULT_FROM_EMAIL,
+                            to=[order.email], body=text_body
+                        )
+                        msg.attach_alternative(html_body, "text/html")
+                        msg.send()
 
+                        # Notification to Vendor
+                        for o in order_items:
+                            send_notification(vendor=o.vendor, order=order, order_item=o)
+                            
+                            merge_data = {
+                                'order': order, 
+                                'order_items': order_items, 
+                            }
+                            subject = f"New Sale!"
+                            text_body = render_to_string("email/vendor_sale.txt", merge_data)
+                            html_body = render_to_string("email/vendor_sale.html", merge_data)
+                            
+                            msg = EmailMultiAlternatives(
+                                subject=subject, from_email=settings.DEFAULT_FROM_EMAIL,
+                                to=[o.vendor.user.email], body=text_body
+                            )
+                            msg.attach_alternative(html_body, "text/html")
+                            msg.send()
 
                     return Response({"message": "Payment Successful"})
                 else:
