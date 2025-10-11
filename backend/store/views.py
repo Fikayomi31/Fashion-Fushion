@@ -4,8 +4,8 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 
 from userauth.models import User
-from store.models import Product, Tax, Category, SubCategory, Cart, CartOrder, CartOrderItem, Coupon, Notification
-from store.serializers import ProductSerializer, CategorySerializer, SubCategorySerializer, CartSerializer, CartOrderSerializer, CouponSerializer, NotificationSerializer
+from store.models import Product, Tax, Category, SubCategory, Cart, CartOrder, CartOrderItem, Coupon, Notification, Review
+from store.serializers import ProductSerializer, CategorySerializer, SubCategorySerializer, CartSerializer, CartOrderSerializer, CouponSerializer, NotificationSerializer, ReviewSerializer
 from vendor.models import Vendor
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -566,3 +566,14 @@ class PaymentSuccessView(generics.CreateAPIView):
                 return Response({"message": "An Error Occurred, Try Again..."})
         else:
             session = None  
+
+
+class ReviewListAPIView(generics.ListAPIView):
+    serializer_class = ReviewSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        product_id = self.kwargs['product_id']
+        product = Product.objects.get(id=product_id)
+        reviews = Review.objects.filter(product=product)
+        return reviews
