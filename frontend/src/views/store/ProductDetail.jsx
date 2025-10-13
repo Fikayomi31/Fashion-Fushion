@@ -7,6 +7,7 @@ import GetCurrentAddress from '../plugin/UserCountry';
 import UserData from '../plugin/UserData';
 import CardID from '../plugin/CardID';
 import './cart.css';
+import moment from 'moment/moment';
 
 const Toast = Swal.mixin({
     toast:true,
@@ -29,7 +30,7 @@ export default function ProductDetail() {
     const [colorValue, setColorValue] = useState('No Color')
     const [sizeValue, setSizeValue] = useState('No Size')
     const [qtyValue, setQtyValue] = useState(1)
-
+    const [reviews, setReviews] = useState([])
     const param = useParams()
 
     const currentAddress = GetCurrentAddress()
@@ -90,6 +91,19 @@ export default function ProductDetail() {
  
      }
 
+     const fetchReviews = () => {
+        if (product?.id) {
+            apiInstance.get(`reviews/${product?.id}/`).then((res) => {
+            setReviews(res.data)
+            console.log(res.data)
+        })
+
+        }
+        
+     }
+     useEffect(() => {
+        fetchReviews()
+     }, [product])
 
   return (
     <div>
@@ -285,20 +299,61 @@ export default function ProductDetail() {
         <section className="reviews">
             <div className="container">
                 <h2>All Reviews (451)</h2>
-                <div className="reviews-list">
-                    <div className="review">
-                        <h4>Samantha D. ⭐⭐⭐⭐⭐</h4>
-                        <p>"I absolutely love this t-shirt! The design is unique and the fabric feels so comfortable."</p>
+                {reviews?.map((r, index) => (
+                    <div className='row g-0' key={index}>
+                        <div className='col-md-3'>
+                            <img src={r.profile?.image} alt={r.profile?.name} 
+                            className='img-fluid' />
+                        </div>
+                        <div className='col-md-9'>
+                            <div className='card-body'>
+                                <h4>{r.profile?.full_name}</h4>
+                                <p>{moment(r.date).format('MMMM Do YYYY ')   }</p>
+                                <p>"{r.review}"
+                                <br />
+                                {r.rating === 1 &&
+                                    <i className='fas fa-star'></i>
+                                }
+                                {r.rating === 2 &&
+                                    <>
+                                        <i className='fas fa-star'></i>
+                                        <i className='fas fa-star'></i>
+                                    </>
+                                }
+                                {r.rating === 3 &&
+                                    <>
+                                        <i className='fas fa-star'></i>
+                                        <i className='fas fa-star'></i>
+                                        <i className='fas fa-star'></i>
+                                    </>
+                                }
+                                {r.rating === 4 &&
+                                    <>
+                                        <i className='fas fa-star'></i>
+                                        <i className='fas fa-star'></i>
+                                        <i className='fas fa-star'></i>
+                                        <i className='fas fa-star'></i>
+                                    </>
+                                }
+                                {r.rating === 5 &&
+                                    <>
+                                        <i className='fas fa-star'></i>
+                                        <i className='fas fa-star'></i>
+                                        <i className='fas fa-star'></i>
+                                        <i className='fas fa-star'></i>
+                                        <i className='fas fa-star'></i>
+                                    </>
+                                }
+                                </p>
+                               
+
+                            </div>
+                            
+                        </div>
                     </div>
-                    <div className="review">
-                        <h4>Alex M. ⭐⭐⭐⭐⭐</h4>
-                        <p>"The colors are vibrant and the print quality is top-notch. Definitely gets a thumbs up from me."</p>
-                    </div>
-                    <div className="review">
-                        <h4>Ethan R. ⭐⭐⭐⭐⭐</h4>
-                        <p>"This t-shirt is a must-have for anyone who appreciates good design."</p>
-                    </div>
-                </div>
+                                    
+                ))}
+               
                 <button className="load-more">Load More Reviews</button>
             </div>
         </section>

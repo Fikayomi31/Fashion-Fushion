@@ -335,14 +335,9 @@ class Review(models.Model):
         verbose_name_plural = 'Review & Rating'
 
     def profile(self):
-       
-        if self.user.is_vendor:
-            return getattr(self.user, 'vendor_profile', None)
-        elif self.user.is_customer:
-            return getattr(self.user, 'customer_profile', None)
-        return None
-
-
+        return Profile.objects.get(user=self.user)
+    
+# Signal handler to update the product rating when a review is saved
 @receiver(post_save, sender=Review)
 def update_product_rating(sender, instance, **kwargs):
     if instance.product:

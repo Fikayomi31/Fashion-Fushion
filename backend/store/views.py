@@ -577,3 +577,22 @@ class ReviewListAPIView(generics.ListAPIView):
         product = Product.objects.get(id=product_id)
         reviews = Review.objects.filter(product=product)
         return reviews
+    
+    def create(self, request, *args, **kwargs):
+        payload = request.data
+
+        user_id = payload['user_id']
+        product_id = payload['product_id']
+        rating = payload['rating']
+        review = payload['review']
+
+        user = User.objects.get(id=user_id)
+        product = Produc.objects.get(id=product_id)
+        Review.objects.create(
+            user=user,
+            product=product,
+            rating=rating,
+            review=review
+        )
+
+        return Response({"message": 'Review Created Successful'}, status=status.HTTP_200_OK)
