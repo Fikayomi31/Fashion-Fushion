@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import "../../views/store/ProductDetail.css";
 import apiInstance from '../../utils/axios';
-import { useParams } from 'react-router-dom';
+import { Form, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2'
 import GetCurrentAddress from '../plugin/UserCountry';
 import UserData from '../plugin/UserData';
@@ -31,11 +31,15 @@ export default function ProductDetail() {
     const [sizeValue, setSizeValue] = useState('No Size')
     const [qtyValue, setQtyValue] = useState(1)
     const [reviews, setReviews] = useState([])
+    const [createReview, setCreateReview] = useState({
+        user_id:0, product_id: product?.id, review:'', rating:0
+    })
     const param = useParams()
 
     const currentAddress = GetCurrentAddress()
     const userData = UserData()
     const cart_id = CardID()
+
 
    
 
@@ -104,6 +108,30 @@ export default function ProductDetail() {
      useEffect(() => {
         fetchReviews()
      }, [product])
+
+
+     const handleReviewChange = (e) => {
+        setCreateReview({
+            ...createReview,
+            [e.target.name]: e.target.value,
+        })
+        console.log(createReview)
+    }     
+    
+    const handleReviewSubmit = (e) => {
+        e.preventDefault()
+
+        const formdata = new FormData
+        formdata.append('user_id', userData?.user_id)
+        formdata.append('product_id', product?.id)
+        formdata.append('rating', createReview.rating)
+        formdata.append('review', createReview.review)
+
+        apiInstance.post(`reviews/${product?.id}/`, formdata).then((res) => {
+            console.log(res.data)
+        })
+
+    }
 
   return (
     <div>
@@ -296,67 +324,82 @@ export default function ProductDetail() {
             </div>
         </section>
 
-        <section className="reviews">
-            <div className="container">
-                <h2>All Reviews (451)</h2>
-                {reviews?.map((r, index) => (
-                    <div className='row g-0' key={index}>
-                        <div className='col-md-3'>
-                            <img src={r.profile?.image} alt={r.profile?.name} 
-                            className='img-fluid' />
-                        </div>
-                        <div className='col-md-9'>
-                            <div className='card-body'>
-                                <h4>{r.profile?.full_name}</h4>
-                                <p>{moment(r.date).format('MMMM Do YYYY ')   }</p>
-                                <p>"{r.review}"
-                                <br />
-                                {r.rating === 1 &&
-                                    <i className='fas fa-star'></i>
-                                }
-                                {r.rating === 2 &&
-                                    <>
-                                        <i className='fas fa-star'></i>
-                                        <i className='fas fa-star'></i>
-                                    </>
-                                }
-                                {r.rating === 3 &&
-                                    <>
-                                        <i className='fas fa-star'></i>
-                                        <i className='fas fa-star'></i>
-                                        <i className='fas fa-star'></i>
-                                    </>
-                                }
-                                {r.rating === 4 &&
-                                    <>
-                                        <i className='fas fa-star'></i>
-                                        <i className='fas fa-star'></i>
-                                        <i className='fas fa-star'></i>
-                                        <i className='fas fa-star'></i>
-                                    </>
-                                }
-                                {r.rating === 5 &&
-                                    <>
-                                        <i className='fas fa-star'></i>
-                                        <i className='fas fa-star'></i>
-                                        <i className='fas fa-star'></i>
-                                        <i className='fas fa-star'></i>
-                                        <i className='fas fa-star'></i>
-                                    </>
-                                }
-                                </p>
-                               
+        <section className="reviews container my-5">
+            <div className="row">
+                {/* Left side: Write a Review Form */}
+                <div className="col-md-5">
+                <h2>Write a Review</h2>
+                <form onSubmit={handleReviewSubmit}>
+                    <div className="mb-3">
+                    <label htmlFor="rating" className="form-label">Your Rating</label>
+                    <select
+                        name="rating"
+                        className="form-select"
+                        onChange={handleReviewChange}
+                        value={createReview.rating}
+                    >
+                        <option value="1">1 Star</option>
+                        <option value="2">2 Star</option>
+                        <option value="3">3 Star</option>
+                        <option value="4">4 Star</option>
+                        <option value="5">5 Star</option>
+                    </select>
+                    </div>
 
+                    <div className="mb-3">
+                    <label htmlFor="review" className="form-label">Your Review</label>
+                    <textarea
+                        name="review"
+                        id="review"
+                        rows="5"
+                        className="form-control"
+                        value={createReview.review}
+                        onChange={handleReviewChange}
+                    ></textarea>
+                    </div>
+
+                    <button className="btn btn-primary" type="submit">
+                    Submit Review
+                    </button>
+                </form>
+                </div>
+
+                {/* Right side: Reviews list */}
+                <div className="col-md-7">
+                <h2>All Reviews ({reviews?.length || 0})</h2>
+                {reviews?.map((r, index) => (
+                    <div className="card mb-3" key={index}>
+                    <div className="row g-0 align-items-center">
+                        <div className="col-3 text-center">
+                        <img
+                            src={r.profile?.image}
+                            alt={r.profile?.name}
+                            className="img-fluid rounded-circle"
+                            style={{ width: "70px", height: "70px", objectFit: "cover" }}
+                        />
+                        </div>
+                        <div className="col-9">
+                        <div className="card-body p-2">
+                            <h5 className="mb-1">{r.profile?.full_name}</h5>
+                            <small className="text-muted">
+                            {moment(r.date).format("MMMM Do YYYY")}
+                            </small>
+                            <p className="mt-2 mb-1">"{r.review}"</p>
+                            <div>
+                            {[...Array(r.rating)].map((_, i) => (
+                                <i key={i} className="fas fa-star text-warning"></i>
+                            ))}
                             </div>
-                            
+                        </div>
                         </div>
                     </div>
-                                    
+                    </div>
                 ))}
-               
-                <button className="load-more">Load More Reviews</button>
+                <button className="btn btn-outline-secondary mt-3">Load More Reviews</button>
+                </div>
             </div>
         </section>
+
 
         {/* Newsletter Subscription */}
       <div className="newsletter">

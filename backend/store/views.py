@@ -568,7 +568,7 @@ class PaymentSuccessView(generics.CreateAPIView):
             session = None  
 
 
-class ReviewListAPIView(generics.ListAPIView):
+class ReviewListAPIView(generics.ListCreateAPIView):
     serializer_class = ReviewSerializer
     permission_classes = [AllowAny]
 
@@ -587,7 +587,7 @@ class ReviewListAPIView(generics.ListAPIView):
         review = payload['review']
 
         user = User.objects.get(id=user_id)
-        product = Produc.objects.get(id=product_id)
+        product = Product.objects.get(id=product_id)
         Review.objects.create(
             user=user,
             product=product,
@@ -596,3 +596,4 @@ class ReviewListAPIView(generics.ListAPIView):
         )
 
         return Response({"message": 'Review Created Successful'}, status=status.HTTP_200_OK)
+    
