@@ -14,6 +14,9 @@ from pathlib import Path
 import os
 from environs import Env
 from datetime import timedelta
+import logging
+
+logging.getLogger('django.server').setLevel(logging.ERROR)
 
 env = Env()
 env.read_env()  # read .env file, if it exists

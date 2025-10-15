@@ -3,7 +3,7 @@ import { FaSearch, FaHeart, FaShoppingCart, FaUser } from "react-icons/fa";
 import "../../views/auth/dashboard.css";
 import FFH_logo from '../../assets/FFH_logo.webp'
 import Icondashboard from '../../assets/Icondashboard.png'
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from '../../store/auth';
 import { CartContext } from "../plugin/Context";
 
@@ -20,8 +20,18 @@ export default function Header() {
   const [menuDropdown, setMenuDropdown] = useState(false);
 
 
-  
+  const [search, setSearch] = useState("");
 
+  const handleSearchChange = (e) => {
+    setSearch(e.target.value);
+    console.log(search)
+  }
+  const navigate = useNavigate();
+
+  const handleSearchSubmit = () => {
+    navigate(`/search?query=${search}`);
+
+  }
   return (
     <div>
         
@@ -52,12 +62,11 @@ export default function Header() {
                   <a href="#">Contact</a>
               </nav>
             </div>
-            <div className="search-bar">
-              <input type="text" placeholder="Search" />
-              <button>
-                <FaSearch />
-              </button>
+            <div className="d-flex">
+              <input onChange={handleSearchChange} name='search' className="form-control me-2" type="text" placeholder="Search" aria-label="Search" />
+              <button onClick={handleSearchSubmit} className="btn btn-outline-success me-2" type="submit">Search</button>
             </div>
+            
             <div className="nav-icons">
               <a href="#">
                 <FaHeart />
