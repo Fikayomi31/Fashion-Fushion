@@ -19,6 +19,7 @@ import Carts from './views/store/Carts'
 import Checkout from './views/store/Checkout'
 import PaymentSuccess from './views/store/PaymentSuccess'
 import Search from './views/store/Search'
+import Account from './views/customer/Account' 
 
 function App() {
   const [count, setCount] = useState(0)
@@ -36,14 +37,17 @@ function App() {
           <Route path='/forgot-password' element={<ForgotPassword />} />
           <Route path='/password-change' element={<CreatePassword/>} />
 
-          {/** Store Components */}
-          {<Route path='/products' element={<Product />} />}
+          {/* Store Components */}
+          <Route path='/products' element={<Product />} />
           <Route path='/category' element={<Category />} />
           <Route path='/detail/:slug/' element={<ProductDetail />} />
           <Route path='/cart' element={<Carts />} />
           <Route path='/checkout/:order_oid/' element={<Checkout />} />
           <Route path='/payment-success/:order_oid/' element={<PaymentSuccess />} />
           <Route path='/search/' element={<Search />} />
+
+          {/* Customer Components */}
+          <Route path='/customer/account/' element={<Account />} />
 
         </Routes>
       </MainWrapper>
