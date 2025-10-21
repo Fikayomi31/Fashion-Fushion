@@ -5,7 +5,7 @@ from userauth.views import (
     RegisterView,
     PasswordEmailVerify,
     PasswordChangeView,
-    UserProfileView
+    ProfileView
 )
 from store import views as store_view
 
@@ -22,7 +22,7 @@ urlpatterns = [
     path('user/password-change/', PasswordChangeView.as_view(), name='password_change'),
     
     # User profile management
-    path('profile/', UserProfileView.as_view(), name='user_profile'),
+    path('user/profile/<user_id>/', ProfileView.as_view()),
 
     # Store Endpoint
     path('category/', store_view.CategoryListAPIView.as_view()),

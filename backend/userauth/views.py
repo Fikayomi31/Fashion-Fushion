@@ -168,15 +168,15 @@ class PasswordChangeView(generics.CreateAPIView):
             )
 
 
-class UserProfileView(generics.RetrieveUpdateAPIView):
-    """View for retrieving and updating user profile."""
-   
-    permission_classes = (AllowAny,)
+class ProfileView(generics.RetrieveAPIView):
     serializer_class = ProfileSerializer
+    permission_classes = [AllowAny]
 
     def get_object(self):
         user_id = self.kwargs['user_id']
 
         user = User.objects.get(id=user_id)
         profile = Profile.objects.get(user=user)
+
         return profile
+    
