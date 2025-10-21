@@ -1,11 +1,26 @@
 import React from "react";
+import { useState, useEffect } from "react";
+import apiInstance from '../../utils/axios'
+import UserData from "../plugin/UserData";
+import Sidebar from "./SideBar";
 
-function Search() {
+function Account() {
+    const [profile, setProfile] = useState({});
+    const userData = UserData();    
+
+    useEffect(() => {
+        apiInstance.get(`user/profile/${userData?.user_id}/`).then((res) => {
+          setProfile(res.data)
+          console.log(profile) 
+
+        })
+    }, []);
   return (
     <main className="mt-5">
         <div className="container">
             <section className="">
             <div className="row">
+                
                 <div className="col-lg-3">
                 <div className="d-flex justify-content-center align-items-center flex-column mb-4 shadow rounded-3">
                     <img
@@ -14,12 +29,13 @@ function Search() {
                     alt=""
                     />
                     <div className="text-center">
-                    <h3 className="mb-0">Destiny Franks</h3>
+                    <h3 className="mb-0">{profile.full_name}</h3>
                     <p className="mt-0">
                         <a href="">Edit Account</a>
                     </p>
                     </div>
                 </div>
+                
                 <ol className="list-group">
                     <li className="list-group-item d-flex justify-content-between align-items-start">
                     <div className="ms-2 me-auto">
@@ -56,7 +72,7 @@ function Search() {
                     <section className=""></section>
                     <section className="">
                         <div className="row rounded shadow p-3">
-                        <h2>Hi Destiny, </h2>
+                        <h2>Hi {profile.full_name}, </h2>
                         <div className="col-lg-12 mb-4 mb-lg-0 h-100">
                             From your account dashboard. you can easily check &amp;
                             view your <a href="">orders</a>, manage your{" "}
@@ -77,4 +93,4 @@ function Search() {
   )
 }
 
-export default Search;
+export default Account;

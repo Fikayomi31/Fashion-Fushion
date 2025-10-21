@@ -20,6 +20,8 @@ import Checkout from './views/store/Checkout'
 import PaymentSuccess from './views/store/PaymentSuccess'
 import Search from './views/store/Search'
 import Account from './views/customer/Account' 
+import PrivateRoute from './layout/PrivateRoute'
+
 
 function App() {
   const [count, setCount] = useState(0)
@@ -47,7 +49,7 @@ function App() {
           <Route path='/search/' element={<Search />} />
 
           {/* Customer Components */}
-          <Route path='/customer/account/' element={<Account />} />
+          <Route path='/customer/account/' element={<PrivateRoute><Account /></PrivateRoute>} />
 
         </Routes>
       </MainWrapper>
