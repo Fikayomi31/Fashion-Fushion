@@ -3,6 +3,7 @@ import SideBar from './SideBar'
 import apiInstance from '../../utils/axios'
 import UserData from '../plugin/UserData'
 import moment from 'moment'
+import { Link } from 'react-router-dom'
 
 
 
@@ -161,12 +162,12 @@ const statusCounts = orders.reduce((counts, order) => {
                                 <span className="fw-normal mb-1">${o.total}</span>
                               </td>
                               <td>
-                                <button
-                                  type="button"
+                                <Link
+                                  to={`/customer/orders/${o.oid}/`}
                                   className="btn btn-link btn-sm btn-rounded"
                                 >
                                   View <i className="fas fa-eye" />
-                                </button>
+                                </Link>
                               </td>
                               </tr>
                             ))}
