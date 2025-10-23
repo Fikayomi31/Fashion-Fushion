@@ -181,6 +181,7 @@ class WishlistSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Wishlist
+        fields = '__all__'
 
     def __init__(self, *args, **kwargs):
         super(WishlistSerializer, self).__init__(*args, **kwargs)
