@@ -8,6 +8,8 @@ from userauth.views import (
     ProfileView
 )
 from store import views as store_view
+from customer import views as customer_view
+
 
 
 
@@ -41,7 +43,11 @@ urlpatterns = [
     path('reviews/<product_id>/', store_view.ReviewListAPIView.as_view()),
     path('search/', store_view.SearchProductAPIView.as_view()),
 
-    
+    # Customer Orders
+    path('customer/orders/<user_id>/', customer_view.OrdersAPIView.as_view()),
+    path('customer/orders/<user_id>/<order_oid>/', customer_view.OrdersDetailAPIView.as_view()),
+
+
     #payment
     path('stripe-checkout/<order_oid>/', store_view.StripeCheckoutView.as_view()),
     path('payment-success/<order_oid>/', store_view.PaymentSuccessView.as_view()),

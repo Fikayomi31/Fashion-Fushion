@@ -21,6 +21,7 @@ import PaymentSuccess from './views/store/PaymentSuccess'
 import Search from './views/store/Search'
 import Account from './views/customer/Account' 
 import PrivateRoute from './layout/PrivateRoute'
+import Orders from './views/customer/Orders'
 
 
 function App() {
@@ -50,7 +51,7 @@ function App() {
 
           {/* Customer Components */}
           <Route path='/customer/account/' element={<PrivateRoute><Account /></PrivateRoute>} />
-
+          <Route path='/customer/orders/' element={<PrivateRoute><Orders /></PrivateRoute>} />
         </Routes>
       </MainWrapper>
 

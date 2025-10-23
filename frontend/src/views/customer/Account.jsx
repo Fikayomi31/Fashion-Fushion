@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import apiInstance from '../../utils/axios'
 import UserData from "../plugin/UserData";
-import Sidebar from "./SideBar";
+import SideBar from "./SideBar";
 
 function Account() {
     const [profile, setProfile] = useState({});
@@ -35,7 +35,6 @@ function Account() {
                     </p>
                     </div>
                 </div>
-                
                 <ol className="list-group">
                     <li className="list-group-item d-flex justify-content-between align-items-start">
                     <div className="ms-2 me-auto">

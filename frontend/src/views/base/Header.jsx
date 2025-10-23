@@ -52,7 +52,7 @@ export default function Header() {
             <Link className="logo"  to="/">
               <img style={{ width: 60, height: 40, borderRadius: 50 }} src={FFH_logo} alt="" />
             </Link>
-            <div className="container">
+            {/* <div className="container"> */}
               <nav className="nav-menu">
                   <a href="#">Explore</a>
                   <a href="#">Boutiques</a>
@@ -61,7 +61,7 @@ export default function Header() {
                   <a href="#">About</a>
                   <a href="#">Contact</a>
               </nav>
-            </div>
+            {/* </div> */}
             <div className="d-flex">
               <input onChange={handleSearchChange} name='search' className="form-control me-2" type="text" placeholder="Search" aria-label="Search" />
               <button onClick={handleSearchSubmit} className="btn btn-outline-success me-2" type="submit">Search</button>
@@ -109,10 +109,9 @@ export default function Header() {
                           padding: '8px 0',
                           zIndex: 10
                         }}>
-                          <Link to="/dashboard" style={{ display: 'block', padding: '8px 16px', color: '#333', textDecoration: 'none' }}>Dashboard</Link>
-                          <Link to="/profile" style={{ display: 'block', padding: '8px 16px', color: '#333', textDecoration: 'none' }}>Profile</Link>
+                          <Link to="/customer/account" style={{ display: 'block', padding: '8px 16px', color: '#333', textDecoration: 'none' }}>Dashboard</Link>
                           <Link to="/wishlist" style={{ display: 'block', padding: '8px 16px', color: '#333', textDecoration: 'none' }}>My Wishlist</Link>
-                          <Link to="/history" style={{ display: 'block', padding: '8px 16px', color: '#333', textDecoration: 'none' }}>History</Link>
+                          <Link to="/customer/order" style={{ display: 'block', padding: '8px 16px', color: '#333', textDecoration: 'none' }}>Orders</Link>
                           <Link to="/help" style={{ display: 'block', padding: '8px 16px', color: '#333', textDecoration: 'none' }}>Help</Link>
                           <Link to="/logout" style={{ display: 'block', padding: '8px 16px', color: 'red', fontWeight: 'bold', textDecoration: 'none' }}>Logout</Link>
                         </div>
@@ -167,6 +166,6 @@ export default function Header() {
         </div>
       </header>
       
-    </div>
+    </div> 
   )
 }
