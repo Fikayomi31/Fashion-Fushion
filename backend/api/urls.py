@@ -47,7 +47,8 @@ urlpatterns = [
     path('customer/orders/<user_id>/', customer_view.OrdersAPIView.as_view()),
     path('customer/orders/<user_id>/<order_oid>/', customer_view.OrdersDetailAPIView.as_view()),
     path('customer/wishlist/<user_id>/', customer_view.WishlistAPIView.as_view()),
-
+    path('customer/notification/<user_id>/', customer_view.CustomerNotification.as_view()),
+    path('customer/notification/<user_id>/<notification_id>', customer_view.MarkNotificationAsSeen.as_view()),
 
     #payment
     path('stripe-checkout/<order_oid>/', store_view.StripeCheckoutView.as_view()),

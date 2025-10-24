@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
-from store.models import CartOrder, Cart, Product, Wishlist
-from store.serializers import CartOrderSerializer, WishlistSerializer
+from store.models import CartOrder, Cart, Notification, Product, Wishlist
+from store.serializers import CartOrderSerializer, NotificationSerializer, WishlistSerializer
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -65,3 +65,29 @@ class WishlistAPIView(generics.ListCreateAPIView):
             )
             return Response( {"message": "Added To Wishlist"}, status=status.HTTP_201_CREATED)
        
+
+class CustomerNotification(generics.ListAPIView):
+    serializer_class = NotificationSerializer
+    permission_classes = (AllowAny, )
+
+    def get_queryset(self):
+        user_id = self.kwargs['user_id']
+        user = User.objects.get(id=user_id)
+        return Notification.objects.filter(user=user)
+    
+
+class MarkNotificationAsSeen(generics.RetrieveAPIView):
+    serializer_class = NotificationSerializer
+    permission_classes = (AllowAny, )
+
+    def get_object(self):
+        user_id = self.kwargs['user_id']
+        notification_id = self.kwargs['notification_id']    
+
+        user = User.objects.get(id=user_id)
+        notification = Notification.objects.get(id=notification_id)
+
+        if notification.seen != True:
+            notification.seen = True
+            notification.save()
+        return notification
