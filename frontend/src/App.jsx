@@ -23,7 +23,7 @@ import Account from './views/customer/Account'
 import PrivateRoute from './layout/PrivateRoute'
 import Orders from './views/customer/Orders'
 import OrderDetail from './views/customer/OrderDetail'
-
+import Wishlist from './views/customer/Wishlist'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -54,6 +54,7 @@ function App() {
           <Route path='/customer/account/' element={<PrivateRoute><Account /></PrivateRoute>} />
           <Route path='/customer/orders/' element={<PrivateRoute><Orders /></PrivateRoute>} />
           <Route path='/customer/orders/:order_oid/' element={<PrivateRoute><OrderDetail /></PrivateRoute>} />
+          <Route path='/customer/wishlist/' element={<PrivateRoute><Wishlist /></PrivateRoute>} />
 
 
         </Routes>

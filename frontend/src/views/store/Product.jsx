@@ -98,6 +98,27 @@ export default function Products() {
 
  }
 
+ const addToWishlist = async (productId, userId) => {
+         try {
+             const formdata = new FormData();
+             formdata.append('product_id', productId);
+             formdata.append('user_id', userId);
+             
+             const response = await apiInstance.post(`customer/wishlist/${userId}/`, formdata);
+             console.log(response.data);
+             //fetchWishlist();
+ 
+             Swal.fire({
+                 title: response.data.message,
+                 icon: 'success',
+             })
+ 
+ 
+         } catch (error) {
+             console.log(error);
+         }
+     };
+
   const itemsPerPage = 6 // items to be display per page
   const [currentPage, setCurrentPage] = useState(1) // manage the current page display
 
@@ -237,6 +258,7 @@ export default function Products() {
                           
                           type="button"
                           className="btn btn-danger px-3 ms-2 "
+                          onClick={() => addToWishlist(product.id, userData?.user_id)}
                          >
                           <i className="fas fa-heart" />
                     </button>

@@ -35,7 +35,7 @@ class OrdersDetailAPIView(generics.RetrieveAPIView):
         return order   
 
 
-class WishlistAPIView(generics.ListAPIView):
+class WishlistAPIView(generics.ListCreateAPIView):
     serializer_class = WishlistSerializer
     permission_classes = (AllowAny, )
 
@@ -46,7 +46,7 @@ class WishlistAPIView(generics.ListAPIView):
         wishlists = Wishlist.objects.filter(user=user)
         return wishlists
 
-    def create(self, request):
+    def create(self, request, *args, **kwargs):
         payload = request.data
 
         product_id = payload['product_id']
