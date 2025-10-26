@@ -26,39 +26,42 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)
+    role = serializers.ChoiceField(choices=[('customer', 'Customer'), ('vendor', 'Vendor')], default='customer')
+    shop_name = serializers.CharField(required=False)
 
     class Meta:
         model = User
-        fields = ['full_name', 'email', 'phone', 'password', 'password2']
-
+        fields = ['full_name', 'email', 'phone', 'password', 'password2', 'role', 'shop_name']
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
             raise serializers.ValidationError({"password": "Password does not match"})
         return attrs
-    
+
     def create(self, validated_data):
+        role = validated_data.pop('role', 'customer')
+        shop_name = validated_data.pop('shop_name', None)
+
         user = User.objects.create(
             full_name=validated_data['full_name'],
             email=validated_data['email'],
             phone=validated_data['phone'],
+            role=role,
         )
-
-        email_user, mobile = user.email.split('@')
         user.set_password(validated_data['password'])
         user.save()
 
+        if role == 'vendor' and shop_name:
+            from vendor.models import Vendor  # Import here to avoid circular imports
+            Vendor.objects.create(user=user, name=shop_name)
+
         return user
-
-
 
 class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
         fields = '__all__'
-
-
 
 class ProfileSerializer(serializers.ModelSerializer):
     """Serializer for Customer profiles with nested user details."""
@@ -75,3 +78,4 @@ class ProfileSerializer(serializers.ModelSerializer):
         response = super().to_representation(instance)
         response['user'] = UserSerializer(instance.user).data
         return response
+    

@@ -5,10 +5,10 @@ import MainWrapper from "./layout/MainWrapper"
 
 import Login from './views/auth/Login'
 import Register from './views/auth/Register'
-import DashBoard from './views/auth/DashBoard'
 import Footer from './views/base/Footer'
 import Header from './views/base/Header'
 import Logout from './views/auth/Logout'
+import Home from './views/store/Home'
 import ForgotPassword from './views/auth/ForgotPassword'
 import CreatePassword from './views/auth/CreatePassword'
 import Product from './views/store/Product'
@@ -24,6 +24,7 @@ import PrivateRoute from './layout/PrivateRoute'
 import Orders from './views/customer/Orders'
 import OrderDetail from './views/customer/OrderDetail'
 import Wishlist from './views/customer/Wishlist'
+import Dashboard from './views/vendor/Dashboard'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -36,7 +37,7 @@ function App() {
         <Routes>
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
-          <Route path='/' element={<DashBoard />} />
+          <Route path='/' element={<Home />} />
           <Route path='/logout' element={<Logout />} />
           <Route path='/forgot-password' element={<ForgotPassword />} />
           <Route path='/password-change' element={<CreatePassword/>} />
@@ -56,6 +57,8 @@ function App() {
           <Route path='/customer/orders/:order_oid/' element={<PrivateRoute><OrderDetail /></PrivateRoute>} />
           <Route path='/customer/wishlist/' element={<PrivateRoute><Wishlist /></PrivateRoute>} />
 
+          {/* Vendor Components */}
+          <Route path='/vendor/dashboard/' element={<PrivateRoute><Dashboard /></PrivateRoute>} />
 
         </Routes>
       </MainWrapper>

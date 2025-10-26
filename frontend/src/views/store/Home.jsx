@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { Link } from 'react-router-dom'
 import { FaCheckCircle, FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import "../../views/auth/dashboard.css";
+import "../../views/store/home.css";
 //import { useAuthStore } from "../../store/auth";
 import apiInstance from "../../utils/axios";
 import '../store/cart.css';
@@ -13,7 +13,7 @@ import hero4 from "../../assets/Confident-Professional-in-Modern-Office.png";
 
 
 
-export default function DashBoard() {
+export default function Home() {
     const [category, setCategory] = useState([])
     const [subCategory, setSubCategory] = useState([])
     const heroImages = [hero1, hero2, hero3, hero4];

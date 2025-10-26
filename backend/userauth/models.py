@@ -7,13 +7,18 @@ from django.utils.text import slugify
 
 
 class User(AbstractUser):
+    ROLE_CHOICES = (
+        ('customer', 'Customer'),
+        ('vendor', 'Vendor'),
+    )
+
     username = models.CharField(max_length=500, null=True, blank=True)
     email = models.EmailField(unique=True)
     full_name = models.CharField(max_length=500, null=True, blank=True)
     phone = models.CharField(max_length=500)
     otp = models.CharField(max_length=1000, null=True, blank=True)
-    reset_token  = models.CharField(max_length=1000, null=True, blank=True)
-
+    reset_token = models.CharField(max_length=1000, null=True, blank=True)
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='customer')  # 👈 Add this
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
@@ -22,13 +27,12 @@ class User(AbstractUser):
         return self.email
 
     def save(self, *args, **kwargs):
-        email_username, mobile = self.email.split('@')
-        if self.full_name == "" or self.full_name == None:
-             self.full_name = self.email
-        if self.username == "" or self.username == None:
-             self.username = email_username
-        super(User, self).save(*args, **kwargs)
-        
+        email_username, _ = self.email.split('@')
+        if not self.full_name:
+            self.full_name = self.email
+        if not self.username:
+            self.username = email_username
+        super(User, self).save(*args, **kwargs)     
 
 class Profile(models.Model):
     """Profile model."""
@@ -72,3 +76,4 @@ def save_user_profile(sender, instance, **kwargs):
 # Connect the signal
 post_save.connect(create_user_profile, sender=User)
 post_save.connect(save_user_profile, sender=User)
+

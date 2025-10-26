@@ -391,3 +391,4 @@ class Tax(models.Model):
     class Meta:
         verbose_name_plural = "Taxes"
         ordering = ['country']
+
