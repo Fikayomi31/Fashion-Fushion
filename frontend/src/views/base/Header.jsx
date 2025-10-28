@@ -1,89 +1,72 @@
-import React, { useState } from "react";
-import { FaHeart, FaShoppingCart, FaUser } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuthStore } from "../../store/auth";
-import FFH_logo from "../../assets/FFH_logo.webp";
-import Icondashboard from "../../assets/Icondashboard.png";
+import {useState} from 'react'
+import { FaSearch, FaHeart, FaShoppingCart, FaUser } from "react-icons/fa";
 import "../../views/store/home.css";
+import FFH_logo from '../../assets/FFH_logo.webp'
+import Icondashboard from '../../assets/Icondashboard.png'
+import { Link, useNavigate } from "react-router-dom";
+import { useAuthStore } from '../../store/auth';
+import { CartContext } from "../plugin/Context";
+
+
+
 
 export default function Header() {
-  const navigate = useNavigate();
 
-  // Get auth info from Zustand store
+  //const cartCount = useContext(CartContext)
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
-  const user = useAuthStore((state) => state.user);
+  //const user = useAuthStore((state) => state.user);
 
-  const [search, setSearch] = useState("");
   const [userDropdown, setUserDropdown] = useState(false);
   const [menuDropdown, setMenuDropdown] = useState(false);
 
+
+  const [search, setSearch] = useState("");
+
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
-  };
+    console.log(search)
+  }
+  const navigate = useNavigate();
 
   const handleSearchSubmit = () => {
-    if (search.trim() !== "") {
-      navigate(`/search?query=${search}`);
-    }
-  };
+    navigate(`/search?query=${search}`);
 
+  }
   return (
     <div>
-      {/* Announcement Bar */}
+        
       <div className="announcement-bar">
         <div className="container">
           Sign up and get 20% off on your first order.{" "}
-          <Link to="/register" style={{ color: "#fff", textDecoration: "underline" }}>
+          <a href="#" style={{ color: "#fff", textDecoration: "underline" }}>
             Sign Up Now
-          </Link>
+          </a>
           <button className="close-btn">×</button>
         </div>
       </div>
 
-      {/* Header */}
-      <header className="header p-0">
+      
+      <header className="header p-0" >
         <div className="container">
           <div className="nav-container">
-            {/* Logo */}
-            <Link className="logo" to="/">
-              <img
-                style={{ width: 60, height: 40, borderRadius: 50 }}
-                src={FFH_logo}
-                alt="Logo"
-              />
+            <Link className="logo"  to="/">
+              <img style={{ width: 60, height: 40, borderRadius: 50 }} src={FFH_logo} alt="" />
             </Link>
-
-            {/* Navigation Menu */}
-            <nav className="nav-menu">
-              <a href="#">Explore</a>
-              <a href="#">Boutiques</a>
-              <a href="#">Brand</a>
-              <a href="#">Sell Here</a>
-              <a href="#">About</a>
-              <a href="#">Contact</a>
-            </nav>
-
-            {/* Search Bar */}
+            {/* <div className="container"> */}
+              <nav className="nav-menu">
+                  <a href="#">Explore</a>
+                  <a href="#">Boutiques</a>
+                  <a href="#">Brand</a>
+                  <a href="#">Sell Here</a>
+                  <a href="#">About</a>
+                  <a href="#">Contact</a>
+              </nav>
+            {/* </div> */}
             <div className="d-flex">
-              <input
-                onChange={handleSearchChange}
-                value={search}
-                name="search"
-                className="form-control me-2"
-                type="text"
-                placeholder="Search"
-                aria-label="Search"
-              />
-              <button
-                onClick={handleSearchSubmit}
-                className="btn btn-outline-success me-2"
-                type="submit"
-              >
-                Search
-              </button>
+              <input onChange={handleSearchChange} name='search' className="form-control me-2" type="text" placeholder="Search" aria-label="Search" />
+              <button onClick={handleSearchSubmit} className="btn btn-outline-success me-2" type="submit">Search</button>
             </div>
-
-            {/* Icons Section */}
+            
             <div className="nav-icons">
               <a href="#">
                 <FaHeart />
@@ -91,179 +74,98 @@ export default function Header() {
               <Link to="/cart/">
                 <FaShoppingCart />
               </Link>
-            </div>
-
-            {/* User Section */}
-            <div
-              style={{
-                position: "relative",
-                marginRight: "15px",
-                display: "block",
-              }}
-            >
-              {isLoggedIn() && user ? (
-                // When logged in
-                <div style={{ display: "block" }}>
-                  <button
-                    onClick={() => setMenuDropdown(!menuDropdown)}
-                    style={{
-                      background: "transparent",
-                      border: "none",
-                      cursor: "pointer",
-                      padding: "10px 10px",
-                      display: "flex",
-                      alignItems: "center",
-                      marginLeft: "10px",
-                    }}
-                  >
-                    <img
-                      src={Icondashboard}
-                      alt="Menu"
-                      style={{
-                        width: "35px",
-                        height: "20px",
-                        marginTop: "5px",
-                      }}
-                    />
-                  </button>
-
-                  {/* Dropdown Menu */}
-                  {menuDropdown && (
-                    <div
-                      style={{
-                        position: "absolute",
-                        right: 0,
-                        marginTop: "8px",
-                        width: "200px",
-                        backgroundColor: "white",
-                        boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-                        borderRadius: "4px",
-                        padding: "8px 0",
-                        zIndex: 10,
-                      }}
-                    >
-                      {/* Vendor Menu */}
-                      {user.is_vendor ? (
-                        <>
-                          <Link
-                            to="/vendor/dashboard"
-                            className="dropdown-item"
-                          >
-                            Dashboard
-                          </Link>
-                          <Link to="/vendor/products" className="dropdown-item">
-                            Products
-                          </Link>
-                          <Link to="/vendor/orders" className="dropdown-item">
-                            Orders
-                          </Link>
-                          <Link to="/vendor/earning" className="dropdown-item">
-                            Earning
-                          </Link>
-                          <Link to="/vendor/settings" className="dropdown-item">
-                            Settings
-                          </Link>
-                        </>
-                      ) : (
-                        // Customer Menu
-                        <>
-                          <Link
-                            to="/customer/account"
-                            className="dropdown-item"
-                          >
-                            Dashboard
-                          </Link>
-                          <Link to="/wishlist" className="dropdown-item">
-                            My Wishlist
-                          </Link>
-                          <Link to="/customer/order" className="dropdown-item">
-                            Orders
-                          </Link>
-                          <Link to="/help" className="dropdown-item">
-                            Help
-                          </Link>
-                        </>
-                      )}
-
-                      {/* Logout */}
-                      <Link
-                        to="/logout"
-                        className="dropdown-item"
-                        style={{
-                          color: "red",
-                          fontWeight: "bold",
-                          textDecoration: "none",
+             
+          </div>
+            {/* User icon - always visible regardless of login state */}
+            <div style={{ position: 'relative', marginRight: '15px', display: 'block' }}>
+                {isLoggedIn() 
+                  ? 
+                    // When logged in: Show dashboard icon
+                    <div style={{ display: 'block' }}>
+                      <button 
+                        onClick={() => setMenuDropdown(!menuDropdown)} 
+                        style={{ 
+                          background: 'transparent', 
+                          border: 'none',
+                          cursor: 'pointer',
+                          padding: '10px 10px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          marginLeft: '10px',
                         }}
                       >
-                        Logout
-                      </Link>
+                        <img src={Icondashboard} alt="Menu" style={{ width: '35px', height: '20px', marginTop: '5px' }} />
+                      </button>
+                      
+                      {menuDropdown && (
+                        <div style={{
+                          position: 'absolute',
+                          right: 0,
+                          marginTop: '8px',
+                          width: '180px',
+                          backgroundColor: 'white',
+                          boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+                          borderRadius: '4px',
+                          padding: '8px 0',
+                          zIndex: 10
+                        }}>
+                          <Link to="/customer/account" style={{ display: 'block', padding: '8px 16px', color: '#333', textDecoration: 'none' }}>Dashboard</Link>
+                          <Link to="/wishlist" style={{ display: 'block', padding: '8px 16px', color: '#333', textDecoration: 'none' }}>My Wishlist</Link>
+                          <Link to="/customer/order" style={{ display: 'block', padding: '8px 16px', color: '#333', textDecoration: 'none' }}>Orders</Link>
+                          <Link to="/help" style={{ display: 'block', padding: '8px 16px', color: '#333', textDecoration: 'none' }}>Help</Link>
+                          <Link to="/logout" style={{ display: 'block', padding: '8px 16px', color: 'red', fontWeight: 'bold', textDecoration: 'none' }}>Logout</Link>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-              ) : (
-                // When NOT logged in
-                <div style={{ display: "block" }}>
-                  <button
-                    onClick={() => setUserDropdown(!userDropdown)}
-                    style={{
-                      background: "transparent",
-                      border: "none",
-                      cursor: "pointer",
-                      padding: "8px",
-                      display: "flex",
-                      alignItems: "center",
-                      marginLeft: "10px",
-                    }}
-                  >
-                    <FaUser
-                      style={{ width: "20px", height: "20px", color: "#444" }}
-                    />
-                  </button>
-
-                  {/* Guest Dropdown */}
-                  {userDropdown && (
-                    <div
-                      style={{
-                        position: "absolute",
-                        right: 0,
-                        marginTop: "8px",
-                        width: "150px",
-                        backgroundColor: "white",
-                        boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-                        borderRadius: "4px",
-                        padding: "8px 0",
-                        zIndex: 10,
+                  
+                 : 
+                  // When not logged in: Show user icon
+                  <div style={{ display: 'block' }}>
+                    <button 
+                      onClick={() => setUserDropdown(!userDropdown)} 
+                      style={{ 
+                        background: 'transparent', 
+                        border: 'none',
+                        cursor: 'pointer',
+                        padding: '8px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        marginLeft: '10px',
                       }}
                     >
-                      <Link
-                        to="/login"
-                        className="dropdown-item"
-                        style={{ color: "#333", textDecoration: "none" }}
-                      >
-                        Login
-                      </Link>
-                      <Link
-                        to="/register"
-                        className="dropdown-item"
-                        style={{ color: "#333", textDecoration: "none" }}
-                      >
-                        Register
-                      </Link>
-                      <Link
-                        to="/help"
-                        className="dropdown-item"
-                        style={{ color: "#333", textDecoration: "none" }}
-                      >
-                        Help
-                      </Link>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
+                      <FaUser style={{ width: '20px', height: '20px', color: '#444' }} />
+                    </button>
+                    
+                    {userDropdown && (
+                      <div style={{
+                        position: 'absolute',
+                        right: 0,
+                        marginTop: '8px',
+                        width: '150px',
+                        backgroundColor: 'white',
+                        boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+                        borderRadius: '4px',
+                        padding: '8px 0',
+                        zIndex: 10
+                      }}>
+                        <Link to="/login" style={{ display: 'block', padding: '8px 16px', color: '#333', textDecoration: 'none' }}>Login</Link>
+                        <Link to="/register" style={{ display: 'block', padding: '8px 16px', color: '#333', textDecoration: 'none' }}>Register</Link>
+                        <Link to="/help" style={{ display: 'block', padding: '8px 16px', color: '#333', textDecoration: 'none' }}>Help</Link>
+                      </div>
+                    )}
+                  </div>
+                }
+              </div>  
+          
+         
+                        
+              
+            
+            
           </div>
         </div>
       </header>
-    </div>
-  );
+      
+    </div> 
+  )
 }

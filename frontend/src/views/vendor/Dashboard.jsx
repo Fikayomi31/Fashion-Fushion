@@ -1,11 +1,12 @@
 import React from 'react'
-
+import SideBar from './SideBar'
 function Dashboard() {
   return (
     <div className="container-fluid" id="main">
         <div className="row row-offcanvas row-offcanvas-left h-100">
-            {/* Add Side Bar Here */}
-            {/* <Sidebar /> */}
+           
+            <SideBar />
+            
             
             <div className="col-md-9 col-lg-10 main mt-4">
             <div className="row mb-3">

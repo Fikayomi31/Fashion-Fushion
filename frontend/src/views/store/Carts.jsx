@@ -123,6 +123,7 @@ function Cart() {
       
 
       apiInstance.delete(url)
+      console.log(UserData?.role)
   }
 
   const handleChange = (e) => {
