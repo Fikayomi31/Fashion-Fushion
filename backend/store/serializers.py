@@ -206,3 +206,9 @@ class CouponSerializer(serializers.ModelSerializer):
             self.Meta.depth = 0
         else:
             self.Meta.depth = 3
+
+
+class SummarySerializer(serializers.Serializer):
+    products = serializers.IntegerField()
+    orders = serializers.IntegerField()
+    revenue = serializers.DecimalField(max_digits=10, decimal_places=2)

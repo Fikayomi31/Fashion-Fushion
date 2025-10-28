@@ -9,7 +9,7 @@ from userauth.views import (
 )
 from store import views as store_view
 from customer import views as customer_view
-
+from vendor import views as vendor_view
 
 
 
@@ -49,6 +49,9 @@ urlpatterns = [
     path('customer/wishlist/<user_id>/', customer_view.WishlistAPIView.as_view()),
     path('customer/notification/<user_id>/', customer_view.CustomerNotification.as_view()),
     path('customer/notification/<user_id>/<notification_id>', customer_view.MarkNotificationAsSeen.as_view()),
+
+    # Vendor 
+    path('vendor/stats/<vendor_id>/', vendor_view.DashboardAPIView.as_view()),
 
     #payment
     path('stripe-checkout/<order_oid>/', store_view.StripeCheckoutView.as_view()),

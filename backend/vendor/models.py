@@ -18,11 +18,12 @@ class Vendor(models.Model):
         ordering = ['-date']
 
     def __str__(self):
-        return str(self.name)
+        return str(self.shop_name)
+    
 
     def save(self, *args, **kwargs):
         if self.slug == "" or self.slug == None:
-            self.slug = slugify(self.name)
+            self.slug = slugify(self.shop_name)
 
         super(Vendor, self).save(*args, **kwargs)
     
