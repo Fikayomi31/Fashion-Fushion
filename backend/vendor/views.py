@@ -63,7 +63,7 @@ class ProductAPIView(generics.ListAPIView):
         return products
 
 
-class OrderAPIView(generics.RetrieveAPIView):
+class OrderAPIView(generics.ListAPIView):
     serializer_class = CartOrderSerializer
     permission_classes = [AllowAny]
 
@@ -73,7 +73,7 @@ class OrderAPIView(generics.RetrieveAPIView):
         orders = CartOrder.objects.filter(vendor=vendor, payment_status='paid').order_by('-id')
         return orders   
     
-class OrderDetailAPIView(generics.RetrieveAPIView):
+class OrderDetailAPIView(generics.ListAPIView):
     serializer_class = CartOrderSerializer
     permission_classes = [AllowAny]
 
