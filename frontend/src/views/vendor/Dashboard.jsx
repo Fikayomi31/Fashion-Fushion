@@ -3,17 +3,67 @@ import SideBar from './SideBar'
 import apiInstance from '../../utils/axios'
 import UserData from '../plugin/UserData'
 
+import { Line } from 'react-chartjs-2';
+import { Chart } from 'chart.js/auto';
+
+
+
 function Dashboard() {
     const [stats, setStats] = useState(null)
+    const [orderChartData, setOrderChartData] = useState([]);
+    const [productChartData, setProductChartData] = useState([]);
 
     useEffect(() => {
         apiInstance.get(`/vendor/stats/${UserData()?.user_id}`).then((res) => {
             setStats(res.data[0])
-           
-            
+ 
         })
     }, []) 
-    
+
+    const fetchOrderChartData = async () => {
+          const orderResponse = await apiInstance.get(`/vendor-orders-chart/${UserData()?.user_id}`);
+          setOrderChartData(orderResponse.data);
+
+          const productResponse = await apiInstance.get(`/vendor-products-chart/${UserData()?.user_id}`);
+          setProductChartData(productResponse.data);
+    }
+
+    useEffect(() => {
+        fetchOrderChartData();
+    }, []);
+
+    const orderMonths = orderChartData?.map(item => item.month)
+    const orderCounts = orderChartData?.map(item => item.count)
+
+    const productMonths = productChartData?.map(item => item.month)
+    const productCounts = productChartData?.map(item => item.count)
+
+    const orderData = {
+        labels: orderMonths,
+        datasets: [
+          {
+            label: 'Total Orders',
+            data: orderCounts,
+            fill: false,
+            backgroundColor: 'rgb(75, 192, 192)',
+            boarderColor: 'rgba(75, 192, 192, 0.2)',
+          }
+        ]
+    }
+
+    const productData = {
+        labels: productMonths,
+        datasets: [
+          {
+            label: 'Total Products',
+            data: productCounts,
+            fill: false,
+            backgroundColor: 'blue',
+            borderColor: 'rgba(75, 192, 192, 0.2)',
+          }
+        ]
+    }
+
 
   return (
     <div className="container-fluid" id="main">
