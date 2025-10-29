@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 from django.db import models
 from store.models import CartOrder, Cart, Notification, Product, Wishlist
-from store.serializers import CartOrderSerializer, NotificationSerializer, WishlistSerializer, SummarySerializer
+from store.serializers import CartOrderSerializer, NotificationSerializer, WishlistSerializer, SummarySerializer, ProductSerializer
 from django.db.models.functions import ExtractMonth
 
 from rest_framework.decorators import api_view
@@ -53,7 +53,7 @@ def MonthlyProductCharAPIView(request, vendor_id):
     return Response(products_by_month)
 
 class ProductAPIView(generics.ListAPIView):
-    serializer_class = Product
+    serializer_class = ProductSerializer
     permission_classes = (AllowAny, )
 
     def get_queryset(self):
