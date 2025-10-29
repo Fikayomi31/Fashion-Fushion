@@ -3,7 +3,7 @@ import SideBar from './SideBar'
 import apiInstance from '../../utils/axios'
 import UserData from '../plugin/UserData'
 
-import { Line } from 'react-chartjs-2';
+import { Bar, Line } from 'react-chartjs-2';
 import { Chart } from 'chart.js/auto';
 
 
@@ -114,7 +114,7 @@ function Dashboard() {
                         <i className="bi bi-currency-dollar fa-5x" />
                     </div>
                     <h6 className="text-uppercase">Revenue</h6>
-                    <h1 className="display-1">${stats?.revenue}</h1>
+                    <h5 className="display-1">${stats?.revenue}</h5>
                     </div>
                 </div>
                 </div>
@@ -123,25 +123,26 @@ function Dashboard() {
             <hr />
             <div className="container">
                 <div className="row my-3">
-                <div className="col">
-                    <h4>Chart Analytics</h4>
-                </div>
+                    <div className="col">
+                        <h4>Chart Analytics</h4>
+                    </div>
                 </div>
                 <div className="row my-2">
-                <div className="col-md-12 py-1">
-                    <div className="card">
-                    <div className="card-body">
-                        <canvas id="line-chart" />
-                    </div>
-                    </div>
-                </div>
-                {/* <div class="col-md-6 py-1">
-                        <div class="card">
-                            <div class="card-body">
-                                <canvas id="pie-chart"></canvas>
+                    <div className="col-lg-6 py-1">
+                        <div className="card">
+                            <div className="card-body">
+                                <Bar data={orderData} style={{ height: '300px' }} />
+                                
                             </div>
                         </div>
-                    </div> */}
+                    </div> 
+                <div class="col-md-6 py-1">
+                        <div class="card">
+                            <div class="card-body">
+                                <Bar data={productData} style={{ height: '300px' }} />
+                            </div>
+                        </div>
+                    </div> 
                 </div>
             </div>
             <a id="layouts" />
