@@ -52,7 +52,9 @@ urlpatterns = [
 
     # Vendor 
     path('vendor/stats/<vendor_id>/', vendor_view.DashboardAPIView.as_view()),
-
+    path('vendor-orders-chart/<vendor_id>/', vendor_view.MonthlyOrderCharAPIView),
+    path('vendor-products-chart/<vendor_id>/', vendor_view.MonthlyProductCharAPIView),
+    
     #payment
     path('stripe-checkout/<order_oid>/', store_view.StripeCheckoutView.as_view()),
     path('payment-success/<order_oid>/', store_view.PaymentSuccessView.as_view()),

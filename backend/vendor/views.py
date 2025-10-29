@@ -3,7 +3,9 @@ from django.shortcuts import render
 from django.db import models
 from store.models import CartOrder, Cart, Notification, Product, Wishlist
 from store.serializers import CartOrderSerializer, NotificationSerializer, WishlistSerializer, SummarySerializer
+from django.db.models.functions import ExtractMonth
 
+from rest_framework.decorators import api_view
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -36,3 +38,16 @@ class DashboardAPIView(generics.ListAPIView):
         return Response(serializer.data)
     
 
+@api_view(("GET",))
+def MonthlyOrderCharAPIView(request, vendor_id):
+    vendor = Vendor.objects.get(user__id=vendor_id)
+    orders = CartOrder.objects.filter(vendor=vendor, payment_status='paid')
+    orders_by_month = orders.annotate(month=ExtractMonth('date')).values('month').annotate(count=models.Count('id')).order_by('month')
+    return Response(orders_by_month)
+
+@api_view(("GET",))
+def MonthlyProductCharAPIView(request, vendor_id):
+    vendor = Vendor.objects.get(user__id=vendor_id)
+    products = Product.objects.filter(vendor=vendor)
+    products_by_month = products.annotate(month=ExtractMonth('date')).values('month').annotate(count=models.Count('id')).order_by('month')
+    return Response(products_by_month)
