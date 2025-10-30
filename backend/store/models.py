@@ -45,10 +45,10 @@ RATING = (
 )
 
 STATUS = (
-    ('Draft', 'Draft'),
-    ('Disable', 'Disable'),
-    ('In_Review', 'In Review'),
-    ('Published', 'Published'),
+    ('draft', 'Draft'),
+    ('disable', 'Disable'),
+    ('in_review', 'In Review'),
+    ('published', 'Published'),
 )
 
 PAYMENT_STATUS_CHOICES = (
@@ -58,10 +58,10 @@ PAYMENT_STATUS_CHOICES = (
 )
 
 ORDER_STATUS = (
-    ('Pending', 'Pending'),
-    ('Shipped', 'Shipped'),
-    ('Delivered', 'Delivered'),
-    ('Cancelled', 'Cancelled'),
+    ('pending', 'Pending'),
+    ('shipped', 'Shipped'),
+    ('delivered', 'Delivered'),
+    ('cancelled', 'Cancelled'),
 )
 
 PAYMENT_STATUS = (
