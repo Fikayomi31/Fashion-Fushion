@@ -58,7 +58,17 @@ urlpatterns = [
     path('vendor/orders/<vendor_id>/', vendor_view.OrderAPIView.as_view()),
     path('vendor/orders/<vendor_id>/<order_oid>/', vendor_view.OrderDetailAPIView.as_view()),
     path('vendor/revenue/<vendor_id>/', vendor_view.RevenueAPIView.as_view()),
-    
+    path('vendor/filter-product/<vendor_id>/', vendor_view.FilterProductAPIView.as_view()),
+    path('vendor/earnings/<vendor_id>/', vendor_view.EarningAPIView.as_view()),
+    path('vendor/monthly-earning-tracker/<vendor_id>/', vendor_view.MonthlyEarningTracker),
+    path('vendor/reviews/<vendor_id>/', vendor_view.ReviewListAPIView.as_view()),
+    path('vendor/reviews/<vendor_id>/<review_id>/', vendor_view.ReviewDetailAPIView.as_view()),
+    path('vendor/coupons/<vendor_id>/', vendor_view.CouponListAPIView.as_view()),
+    path('vendor/coupons-detail/<vendor_id>/<coupon_id>/', vendor_view.CouponDetailAPIView.as_view()),
+    path('vendor/coupons-stats/<vendor_id>/', vendor_view.CouponStatsAPIView.as_view()),
+
+
+
     #payment
     path('stripe-checkout/<order_oid>/', store_view.StripeCheckoutView.as_view()),
     path('payment-success/<order_oid>/', store_view.PaymentSuccessView.as_view()),
