@@ -70,7 +70,10 @@ urlpatterns = [
     path('vendor/seen-notification/<vendor_id>/', vendor_view.NotificationSeenAPIView.as_view()),
     path('vendor/notifications-summary/<vendor_id>/', vendor_view.NotificationSummaryAPIView.as_view()),
     path('vendor/notifications-mark-seen/<vendor_id>/<notification_id>/', vendor_view.NotificationVendorMarkAsSeenAPIView.as_view()),
-
+    path('vendor/profile-update/<int:pk>/', vendor_view.VendorProfileUpdateView.as_view()),
+    path('vendor/shop-update/<int:pk>/', vendor_view.ShopUpdateView.as_view()),
+    path('vendor/shop-view/<vendor_slug>/', vendor_view.ShopAPIView.as_view()),
+    path('vendor/shop-products/<vendor_slug>/', vendor_view.ShopProductsAPIView.as_view()),
 
     #payment
     path('stripe-checkout/<order_oid>/', store_view.StripeCheckoutView.as_view()),

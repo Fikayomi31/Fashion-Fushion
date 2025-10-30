@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from userauth.serializers import ProfileSerializer
+from vendor.models import Vendor
+from userauth.serializers import ProfileSerializer, UserSerializer
 from store.models import Category, SubCategory, Product, Gallery, Specification, Color, Size, Cart, CartOrder, CartOrderItem, ProductFaq, Notification, Coupon, Review, Wishlist
 
 
@@ -146,6 +147,26 @@ class ProductFaqSerializer(serializers.ModelSerializer):
             self.Meta.depth = 0
         else:
             self.Meta.depth = 3
+
+class VendorSerializer(serializers.ModelSerializer):
+    # Serialize related CartOrderItem models
+    user = UserSerializer(read_only=True)
+
+    class Meta:
+        model = Vendor
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super(VendorSerializer, self).__init__(*args, **kwargs)
+        # Customize serialization depth based on the request method.
+        request = self.context.get('request')
+        if request and request.method == 'POST':
+            # When creating a new cart order, set serialization depth to 0.
+            self.Meta.depth = 0
+        else:
+            # For other methods, set serialization depth to 3.
+            self.Meta.depth = 3
+
 
 class ReviewSerializer(serializers.ModelSerializer):
     profile = ProfileSerializer()
