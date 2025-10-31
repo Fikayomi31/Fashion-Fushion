@@ -173,7 +173,7 @@ class ReviewSerializer(serializers.ModelSerializer):
     profile = ProfileSerializer()
     class Meta:
         model = Review
-        fields = ['id', 'user', 'profile', 'review', 'rating', 'date']
+        fields = ['id', 'user', 'profile', 'review','product', 'rating', 'date']
 
     def __init__(self, *args, **kwargs):
         super(ReviewSerializer, self).__init__(*args, **kwargs)

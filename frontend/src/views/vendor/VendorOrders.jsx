@@ -9,7 +9,7 @@ import SideBar from './SideBar';
 function VendorOrders() {
     const [orders, setOrders] = useState(null)
 
-    const axios = apiInstance
+    
     const userData = UserData()
 
     if (UserData()?.user_id === 0) {
@@ -19,7 +19,7 @@ function VendorOrders() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`vendor/orders/${userData?.user_id}/`)
+                const response = await apiInstance.get(`vendor/orders/${userData?.user_id}/`)
                 setOrders(response.data);
             } catch (error) {
                 console.error('Error fetching data:', error);

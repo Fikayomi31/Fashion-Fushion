@@ -29,7 +29,7 @@ export default function SideBar() {
                 </Link>
             </li>
             <li className="mb-3">
-                <Link to="/vendor/earning/" className={isActiveLink(location.pathname, '/vendor/earning/') ? "nav-link active text-white" : "nav-link text-white"}>
+                <Link to="/vendor/earnings/" className={isActiveLink(location.pathname, '/vendor/earning/') ? "nav-link active text-white" : "nav-link text-white"}>
                     <i className="bi bi-currency-dollar" /> Earning{" "}
                 </Link>
             </li>

@@ -60,7 +60,7 @@ urlpatterns = [
     path('vendor/revenue/<vendor_id>/', vendor_view.RevenueAPIView.as_view()),
     path('vendor/filter-product/<vendor_id>/', vendor_view.FilterProductAPIView.as_view()),
     path('vendor/earnings/<vendor_id>/', vendor_view.EarningAPIView.as_view()),
-    path('vendor/monthly-earning-tracker/<vendor_id>/', vendor_view.MonthlyEarningTracker),
+    path('vendor/monthly-earning/<vendor_id>/', vendor_view.MonthlyEarningTracker),
     path('vendor/reviews/<vendor_id>/', vendor_view.ReviewListAPIView.as_view()),
     path('vendor/reviews/<vendor_id>/<review_id>/', vendor_view.ReviewDetailAPIView.as_view()),
     path('vendor/coupons/<vendor_id>/', vendor_view.CouponListAPIView.as_view()),
