@@ -2,17 +2,65 @@ import {useState, useEffect} from 'react'
 import SideBar from './SideBar'
 import apiInstance from '../../utils/axios'
 import UserData from '../plugin/UserData'
+import { Link, useParams } from 'react-router-dom'
+import Swal from 'sweetalert2'
 
+
+const Toast = Swal.mixin({
+    toast:true,
+    position:'top',
+    showConfirmButton:false,
+    timer:1500,
+    timerProgressBar:true
+  })
 
 
 function Reviews() {
     const [reviews, setReviews] = useState([])
+    const [review, setReview] = useState({})
+    const [updateReview, setUpdateReview] = useState({ reply: "" })
 
+    const param = useParams()
+
+    const handleReplyChange = (event) => {
+        setUpdateReview({
+            ...updateReview,
+            [event.target.name]: event.target.value
+        })
+        console.log(updateReview);
+    }
+
+    const handleReplySubmit = async (e, reviewId) => {
+        e.preventDefault();
+
+        const formdata = new FormData();
+        formdata.append("reply", updateReview.reply);
+
+        try {
+            const response = await apiInstance.patch(
+            `vendor/reviews/${UserData()?.user_id}/${reviewId}/`,
+            formdata
+            );
+            
+            Swal.fire({
+                icon: "success",
+                title: "Message sent successfully!",
+            });
+            
+        } catch (error) {
+        Swal.fire({
+            icon: "Fail",
+            title: "Try Again!",
+        });
+            
+        }
+    };
 
     useEffect(() => {
         apiInstance.get(`vendor/reviews/${UserData()?.user_id}/`).then((res) => {
             setReviews(res.data)
         })
+       
     }, [])
 
 
@@ -66,48 +114,57 @@ function Reviews() {
                                 <p className="fw-bold text-muted mb-0">
                                 Rating: {r?.rating}
                                 {r.rating == 1 &&
-                                    <i className="fas fa-star" />
+                                    <i className="fas fa-star " style={{ color: '#FFD700' }} />
                                 }
                                 {r.rating == 2 &&
                                 <>
-                                    <i className="fas fa-star" />
-                                    <i className="fas fa-star" />
+                                    <i className="fas fa-star" style={{ color: '#FFD700' }}/>
+                                    <i className="fas fa-star" style={{ color: '#FFD700' }} />
                                 </>
                                 }
                                 {r?.rating == 3 &&
                                 <>
-                                    <i className="fas fa-star" />
-                                    <i className="fas fa-star" />
-                                    <i className="fas fa-star" />
+                                    <i className="fas fa-star" style={{ color: '#FFD700' }}/>
+                                    <i className="fas fa-star" style={{ color: '#FFD700' }} />
+                                    <i className="fas fa-star" style={{ color: '#FFD700' }} />
                                 </>
                                 }
                                 {r?.rating == 4 &&
                                 <>
-                                    <i className="fas fa-star" />
-                                    <i className="fas fa-star" />
-                                    <i className="fas fa-star" />
-                                    <i className="fas fa-star" />
+                                    <i className="fas fa-star" style={{ color: '#FFD700' }} />
+                                    <i className="fas fa-star" style={{ color: '#FFD700' }} />
+                                    <i className="fas fa-star" style={{ color: '#FFD700' }} />
+                                    <i className="fas fa-star" style={{ color: '#FFD700' }} />
                                 </>
                                 }
                                 {r?.rating == 5 &&
                                 <>
-                                    <i className="fas fa-star" />
-                                    <i className="fas fa-star" />
-                                    <i className="fas fa-star" />
-                                    <i className="fas fa-star" />
+                                    <i className="fas fa-star" style={{ color: '#FFD700' }} />
+                                    <i className="fas fa-star" style={{ color: '#FFD700' }} />
+                                    <i className="fas fa-star" style={{ color: '#FFD700' }} />
+                                    <i className="fas fa-star" style={{ color: '#FFD700' }} />
+                                    <i className="fas fa-star" style={{ color: '#FFD700' }} />
                                 </>
                                 }
                                 
                                 
                                 </p>
                                 <div className="d-flex mt-3">
-                                <p className="fw-bold text-muted mb-0">
-                                    <a href="#" className="btn btn-primary">
-                                    Reply <i className="fas fa-pen" />
-                                    </a>
-                                </p>
-                                
-                                </div>
+                                    <form className="d-flex align-items-center" onSubmit={(e) => handleReplySubmit(e, r.id)}>
+                                        <input 
+                                        onChange={handleReplyChange}
+                                        type="text" 
+                                        name='reply'
+                                        value={updateReview.reply}
+                                        className="form-control me-2" 
+                                        placeholder="Write a reply..."
+                                        />
+                                        <button className="btn btn-success" type="submit">
+                                        <i className="fas fa-paper-plane"></i>
+                                        </button>
+                                    </form>
+                                    </div>
+
                             </div>
                             </div>
                         </div>

@@ -170,13 +170,15 @@ class VendorSerializer(serializers.ModelSerializer):
 
 
 class ReviewSerializer(serializers.ModelSerializer):
-    profile = ProfileSerializer()
+    profile = ProfileSerializer(read_only=True)
+    
     class Meta:
         model = Review
-        fields = ['id', 'user', 'profile', 'review','product', 'rating', 'date']
+        fields = ['id', 'user', 'profile', 'review','product', 'reply', 'rating', 'date']
 
     def __init__(self, *args, **kwargs):
         super(ReviewSerializer, self).__init__(*args, **kwargs)
+
         
         request = self.context.get("request")
         if request and request.method == "POST":

@@ -67,7 +67,7 @@ function App() {
           <Route path='/vendor/products/' element={<PrivateRoute><Products /></PrivateRoute>} />
           <Route path='/vendor/orders/' element={<PrivateRoute><VendorOrders /></PrivateRoute>} />
           <Route path='/vendor/earnings/' element={<PrivateRoute><Earning /></PrivateRoute>} />
-          <Route path='vendor/reviews/' element={<PrivateRoute><Reviews /></PrivateRoute>} />
+          <Route path='/vendor/reviews/' element={<PrivateRoute><Reviews /></PrivateRoute>} />
 
 
         </Routes>
