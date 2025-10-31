@@ -49,6 +49,7 @@ urlpatterns = [
     path('customer/wishlist/<user_id>/', customer_view.WishlistAPIView.as_view()),
     path('customer/notification/<user_id>/', customer_view.CustomerNotification.as_view()),
     path('customer/notification/<user_id>/<notification_id>', customer_view.MarkNotificationAsSeen.as_view()),
+    
 
     # Vendor 
     path('vendor/stats/<vendor_id>/', vendor_view.DashboardAPIView.as_view()),
@@ -63,9 +64,9 @@ urlpatterns = [
     path('vendor/monthly-earning/<vendor_id>/', vendor_view.MonthlyEarningTracker),
     path('vendor/reviews/<vendor_id>/', vendor_view.ReviewListAPIView.as_view()),
     path('vendor/reviews/<vendor_id>/<review_id>/', vendor_view.ReviewDetailAPIView.as_view()),
-    path('vendor/coupons/<vendor_id>/', vendor_view.CouponListAPIView.as_view()),
-    path('vendor/coupons-detail/<vendor_id>/<coupon_id>/', vendor_view.CouponDetailAPIView.as_view()),
-    path('vendor/coupons-stats/<vendor_id>/', vendor_view.CouponStatsAPIView.as_view()),
+    path('vendor/coupon/<vendor_id>/', vendor_view.CouponListAPIView.as_view()),
+    path('vendor/coupon-detail/<vendor_id>/<coupon_id>/', vendor_view.CouponDetailAPIView.as_view()),
+    path('vendor/coupon-stats/<vendor_id>/', vendor_view.CouponStatsAPIView.as_view()),
     path('vendor/unseen-notifications/<vendor_id>/', vendor_view.NotificationUnseenAPIView.as_view()),
     path('vendor/seen-notification/<vendor_id>/', vendor_view.NotificationSeenAPIView.as_view()),
     path('vendor/notifications-summary/<vendor_id>/', vendor_view.NotificationSummaryAPIView.as_view()),
