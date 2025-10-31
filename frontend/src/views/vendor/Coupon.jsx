@@ -24,15 +24,15 @@ function Coupon() {
 
     const fetchData = async () => {
         try {
-            await axios.get(`vendor/coupon-list/${userData?.user_id}/`).then((res) => {
+            await apiInstance.get(`vendor/coupon-list/${userData?.user_id}/`).then((res) => {
                 setCoupons(res.data);
             })
 
-            await axios.get(`vendor/coupon-list/${userData?.user_id}/`).then((res) => {
+            await apiInstance.get(`vendor/coupon-list/${userData?.user_id}/`).then((res) => {
                 setCoupons(res.data);
             })
 
-            await axios.get(`vendor/coupon-stats/${userData?.user_id}/`).then((res) => {
+            await apiInstance.get(`vendor/coupon-stats/${userData?.user_id}/`).then((res) => {
                 setStats(res.data[0]);
             })
         } catch (error) {
@@ -69,7 +69,7 @@ function Coupon() {
         formdata.append("discount", createCoupons.discount)
         formdata.append("active", createCoupons.active)
 
-        await axios.post(`vendor-coupon-create/${userData?.user_id}/`, formdata).then((res) => {
+        await axios.post(`vendor/coupon-create/${userData?.user_id}/`, formdata).then((res) => {
             console.log(res.data);
         })
         await fetchData();
