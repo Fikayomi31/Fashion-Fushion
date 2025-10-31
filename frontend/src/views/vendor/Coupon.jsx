@@ -45,7 +45,7 @@ function Coupon() {
     }, []);
 
     const handleDeleteCoupon = async (couponId) => {
-        await axios.delete(`vendor/coupon-detail/${userData?.user_id}/${couponId}`).then((res) => {
+        await apiInstance.delete(`vendor/coupon-detail/${userData?.user_id}/${couponId}/`).then((res) => {
             console.log(res.data);
         })
         await fetchData();
@@ -143,7 +143,7 @@ function Coupon() {
                                                 <Link to={`/vendor/coupon/${coupon.id}/`} className="btn btn-primary mb-1">
                                                     <i className="fas fa-edit" />
                                                 </Link>
-                                                <button onClick={() => handleDeleteCoupon(coupon.id)} className="btn btn-danger mb-1 ms-2">
+                                                <button onClick={() => handleDeleteCoupon(coupon?.id)} className="btn btn-danger mb-1 ms-2">
                                                     <i className="fas fa-trash" />
                                                 </button>
                                             </td>

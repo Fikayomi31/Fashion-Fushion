@@ -219,10 +219,11 @@ class CouponListAPIView(generics.ListAPIView):
         )
         return Response({'message': 'Coupon created successfully'}, status=status.HTTP_201_CREATED)
 
-class CouponDetailAPIView(generics.RetrieveUpdateAPIView):
+class CouponDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CouponSerializer
     permission_classes = (AllowAny, )
     lookup_field = 'id'
+    
     lookup_url_kwarg = 'coupon_id'
 
     def get_queryset(self):
