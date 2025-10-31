@@ -26,6 +26,7 @@ import OrderDetail from './views/customer/OrderDetail'
 import Wishlist from './views/customer/Wishlist'
 import Dashboard from './views/vendor/Dashboard'
 import Products from './views/vendor/Products'
+import VendorOrders from './views/vendor/VendorOrders'
 
 
 function App() {
@@ -62,6 +63,8 @@ function App() {
           {/* Vendor Components */}
           <Route path='/vendor/dashboard/' element={<PrivateRoute><Dashboard /></PrivateRoute>} />
           <Route path='/vendor/products/' element={<PrivateRoute><Products /></PrivateRoute>} />
+          <Route path='/vendor/orders/' element={<PrivateRoute><VendorOrders /></PrivateRoute>} />
+          
 
         </Routes>
       </MainWrapper>
