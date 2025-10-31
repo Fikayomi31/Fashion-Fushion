@@ -165,6 +165,9 @@ class Product(models.Model):
     def color(self):
         return Color.objects.filter(product=self)
 
+    def orders(self):
+        return CartOrderItem.objects.filter(product=self).count()   
+    
     
 class Gallery(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)

@@ -5,6 +5,7 @@ import UserData from '../plugin/UserData'
 
 import { Bar, Line } from 'react-chartjs-2';
 import { Chart } from 'chart.js/auto';
+import { Link } from 'react-router-dom';
 
 
 
@@ -12,11 +13,18 @@ function Dashboard() {
     const [stats, setStats] = useState(null)
     const [orderChartData, setOrderChartData] = useState([]);
     const [productChartData, setProductChartData] = useState([]);
+    const [products, setProducts] = useState([])
+
+
+
 
     useEffect(() => {
         apiInstance.get(`/vendor/stats/${UserData()?.user_id}`).then((res) => {
             setStats(res.data[0])
  
+        })
+        apiInstance.get(`/vendor/products/${UserData()?.user_id}`).then((res) => {
+            setProducts(res.data)
         })
     }, []) 
 
@@ -161,16 +169,7 @@ function Dashboard() {
                         Products
                     </a>
                     </li>
-                    <li className="nav-item">
-                    <a
-                        className="nav-link"
-                        href="#profile1"
-                        role="tab"
-                        data-toggle="tab"
-                    >
-                        Orders
-                    </a>
-                    </li>
+                    
                 </ul>
                 {/* Tab panes */}
                 <div className="tab-content">
@@ -180,7 +179,7 @@ function Dashboard() {
                     <table className="table">
                         <thead className="table-dark">
                         <tr>
-                            <th scope="col">#ID</th>
+                            <th scope="col">Img</th>
                             <th scope="col">Name</th>
                             <th scope="col">Price</th>
                             <th scope="col">Quantity</th>
@@ -190,63 +189,30 @@ function Dashboard() {
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <th scope="row">#erituo</th>
-                            <td>Turtle Neck Shirt</td>
-                            <td>$20</td>
-                            <td>14</td>
-                            <td>26</td>
-                            <td>Live</td>
-                            <td>
-                            <a href="" className="btn btn-primary mb-1">
-                                <i className="fas fa-eye" />
-                            </a>
-                            <a href="" className="btn btn-success mb-1">
-                                <i className="fas fa-edit" />
-                            </a>
-                            <a href="" className="btn btn-danger mb-1">
-                                <i className="fas fa-trash" />
-                            </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">#erituo</th>
-                            <td>Turtle Neck Shirt</td>
-                            <td>$20</td>
-                            <td>14</td>
-                            <td>26</td>
-                            <td>Live</td>
-                            <td>
-                            <a href="" className="btn btn-primary mb-1">
-                                <i className="fas fa-eye" />
-                            </a>
-                            <a href="" className="btn btn-success mb-1">
-                                <i className="fas fa-edit" />
-                            </a>
-                            <a href="" className="btn btn-danger mb-1">
-                                <i className="fas fa-trash" />
-                            </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">#erituo</th>
-                            <td>Turtle Neck Shirt</td>
-                            <td>$20</td>
-                            <td>14</td>
-                            <td>26</td>
-                            <td>Live</td>
-                            <td>
-                            <a href="" className="btn btn-primary mb-1">
-                                <i className="fas fa-eye" />
-                            </a>
-                            <a href="" className="btn btn-success mb-1">
-                                <i className="fas fa-edit" />
-                            </a>
-                            <a href="" className="btn btn-danger mb-1">
-                                <i className="fas fa-trash" />
-                            </a>
-                            </td>
-                        </tr>
+                            {products?.map((p, index) => (                            
+                                <tr key={index}>
+                                    <th scope="row">
+                                        <img src={p.image} style={{width:'80px', height:'70px', objectFit:'cover', borderRadius:'10px'}} alt="" />
+                                    </th>
+                                    <td>{p.title}</td>
+                                    <td>${p.price}</td>
+                                    <td>{p.stock_qty}</td>
+                                    <td>{p.orders}</td>
+                                    <td>{p.status.toUpperCase()}</td>
+                                    <td>
+                                    <Link href="" className="btn btn-primary mb-1 me-2">
+                                        <i className="fas fa-eye" />
+                                    </Link>
+                                    <Link href="" className="btn btn-success mb-1 me-2">
+                                        <i className="fas fa-edit" />
+                                    </Link>
+                                    <Link href="" className="btn btn-danger mb-1 me-2">
+                                        <i className="fas fa-trash" />
+                                    </Link>
+                                    </td>
+                                </tr>
+                            ))}
+                        
                         </tbody>
                     </table>
                     </div>

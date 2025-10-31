@@ -25,6 +25,8 @@ import Orders from './views/customer/Orders'
 import OrderDetail from './views/customer/OrderDetail'
 import Wishlist from './views/customer/Wishlist'
 import Dashboard from './views/vendor/Dashboard'
+import Products from './views/vendor/Products'
+
 
 function App() {
   const [count, setCount] = useState(0)
@@ -59,6 +61,7 @@ function App() {
 
           {/* Vendor Components */}
           <Route path='/vendor/dashboard/' element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+          <Route path='/vendor/products/' element={<PrivateRoute><Products /></PrivateRoute>} />
 
         </Routes>
       </MainWrapper>
