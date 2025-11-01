@@ -65,6 +65,8 @@ urlpatterns = [
     path('vendor/reviews/<vendor_id>/', vendor_view.ReviewListAPIView.as_view()),
     path('vendor/reviews/<vendor_id>/<review_id>/', vendor_view.ReviewDetailAPIView.as_view()),
     path('vendor/coupon-list/<vendor_id>/', vendor_view.CouponListAPIView.as_view()),
+    path('vendor/coupon-create/<vendor_id>/', vendor_view.CouponCreateAPIView.as_view()),
+
     path('vendor/coupon-detail/<vendor_id>/<coupon_id>/', vendor_view.CouponDetailAPIView.as_view()),
     path('vendor/coupon-stats/<vendor_id>/', vendor_view.CouponStatsAPIView.as_view()),
     path('vendor/unseen-notifications/<vendor_id>/', vendor_view.NotificationUnseenAPIView.as_view()),

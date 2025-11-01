@@ -16,7 +16,8 @@ from .models import Vendor
 
 from rest_framework.decorators import api_view
 
-from datetime import datetime, timedelta            
+from datetime import datetime, timedelta      
+      
 
 class DashboardAPIView(generics.ListAPIView):
     serializer_class = SummarySerializer
@@ -191,9 +192,9 @@ class ReviewDetailAPIView(generics.RetrieveUpdateAPIView):
         review = Review.objects.filter(product__vendor=vendor, id=review_id)
         return review
     
-
 class CouponListAPIView(generics.ListAPIView):
     serializer_class = CouponSerializer
+    queryset = Coupon.objects.all()
     permission_classes = (AllowAny, )
 
     def get_queryset(self):
@@ -201,29 +202,38 @@ class CouponListAPIView(generics.ListAPIView):
         vendor = Vendor.objects.get(user__id=vendor_id)
         coupon = Coupon.objects.filter(vendor=vendor)
         return coupon
-    
+
+from rest_framework.exceptions import NotFound
+
+class CouponCreateAPIView(generics.CreateAPIView):
+    serializer_class = CouponSerializer
+    queryset = Coupon.objects.all()
+    permission_classes = (AllowAny, )
+
     def create(self, request, *args, **kwargs):
-
         payload = request.data
-        vendor_id = self.kwargs['vendor_id']
-        discount = payload.get['discount']
-        code = payload.get['code']
-        active = payload.get['active']
+        vendor_id = payload['vendor_id']
 
-        vendor = Vendor.objects.get(user__id=vendor_id)
+        try:
+            vendor = Vendor.objects.get(user__id=vendor_id)
+        except Vendor.DoesNotExist:
+            raise NotFound(detail="Vendor not found for this user.")
+
         coupon = Coupon.objects.create(
             vendor=vendor,
-            discount=discount,
-            code=code,
-            active=(active.lower() == 'true')
+            discount=payload['discount'],
+            code=payload['code'],
+            active=(str(payload['active']).lower() == 'true')
         )
         return Response({'message': 'Coupon created successfully'}, status=status.HTTP_201_CREATED)
+
+
 
 class CouponDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CouponSerializer
     permission_classes = (AllowAny, )
     lookup_field = 'id'
-    
+
     lookup_url_kwarg = 'coupon_id'
 
     def get_queryset(self):

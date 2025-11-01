@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import apiInstance from '../../utils/axios';
 import UserData from '../plugin/UserData';
 import SideBar from './SideBar';
+import Swal from "sweetalert2";
 
 
 function Coupon() {
@@ -64,13 +65,19 @@ function Coupon() {
         e.preventDefault()
         const formdata = new FormData()
 
-        formdata.append("vendor_id", userData?.vendor_id)
+        formdata.append("vendor_id", userData?.user_id)
         formdata.append("code", createCoupons.code)
         formdata.append("discount", createCoupons.discount)
         formdata.append("active", createCoupons.active)
 
-        await axios.post(`vendor/coupon-create/${userData?.user_id}/`, formdata).then((res) => {
-            console.log(res.data);
+        await apiInstance.post(`vendor/coupon-create/${userData?.user_id}/`, formdata).then((res) => {
+            Swal.fire({
+                icon: "success",
+                title: "Coupon created successfully!",
+                text: "Your new coupon has been added.",
+                showConfirmButton: false,
+                timer: 1500, // auto close in 1.5s
+            });
         })
         await fetchData();
     }
