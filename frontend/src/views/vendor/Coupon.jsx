@@ -15,6 +15,12 @@ function Coupon() {
         discount: "",
         active: true
     })
+    const [editCoupon, setEditCoupon] = useState({
+            id: "",
+            code: "",
+            discount: "",
+            active: true
+        });
 
     if (UserData()?.user_id === 0) {
         window.location.href = '/vendor/register/'
@@ -81,6 +87,47 @@ function Coupon() {
         })
         await fetchData();
     }
+    const handleEditClick = (coupon) => {
+  setEditCoupon({
+    id: coupon.id,
+    code: coupon.code,
+    discount: coupon.discount,
+    active: coupon.active
+  });
+
+  // open modal manually
+  const editModal = new window.bootstrap.Modal(document.getElementById("editCouponModal"));
+  editModal.show();
+};
+const handleUpdateCoupon = async (e) => {
+  e.preventDefault();
+
+  const formdata = new FormData();
+  formdata.append("code", editCoupon.code);
+  formdata.append("discount", editCoupon.discount);
+  formdata.append("active", editCoupon.active);
+
+  try {
+    const response = await apiInstance.patch(`vendor/coupon-detail/${userData?.user_id}/${editCoupon.id}/`, formdata);
+    
+    Swal.fire({
+      icon: "success",
+      title: "Coupon updated successfully!",
+      showConfirmButton: false,
+      timer: 1500,
+    });
+
+    await fetchData();
+  } catch (error) {
+    console.error("Error updating coupon:", error);
+    Swal.fire({
+      icon: "error",
+      title: "Failed to update coupon",
+      text: "Please try again.",
+    });
+  }
+};
+
 
     return (
         <div className="container-fluid" id="main" >
@@ -147,9 +194,9 @@ function Coupon() {
                                             </td>
                                             <td>
 
-                                                <Link to={`/vendor/coupon/${coupon.id}/`} className="btn btn-primary mb-1">
-                                                    <i className="fas fa-edit" />
-                                                </Link>
+                                                <button onClick={() => handleEditClick(coupon)} className="btn btn-primary mb-1">
+                                                    <i className="fas fa-edit"></i>
+                                                </button>
                                                 <button onClick={() => handleDeleteCoupon(coupon?.id)} className="btn btn-danger mb-1 ms-2">
                                                     <i className="fas fa-trash" />
                                                 </button>
@@ -244,6 +291,67 @@ function Coupon() {
                         </div>
                     </div>
                 </div>
+
+                <div
+  className="modal fade"
+  id="editCouponModal"
+  tabIndex={-1}
+  aria-labelledby="editCouponModalLabel"
+  aria-hidden="true"
+>
+  <div className="modal-dialog">
+    <div className="modal-content">
+      <div className="modal-header">
+        <h5 className="modal-title" id="editCouponModalLabel">
+          Edit Coupon
+        </h5>
+        <button
+          type="button"
+          className="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        />
+      </div>
+      <div className="modal-body">
+        <form onSubmit={handleUpdateCoupon}>
+          <div className="mb-3">
+            <label className="form-label">Code</label>
+            <input
+              type="text"
+              className="form-control"
+              name="code"
+              value={editCoupon.code}
+              onChange={(e) => setEditCoupon({ ...editCoupon, code: e.target.value })}
+            />
+          </div>
+          <div className="mb-3">
+            <label className="form-label">Discount</label>
+            <input
+              type="number"
+              className="form-control"
+              name="discount"
+              value={editCoupon.discount}
+              onChange={(e) => setEditCoupon({ ...editCoupon, discount: e.target.value })}
+            />
+          </div>
+          <div className="mb-3 form-check">
+            <input
+              type="checkbox"
+              className="form-check-input"
+              checked={editCoupon.active}
+              onChange={(e) => setEditCoupon({ ...editCoupon, active: e.target.checked })}
+            />
+            <label className="form-check-label">Active</label>
+          </div>
+          <button type="submit" className="btn btn-success">
+            Save Changes <i className="fas fa-save"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
             </>
 
         </div >

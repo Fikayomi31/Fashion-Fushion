@@ -264,25 +264,17 @@ class CouponStatsAPIView(generics.ListAPIView):
         return Response(serializer.data)
 
 
-class NotificationUnseenAPIView(generics.ListAPIView):
+class NotificationAPIView(generics.ListAPIView):
     serializer_class = NotificationSerializer
     permission_classes = [AllowAny]
 
     def get_queryset(self):
         vendor_id = self.kwargs['vendor_id']
         vendor = Vendor.objects.get(user__id=vendor_id)
-        notifications = Notification.objects.filter(vendor=vendor, seen=False).order_by('-date')
+        notifications = Notification.objects.filter(vendor=vendor, seen=True).order_by('-id')
         return notifications
 
-class NotificationSeenAPIView(generics.ListAPIView):
-    serializer_class = NotificationSerializer
-    permission_classes = [AllowAny]
 
-    def get_queryset(self):
-        vendor_id = self.kwargs['vendor_id']
-        vendor = Vendor.objects.get(user__id=vendor_id)
-        notifications = Notification.objects.filter(vendor=vendor, seen=True).order_by('-date')
-        return notifications
     
 
 class NotificationSummaryAPIView(generics.ListAPIView):
@@ -315,13 +307,24 @@ class NotificationVendorMarkAsSeenAPIView(generics.RetrieveUpdateAPIView):
     permission_classes = (AllowAny, )
 
     def get_object(self):
-        vendor_id = self.kwargs['vendor_id']
-        notification_id = self.kwargs['notification_id']
-        vendor = Vendor.objects.get(id=vendor_id)
-        notification = Notification.objects.get(vendor=vendor, id=notification_id)
-        notification.seen = True
+        vendor_id = self.kwargs.get('vendor_id')
+        notification_id = self.kwargs.get('notification_id')
+
+        try:
+            vendor = Vendor.objects.get(user__id=vendor_id)  # ✅ match your earlier logic
+        except Vendor.DoesNotExist:
+            raise NotFound(detail="Vendor not found.")
+
+        try:
+            notification = Notification.objects.get(vendor=vendor, id=notification_id)
+        except Notification.DoesNotExist:
+            raise NotFound(detail="Notification not found.")
+
+        notification.seen = True   # ✅ correct assignment
         notification.save()
+
         return notification
+
     
 
 class VendorProfileUpdateView(generics.RetrieveUpdateAPIView):
