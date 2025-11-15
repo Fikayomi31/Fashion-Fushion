@@ -4,12 +4,15 @@ import apiInstance from '../../utils/axios'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 import UserData from '../plugin/UserData'
-import Swal from 'sweetalert2' // Import SweetAlert2
+import Swal from 'sweetalert2'
+
 
 function VendorSetting() {
   const [profileData, setProfileData] = useState([])
   const [profileImage, setProfileImage] = useState('')
-  const [imageFile, setImageFile] = useState(null) // Separate state for the actual file
+  const [imageFile, setImageFile] = useState(null)
+  const [vendorData, setVendorData] = useState([])
+  const [vendorImage, setVendorImage] = useState('')
 
   const fetchProfileData = () => {
     apiInstance.get(`vendor/settings/${UserData()?.user_id}/`).then((res) => {
@@ -18,8 +21,18 @@ function VendorSetting() {
     })
   }
 
+  const fetchVendorData = () => {
+    apiInstance.get(`vendor/shop-update/${UserData()?.user_id}/`).then((res) => {
+      setVendorData(res.data)
+      setVendorImage(res.data.image)
+      
+    })
+  }
+  console.log('Vendor Data:', vendorData.image)
+
   useEffect(() => {
     fetchProfileData()
+    fetchVendorData()
   }, [])
 
   const handleInputChange = (e) => {
@@ -227,11 +240,102 @@ function VendorSetting() {
                     </div>
                   </div>
                 </div>
-                
-                {/* Shop tab content remains the same */}
-                <div className="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-                  {/* Your shop tab content */}
+
+                <div
+                  className="tab-pane fade"
+                  id="pills-profile"
+                  role="tabpanel"
+                  aria-labelledby="pills-profile-tab"
+                >
+                <div className="row gutters-sm shadow p-4 rounded">
+                  <div className="col-md-4 mb-3">
+                    <div className="card h-100">
+                      <div className="card-body">
+                        <div className="d-flex flex-column align-items-center text-center">
+                          <img
+                            src={vendorData.image}
+                            style={{ width: 160, height: 160, objectFit: "cover" }}
+                            alt="Admin"
+                            className="rounded-circle"
+                            width={150}
+                          />
+                          <div className="mt-3">
+                            <h4 className="text-dark">Desphixs</h4>
+                            <p className="text-secondary mb-1">We sell cloths here</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-md-8">
+                    <div className="card mb-3">
+                      <div className="card-body">
+                        <form
+                          className="form-group"
+                          method="POST"
+                          noValidate=""
+                          encType="multipart/form-data"
+                        >
+                          <div className="row text-dark">
+                            <div className="col-lg-12 mb-2">
+                              <label htmlFor="" className="mb-2">
+                                Shop Image
+                              </label>
+                              <input
+                                type="file"
+                                className="form-control"
+                                name=""
+                                id=""
+                              />
+                            </div>
+                            <div className="col-lg-12 mb-2 ">
+                              <label htmlFor="" className="mb-2">
+                                Full Name
+                              </label>
+                              <input
+                                type="text"
+                                className="form-control"
+                                name=""
+                                id=""
+                              />
+                            </div>
+                            <div className="col-lg-6 mb-2">
+                              <label htmlFor="" className="mb-2">
+                                Email
+                              </label>
+                              <input
+                                type="text"
+                                className="form-control"
+                                name=""
+                                id=""
+                              />
+                            </div>
+                            <div className="col-lg-6 mb-2">
+                              <label htmlFor="" className="mb-2">
+                                Phone Number
+                              </label>
+                              <input
+                                type="text"
+                                className="form-control"
+                                name=""
+                                id=""
+                              />
+                            </div>
+                            <div className="col-lg-6 mt-4 mb-3">
+                              <button className="btn btn-success" type="submit">
+                                Update Shop <i className="fas fa-check-circle" />{" "}
+                              </button>
+                              <button className="btn btn-primary" type="submit">
+                                View Shop <i className="fas fa-shop" />{" "}
+                              </button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+              </div>                                
               </div>
             </div>
           </div>
