@@ -336,8 +336,13 @@ class ShopUpdateView(generics.RetrieveUpdateAPIView):
     queryset = Vendor.objects.all()
     serializer_class = VendorSerializer
     permission_classes = (AllowAny, )
+    lookup_field = 'pk'
 
-
+    def get_object(self):
+        # interpret pk from URL as a user id
+        user_id = self.kwargs.get('pk')
+        return Vendor.objects.get(user__id=user_id)
+    
 class ShopAPIView(generics.RetrieveAPIView):
     
     serializer_class = VendorSerializer
@@ -358,3 +363,4 @@ class ShopProductsAPIView(generics.ListAPIView):
         vendor = Vendor.objects.get(slug=vendor_slug)
         products = Product.objects.filter(vendor=vendor, status='published').order_by('-date')
         return products
+

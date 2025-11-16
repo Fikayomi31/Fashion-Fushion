@@ -15,19 +15,26 @@ function VendorSetting() {
   const [vendorImage, setVendorImage] = useState('')
 
   const fetchProfileData = () => {
-    apiInstance.get(`vendor/settings/${UserData()?.user_id}/`).then((res) => {
-      setProfileData(res.data)
-      setProfileImage(res.data.image)
-    })
-  }
+  apiInstance.get(`vendor/settings/${UserData()?.user_id}/`).then((res) => {
+    setProfileData(res.data)
+    setProfileImage(res.data.image)
+    
+    // If profile data contains vendor shop ID
+    if (res.data.vendor_id) {
+      fetchVendorData(res.data.vendor_id)
+    }
+  })
+}
 
   const fetchVendorData = () => {
     apiInstance.get(`vendor/shop-update/${UserData()?.user_id}/`).then((res) => {
-      setVendorData(res.data)
-      setVendorImage(res.data.image)
-      
-    })
-  }
+    setVendorData(res.data)
+    setVendorImage(res.data.image)
+    console.log('Vendor Data:', res.data)
+  }).catch((error) => {
+    console.error('Error fetching vendor data:', error)
+  })
+}
   console.log('Vendor Data:', vendorData.image)
 
   useEffect(() => {
