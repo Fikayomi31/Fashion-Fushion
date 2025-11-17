@@ -74,10 +74,20 @@ function VendorSetting() {
   }
 
     const handleVendorFileChange = (e) => {
-    setVendorData({
-      ...vendorData,
-      [e.target.name]: e.target.value
-    })
+     const file = e.target.files[0]
+    if (file) {
+      setImageFile(file) // Store the actual file
+      
+      // Create a preview URL for immediate display
+      const previewUrl = URL.createObjectURL(file)
+      setVendorImage(previewUrl)
+      
+      // Also update profileData if needed
+      setVendorData({
+        ...vendorData,
+        image: file
+      })
+    }
   }
 
   const handleProfileSubmit = async (e) => {
