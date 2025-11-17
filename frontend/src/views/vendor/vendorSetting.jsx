@@ -35,7 +35,6 @@ function VendorSetting() {
     console.error('Error fetching vendor data:', error)
   })
 }
-  console.log('Vendor Data:', vendorData.image)
 
   useEffect(() => {
     fetchProfileData()
@@ -48,6 +47,7 @@ function VendorSetting() {
       [e.target.name]: e.target.value
     })
   }
+
 
   const handleFileChange = (e) => {
     const file = e.target.files[0]
@@ -64,6 +64,20 @@ function VendorSetting() {
         image: file
       })
     }
+  }
+
+    const handleVendorChange = (e) => {
+    setVendorData({
+      ...vendorData,
+      [e.target.name]: e.target.value
+    })
+  }
+
+    const handleVendorFileChange = (e) => {
+    setVendorData({
+      ...vendorData,
+      [e.target.name]: e.target.value
+    })
   }
 
   const handleProfileSubmit = async (e) => {
@@ -110,6 +124,59 @@ function VendorSetting() {
       Swal.fire({
         title: 'Error!',
         text: 'Failed to update profile. Please try again.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#d33'
+      })
+    }
+  }
+
+  const handleVendorSubmit = async (e) => {
+    e.preventDefault()
+    
+    const formData = new FormData()
+    
+    // Only append image if a new one was selected
+    if (imageFile) {
+      formData.append('image', imageFile)
+    }
+    
+    formData.append('shop_name', vendorData.shop_name || '')
+    formData.append('email', vendorData.email || '')
+
+    formData.append('description', vendorData.description || '')
+    
+    try {
+      await apiInstance.patch(`vendor/shop-update/${UserData()?.user_id}/`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      
+      // Refresh data to get the updated image URL from server
+      fetchVendorData()
+      
+      // Reset the image file state
+      setImageFile(null)
+      
+      // Show success message with SweetAlert2
+      Swal.fire({
+        title: 'Success!',
+        text: 'Your Shop has been updated successfully!',
+        icon: 'success',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#3085d6',
+        timer: 3000,
+        timerProgressBar: true
+      })
+      
+    } catch (error) {
+      console.error('Error updating shop:', error)
+      
+      // Show error message with SweetAlert2
+      Swal.fire({
+        title: 'Error!',
+        text: 'Failed to update Shop. Please try again.',
         icon: 'error',
         confirmButtonText: 'OK',
         confirmButtonColor: '#d33'
@@ -267,8 +334,8 @@ function VendorSetting() {
                             width={150}
                           />
                           <div className="mt-3">
-                            <h4 className="text-dark">Desphixs</h4>
-                            <p className="text-secondary mb-1">We sell cloths here</p>
+                            <h4 className="text-dark">{vendorData.shop_name}</h4>
+                            <p className="text-secondary mb-1">{vendorData.description}</p>
                           </div>
                         </div>
                       </div>
@@ -282,6 +349,8 @@ function VendorSetting() {
                           method="POST"
                           noValidate=""
                           encType="multipart/form-data"
+                          onSubmit={handleVendorSubmit}
+
                         >
                           <div className="row text-dark">
                             <div className="col-lg-12 mb-2">
@@ -289,21 +358,26 @@ function VendorSetting() {
                                 Shop Image
                               </label>
                               <input
+                                src={vendorImage}
                                 type="file"
                                 className="form-control"
-                                name=""
+                                name="image"
                                 id=""
+                                onChange={handleVendorFileChange}
+                                
                               />
                             </div>
                             <div className="col-lg-12 mb-2 ">
                               <label htmlFor="" className="mb-2">
-                                Full Name
+                                Shop Name
                               </label>
                               <input
                                 type="text"
-                                className="form-control"
-                                name=""
+                                className="form-control"                                
                                 id=""
+                                value={vendorData.shop_name}
+                                name="shop_name"
+                                onChange={handleVendorChange}
                               />
                             </div>
                             <div className="col-lg-6 mb-2">
@@ -313,8 +387,10 @@ function VendorSetting() {
                               <input
                                 type="text"
                                 className="form-control"
-                                name=""
+                                name="email"
                                 id=""
+                                value={profileData?.user?.email || ''} 
+                                onChange={handleVendorChange}
                               />
                             </div>
                             <div className="col-lg-6 mb-2">
@@ -326,13 +402,24 @@ function VendorSetting() {
                                 className="form-control"
                                 name=""
                                 id=""
+                                value={vendorData.mobile}
                               />
                             </div>
-                            <div className="col-lg-6 mt-4 mb-3">
+                            <div className='col-lg-12 mb-2'>
+                              <label htmlFor="" className='mb-2'>
+                                Shop Description
+                              </label>
+                              <textarea onChange={handleVendorChange} value={vendorData.description} name='description' id='' col='10' className='form-control' rows='10'>
+
+                              </textarea>
+
+
+                            </div>
+                            <div className="col-lg-12 mt-4 mb-3 d-flex">
                               <button className="btn btn-success" type="submit">
                                 Update Shop <i className="fas fa-check-circle" />{" "}
                               </button>
-                              <button className="btn btn-primary" type="submit">
+                              <button className="btn btn-primary ms-2" type="submit">
                                 View Shop <i className="fas fa-shop" />{" "}
                               </button>
                             </div>
