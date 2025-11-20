@@ -13,6 +13,7 @@ function VendorSetting() {
   const [imageFile, setImageFile] = useState(null)
   const [vendorData, setVendorData] = useState([])
   const [vendorImage, setVendorImage] = useState('')
+  const [vendorImageFile, setVendorImageFile] = useState(null)
 
   const fetchProfileData = () => {
   apiInstance.get(`vendor/settings/${UserData()?.user_id}/`).then((res) => {
@@ -76,7 +77,7 @@ function VendorSetting() {
     const handleVendorFileChange = (e) => {
      const file = e.target.files[0]
     if (file) {
-      setImageFile(file) // Store the actual file
+      setVendorImageFile(file) // Store the actual file
       
       // Create a preview URL for immediate display
       const previewUrl = URL.createObjectURL(file)
@@ -147,8 +148,8 @@ function VendorSetting() {
     const formData = new FormData()
     
     // Only append image if a new one was selected
-    if (imageFile) {
-      formData.append('image', imageFile)
+    if (vendorImageFile) {
+      formData.append('image', vendorImageFile)
     }
     
     formData.append('shop_name', vendorData.shop_name || '')
@@ -167,7 +168,7 @@ function VendorSetting() {
       fetchVendorData()
       
       // Reset the image file state
-      setImageFile(null)
+      setVendorImageFile(null)
       
       // Show success message with SweetAlert2
       Swal.fire({
@@ -337,11 +338,14 @@ function VendorSetting() {
                       <div className="card-body">
                         <div className="d-flex flex-column align-items-center text-center">
                           <img
-                            src={vendorData.image}
+                            src={vendorImage || vendorData.image}
                             style={{ width: 160, height: 160, objectFit: "cover" }}
-                            alt="Admin"
+                            alt="Shop Image"
                             className="rounded-circle"
                             width={150}
+                            onError={(e) => {
+                                e.target.src = '/default-shop-image.png' 
+                            }}
                           />
                           <div className="mt-3">
                             <h4 className="text-dark">{vendorData.shop_name}</h4>
@@ -364,18 +368,23 @@ function VendorSetting() {
                         >
                           <div className="row text-dark">
                             <div className="col-lg-12 mb-2">
-                              <label htmlFor="" className="mb-2">
+                              <label htmlFor="shopImage" className="mb-2">
                                 Shop Image
                               </label>
                               <input
-                                src={vendorImage}
+                                
                                 type="file"
                                 className="form-control"
+                                onChange={handleVendorFileChange}                                                                                                  
+                                id="shopImage"                  
                                 name="image"
-                                id=""
-                                onChange={handleVendorFileChange}
-                                
+                                accept="image/*"
                               />
+                              {vendorImageFile && (
+                                <small className="text-success">New image selected: {vendorImageFile.name}</small>
+                              )}
+                                
+                            
                             </div>
                             <div className="col-lg-12 mb-2 ">
                               <label htmlFor="" className="mb-2">
@@ -429,9 +438,9 @@ function VendorSetting() {
                               <button className="btn btn-success" type="submit">
                                 Update Shop <i className="fas fa-check-circle" />{" "}
                               </button>
-                              <button className="btn btn-primary ms-2" type="submit">
+                              <Link to={`/vendor/${vendorData.slug}`} className="btn btn-primary ms-2" type="submit">
                                 View Shop <i className="fas fa-shop" />{" "}
-                              </button>
+                              </Link>
                             </div>
                           </div>
                         </form>

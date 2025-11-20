@@ -361,6 +361,8 @@ class ShopProductsAPIView(generics.ListAPIView):
     def get_queryset(self):
         vendor_slug = self.kwargs['vendor_slug']
         vendor = Vendor.objects.get(slug=vendor_slug)
-        products = Product.objects.filter(vendor=vendor, status='published').order_by('-date')
+        products = Product.objects.filter(vendor=vendor)
         return products
+    
+
 

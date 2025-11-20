@@ -33,6 +33,8 @@ import Coupon from './views/vendor/Coupon'
 import VendorRegister from './views/vendor/VendorRegister'
 import Notification from './views/vendor/Notification'
 import VendorSetting from './views/vendor/vendorSetting'  
+import Shop from './views/vendor/Shop'
+import AddProduct from './views/vendor/AddProduct'
 
 
 
@@ -77,6 +79,8 @@ function App() {
           <Route path='/vendor/register/' element={<PrivateRoute><VendorRegister/></PrivateRoute>} />
           <Route path='/vendor/notifications/' element={<PrivateRoute><Notification /></PrivateRoute>} />
           <Route path='/vendor/settings/' element={<PrivateRoute><VendorSetting /></PrivateRoute>} />
+          <Route path='/vendor/:slug/' element={<PrivateRoute><Shop /></PrivateRoute>} />
+          <Route path='/vendor/add-product/' element={<PrivateRoute><AddProduct /></PrivateRoute>} />
 
 
         </Routes>

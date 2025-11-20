@@ -39,7 +39,7 @@ export default function SideBar() {
                 </Link>
             </li>
             <li className="mb-3">
-                <Link to="/vendor/product/new/" className={isActiveLink(location.pathname, '/vendor/product/new/') ? "nav-link active text-white" : "nav-link text-white" }>
+                <Link to="/vendor/add-product/" className={isActiveLink(location.pathname, '/vendor/add-product/') ? "nav-link active text-white" : "nav-link text-white" }>
                     <i className="bi bi-plus-circle" /> Add Product{" "}
                 </Link>
             </li>
